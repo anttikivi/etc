@@ -42,4 +42,10 @@
     name: core.excludesfile
     scope: global
     value: "{{ ansible_user_dir }}/.gitignore_global"
+
+- name: Install lazygit
+  community.general.homebrew:
+    name:
+      - jesseduffield/lazygit/lazygit
+    state: present
 # vi: ft=yaml.ansible
