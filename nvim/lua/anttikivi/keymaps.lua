@@ -1,6 +1,6 @@
 ---@param mode string|string[]
 ---@param rhs string
----@param lhs string
+---@param lhs string|function
 ---@param opts? table
 local function map(mode, rhs, lhs, opts)
   vim.keymap.set(mode, rhs, lhs, opts)
@@ -94,6 +94,13 @@ map(
   "'nN'[v:searchforward]",
   { expr = true, desc = "Previous search result" }
 )
+
+map("n", "<leader>gg", function()
+  require("anttikivi.terminal").open(
+    { "lazygit" },
+    { esc_esc = false, ctrl_hjkl = false }
+  )
+end, { desc = "Open lazy[g]it" })
 
 map(
   { "n", "v" },

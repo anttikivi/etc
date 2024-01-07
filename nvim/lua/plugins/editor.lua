@@ -112,20 +112,13 @@ return {
     end,
   },
   {
-    "tpope/vim-fugitive",
-    opts = {},
-    config = function() end,
-    keys = {
-      { "<leader>gg", vim.cmd.Git, desc = "Fugitive" },
-    },
-  },
-  {
     "folke/which-key.nvim",
     config = function()
       local which_key = require "which-key"
       which_key.setup()
       which_key.register {
         ["g"] = { name = "+Goto" },
+        ["<leader>g"] = { name = "+[g]it" },
       }
     end,
     event = "VeryLazy",
