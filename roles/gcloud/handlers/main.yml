@@ -1,0 +1,11 @@
+---
+- name: Clean up the downloaded Google Cloud CLI archive
+  ansible.builtin.file:
+    path: "{{ gcloud_archive }}"
+    state: absent
+
+- name: Clean up the temporary Google Cloud CLI directory
+  ansible.builtin.file:
+    path: "{{ tmp_gcloud_dir }}"
+    state: absent
+# vi: ft=yaml.ansible

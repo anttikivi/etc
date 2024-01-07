@@ -1,0 +1,6 @@
+---
+- name: Install GitHub CLI tool
+  community.general.homebrew:
+    name: gh
+    state: present
+# vi: ft=yaml.ansible

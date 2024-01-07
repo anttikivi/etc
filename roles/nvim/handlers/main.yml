@@ -1,0 +1,11 @@
+---
+- name: Clean up the downloaded Neovim archive
+  ansible.builtin.file:
+    path: "{{ nvim_archive }}"
+    state: absent
+
+- name: Clean up the temporary Neovim directory
+  ansible.builtin.file:
+    path: "{{ tmp_nvim_dir }}"
+    state: absent
+# vi: ft=yaml.ansible

@@ -1,0 +1,7 @@
+---
+- name: Install Lua tools
+  community.general.homebrew:
+    name:
+      - stylua
+    state: present
+# vi: ft=yaml.ansible

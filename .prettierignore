@@ -1,0 +1,6 @@
+lazy-lock.json
+
+# Encrypted files
+group_vars/all/vault.yml
+roles/aws/files/config
+roles/ssh/files/config

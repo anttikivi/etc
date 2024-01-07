@@ -1,0 +1,56 @@
+---
+- name: Install PHP and Composer
+  community.general.homebrew:
+    name:
+      - php
+      - composer
+
+- name: Get the Phpactor version
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      echo "$(phpactor --version | cut -d '@' -f 1 | sed 's/Phpactor //')"
+  register: current_phpactor_version_sh
+  changed_when: false
+  failed_when: false
+
+- name: Set the current Phpactor version fact
+  ansible.builtin.set_fact:
+    current_phpactor_version:
+      "{{ current_phpactor_version_sh.stdout|default('') }}"
+
+- name: Query the latest Phpactor version
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      echo $(curl -LsS https://api.github.com/repos/phpactor/phpactor/releases/latest | jq -r '.tag_name')
+  register: latest_phpactor_version_sh
+  changed_when: false
+
+- name: Set the latest Phpactor version fact
+  ansible.builtin.set_fact:
+    latest_phpactor_version:
+      "{{ latest_phpactor_version_sh.stdout|default('') }}"
+
+- name: Debug the current Phpactor version
+  ansible.builtin.debug:
+    var: current_phpactor_version
+
+- name: Debug the latest Phpactor version
+  ansible.builtin.debug:
+    var: latest_phpactor_version
+
+- name: Install Phpactor
+  when: latest_phpactor_version not in current_phpactor_version
+  block:
+    - name: Remove existing Phpactor installation
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/bin/phpactor"
+        state: absent
+
+    - name: Download Phpactor
+      ansible.builtin.get_url:
+        url: https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar
+        dest: "{{ ansible_user_dir }}/.local/bin/phpactor"
+        mode: "0755"
+# vi: ft=yaml.ansible

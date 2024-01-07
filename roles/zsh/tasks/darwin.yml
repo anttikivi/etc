@@ -1,0 +1,41 @@
+---
+- name: Stat Oh My Zsh
+  ansible.builtin.stat:
+    path: "{{ ansible_user_dir }}/.oh-my-zsh"
+  register: ohmyzsh
+
+- name: Register Oh My Zsh state
+  ansible.builtin.set_fact:
+    ohmyzsh_installed: "{{ ohmyzsh.stat.exists }}"
+
+- name: Debug the Oh My Zsh fact
+  ansible.builtin.debug:
+    var: ohmyzsh_installed
+
+- name: Install Oh My Zsh
+  when: not ohmyzsh_installed
+  block:
+    - name: Download the Oh My Zsh install script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+        dest: "{{ ansible_user_dir }}/oh-my-zsh.install.sh"
+        force: true
+        mode: "0755"
+      notify:
+        - Clean up the Oh My Zsh install script
+
+    - name: Run the Oh My Zsh install script
+      ansible.builtin.script:
+        cmd: "{{ ansible_user_dir }}/oh-my-zsh.install.sh"
+
+- name: Copy .zshrc
+  ansible.builtin.copy:
+    src: .zshrc
+    dest: "{{ ansible_user_dir }}/.zshrc"
+    mode: "0644"
+
+- name: Remove the Oh My Zsh backup of .zshrc
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.zshrc.pre-oh-my-zsh"
+    state: absent
+# vi: ft=yaml.ansible

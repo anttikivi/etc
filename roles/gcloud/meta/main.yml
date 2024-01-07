@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: dirs
+  - role: utils
+# vi: ft=yaml.ansible

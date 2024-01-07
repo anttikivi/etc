@@ -1,0 +1,16 @@
+---
+- name: Clean up the downloaded Go archive
+  ansible.builtin.file:
+    path: "{{ go_archive }}"
+    state: absent
+
+- name: Clean up the extracted Go directory
+  ansible.builtin.file:
+    path: "{{ tmp_go_dir }}/go"
+    state: absent
+
+- name: Clean up the temporary Go directory
+  ansible.builtin.file:
+    path: "{{ tmp_go_dir }}"
+    state: absent
+# vi: ft=yaml.ansible

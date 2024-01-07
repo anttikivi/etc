@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: dotfiles
+# vi: ft=yaml.ansible

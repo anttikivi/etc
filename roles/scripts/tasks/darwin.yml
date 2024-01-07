@@ -1,0 +1,15 @@
+---
+- name: Install the password generator script
+  ansible.builtin.copy:
+    src: pwgen
+    dest: "{{ ansible_user_dir }}/.local/bin/"
+    mode: "0755"
+    force: true
+
+- name: Install the sessionizer
+  ansible.builtin.copy:
+    src: tmux-sessionizer
+    dest: "{{ ansible_user_dir }}/.local/bin/"
+    mode: "0755"
+    force: true
+# vi: ft=yaml.ansible

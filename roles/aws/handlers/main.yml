@@ -1,0 +1,11 @@
+---
+- name: Clean up the downloaded AWS CLI package
+  ansible.builtin.file:
+    path: "{{ aws_package }}"
+    state: absent
+
+- name: Clean up the temporary AWS CLI directory
+  ansible.builtin.file:
+    path: "{{ tmp_aws_dir }}"
+    state: absent
+# vi: ft=yaml.ansible

@@ -1,0 +1,45 @@
+---
+- name: Copy the global Git ignores
+  ansible.builtin.copy:
+    src: gitignore_global
+    dest: "{{ ansible_user_dir }}/.gitignore_global"
+    mode: "0644"
+    force: true
+
+- name: Set user.name to Git configuration
+  community.general.git_config:
+    name: user.name
+    scope: global
+    value: "{{ git_user_name }}"
+
+- name: Set user.email to Git configuration
+  community.general.git_config:
+    name: user.email
+    scope: global
+    value: "{{ git_user_email }}"
+  no_log: true
+
+- name: Set user.signingkey to Git configuration
+  community.general.git_config:
+    name: user.signingkey
+    scope: global
+    value: "{{ git_signingkey }}"
+
+- name: Set commit.gpgsign to Git configuration
+  community.general.git_config:
+    name: commit.gpgsign
+    scope: global
+    value: true
+
+- name: Set tag.gpgsign to Git configuration
+  community.general.git_config:
+    name: tag.gpgsign
+    scope: global
+    value: true
+
+- name: Set core.excludesfile to Git configuration
+  community.general.git_config:
+    name: core.excludesfile
+    scope: global
+    value: "{{ ansible_user_dir }}/.gitignore_global"
+# vi: ft=yaml.ansible

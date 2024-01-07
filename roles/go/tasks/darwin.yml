@@ -1,0 +1,105 @@
+---
+- name: Set the GOOS fact
+  ansible.builtin.set_fact:
+    goos: "{{ ansible_system | lower }}"
+
+- name: Set the GOARCH fact
+  ansible.builtin.set_fact:
+    goarch:
+      "{{ ansible_machine | replace('x86_64', 'amd64') | replace('aarch64',
+      'arm64') }}"
+
+- name: Get the Go version
+  ansible.builtin.command: /usr/local/go/bin/go version
+  register: current_go_version
+  changed_when: false
+  failed_when: false
+
+- name: Query the latest Go version information
+  ansible.builtin.uri:
+    url: https://go.dev/dl/?mode=json
+  register: latest_go_version_json
+  changed_when: false
+
+- name: Set the latest Go version fact
+  ansible.builtin.set_fact:
+    latest_go_version:
+      "go version {{ latest_go_version_json.json[0].version }} {{ goos }}/{{
+      goarch }}"
+
+- name: Set the latest Go release fact
+  ansible.builtin.set_fact:
+    latest_go_release: "{{ latest_go_version_json.json[0].version }}"
+
+- name: Set the Go filename fact
+  ansible.builtin.set_fact:
+    go_filename: "{{ latest_go_release }}.{{ goos }}-{{ goarch }}"
+
+- name: Debug the current Go version
+  ansible.builtin.debug:
+    var: current_go_version.stdout|default('')
+
+- name: Debug the latest Go version
+  ansible.builtin.debug:
+    var: latest_go_release
+
+- name: Install Go
+  when: latest_go_version not in current_go_version.stdout|default('')
+  notify:
+    - Clean up the temporary Go directory
+  block:
+    - name: Create a temporary directory for the Go archive
+      ansible.builtin.tempfile:
+        state: directory
+      register: tmp_go
+
+    - name: Set the temporary Go directory fact
+      ansible.builtin.set_fact:
+        tmp_go_dir: "{{ tmp_go.path }}"
+
+    - name: Set the downloaded Go archive fact
+      ansible.builtin.set_fact:
+        go_archive: "{{ tmp_go_dir }}/{{ go_filename }}.tar.gz"
+
+    - name: Ensure clean Go archive download destination
+      ansible.builtin.file:
+        path: "{{ go_archive }}"
+        state: absent
+
+    - name: Download the Go archive
+      ansible.builtin.get_url:
+        url: "https://go.dev/dl/{{ go_filename }}.tar.gz"
+        dest: "{{ go_archive }}"
+        mode: "0644"
+        force: true
+      notify:
+        - Clean up the downloaded Go archive
+
+    - name: Ensure clean Go extraction destination
+      ansible.builtin.file:
+        path: "{{ tmp_go_dir }}/go"
+        state: absent
+
+    - name: Extract the Go archive
+      ansible.builtin.unarchive:
+        src: "{{ go_archive }}"
+        dest: "{{ tmp_go_dir }}"
+
+    - name: Remove existing Go installation
+      ansible.builtin.file:
+        path: /usr/local/go
+        state: absent
+      become: true
+
+    - name: Install Go
+      ansible.builtin.copy:
+        remote_src: true
+        src: "{{ tmp_go_dir }}/go"
+        dest: /usr/local
+        owner: "{{ host_user }}"
+        mode: "0755"
+        force: true
+      become: true
+      notify:
+        - Clean up the extracted Go directory
+# vi: ft=yaml.ansible

@@ -1,0 +1,6 @@
+---
+- name: Clean up the Oh My Zsh install script
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/oh-my-zsh.install.sh"
+    state: absent
+# vi: ft=yaml.ansible

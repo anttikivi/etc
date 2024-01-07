@@ -1,0 +1,178 @@
+---
+- name: Get the Neovim version
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      nvim --version | head --lines 1
+  register: current_nvim_version_sh
+  changed_when: false
+  failed_when: false
+
+- name: Set the current Neovim version fact
+  ansible.builtin.set_fact:
+    current_nvim_version: "{{ current_nvim_version_sh.stdout|default('') }}"
+
+- name: Query the latest Neovim version
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      echo $(curl -LsS https://api.github.com/repos/neovim/neovim/releases/tags/{{ nvim.release }} | jq '.body') | head --lines 2 | tail --lines 1
+  register: latest_nvim_version_sh
+  changed_when: false
+
+- name: Set the latest Neovim version fact
+  ansible.builtin.set_fact:
+    latest_nvim_version: "{{ latest_nvim_version_sh.stdout|default('') }}"
+
+- name: Debug the current Neovim version
+  ansible.builtin.debug:
+    var: current_nvim_version
+
+- name: Debug the latest Neovim version
+  ansible.builtin.debug:
+    var: latest_nvim_version
+
+- name: Install Neovim
+  when: latest_nvim_version not in current_nvim_version
+  notify:
+    - Clean up the temporary Neovim directory
+  block:
+    - name: Create a temporary directory for the Neovim archive
+      ansible.builtin.tempfile:
+        state: directory
+      register: tmp_nvim
+
+    - name: Set the temporary Neovim directory fact
+      ansible.builtin.set_fact:
+        tmp_nvim_dir: "{{ tmp_nvim.path }}"
+
+    - name: Set the downloaded Neovim archive fact
+      ansible.builtin.set_fact:
+        nvim_archive: "{{ tmp_nvim_dir }}/nvim-macos.tar.gz"
+
+    - name: Ensure clean Neovim archive download destination
+      ansible.builtin.file:
+        path: "{{ nvim_archive }}"
+        state: absent
+
+    - name: Download the Neovim archive
+      ansible.builtin.get_url:
+        url:
+          "https://github.com/neovim/neovim/releases/download/{{ nvim.release
+          }}/nvim-macos.tar.gz"
+        dest: "{{ nvim_archive }}"
+        mode: "0644"
+        force: true
+      notify:
+        - Clean up the downloaded Neovim archive
+
+    - name: Remove existing Neovim installation
+      ansible.builtin.file:
+        path: "{{ tools_dir }}/nvim-macos"
+        state: absent
+
+    - name: Ensure that the tools directory exists
+      ansible.builtin.file:
+        path: "{{ tools_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Extract and install Neovim
+      ansible.builtin.unarchive:
+        src: "{{ nvim_archive }}"
+        dest: "{{ tools_dir }}"
+
+- name: Install dark-notify
+  community.general.homebrew:
+    name:
+      - cormacrelf/tap/dark-notify
+    state: present
+
+- name: Stat Brunch
+  ansible.builtin.stat:
+    path: "{{ projects_dir }}/brunch.nvim"
+  register: brunch
+
+- name: Register Brunch state fact
+  ansible.builtin.set_fact:
+    brunch_installed: "{{ brunch.stat.exists }}"
+
+- name: Debug the Brunch fact
+  ansible.builtin.debug:
+    var: brunch_installed
+
+- name: Clone anttikivi/brunch.nvim
+  ansible.builtin.git:
+    repo: git@github.com:anttikivi/brunch.nvim.git
+    dest: "{{ projects_dir }}/brunch.nvim"
+    version: main
+    accept_newhostkey: true
+  when: not brunch_installed
+
+- name: Register the Neovim configuration directory fact
+  ansible.builtin.set_fact:
+    init_lua_dir: "{{ ansible_user_dir }}/.config/nvim"
+
+- name: Ensure the configuration directory exists
+  ansible.builtin.file:
+    path: "{{ init_lua_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Stat the init.lua link
+  ansible.builtin.stat:
+    path: "{{ init_lua_dir }}/init.lua"
+  register: init_lua_link
+
+- name: Stat the lazy-lock.json link
+  ansible.builtin.stat:
+    path: "{{ init_lua_dir }}/lazy-lock.json"
+  register: lazy_lock_link
+
+- name: Stat the Lua directory link
+  ansible.builtin.stat:
+    path: "{{ init_lua_dir }}/lua"
+  register: lua_link
+
+- name: Set the init.lua fact
+  ansible.builtin.set_fact:
+    init_lua: "{{ init_lua_link.stat.exists and init_lua_link.stat.islnk }}"
+
+- name: Set the lazy-lock.json fact
+  ansible.builtin.set_fact:
+    lazy_lock: "{{ lazy_lock_link.stat.exists and lazy_lock_link.stat.islnk }}"
+
+- name: Set the Lua directory fact
+  ansible.builtin.set_fact:
+    lua_dir: "{{ lua_link.stat.exists and lua_link.stat.islnk }}"
+
+- name: Set restow fact
+  ansible.builtin.set_fact:
+    nvim_restow: "{{ init_lua or lazy_lock or lua_dir }}"
+
+- name: Set no-stow fact
+  ansible.builtin.set_fact:
+    nvim_nostow: "{{ init_lua and lazy_lock and lua_dir }}"
+
+- name: Debug the restow fact
+  ansible.builtin.debug:
+    var: nvim_restow
+
+- name: Debug the no-stow fact
+  ansible.builtin.debug:
+    var: nvim_nostow
+
+- name: Restow the Neovim configuration
+  ansible.builtin.command:
+    cmd:
+      "stow -d {{ dotfiles_dir }} -t {{ ansible_user_dir }}/.config/nvim -R nvim"
+  when: not nvim_nostow and nvim_restow
+  changed_when: not nvim_nostow and nvim_restow
+
+- name: Stow the Neovim configuration
+  ansible.builtin.command:
+    cmd:
+      "stow -d {{ dotfiles_dir }} -t {{ ansible_user_dir }}/.config/nvim nvim"
+  when: not nvim_nostow
+  changed_when: not nvim_nostow
+# vi: ft=yaml.ansible

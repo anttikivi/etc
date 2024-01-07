@@ -1,0 +1,98 @@
+---
+- name: Set the AWS CLI directory fact
+  ansible.builtin.set_fact:
+    aws_dir: "{{ tools_dir }}/aws-cli"
+
+- name: Stat AWS CLI
+  ansible.builtin.stat:
+    path: "{{ aws_dir }}"
+  register: aws_stat
+
+- name: Install AWS CLI
+  when: aws.force or not aws_stat.stat.exists
+  notify:
+    - Clean up the temporary AWS CLI directory
+  block:
+    - name: Create a temporary directory for the AWS CLI package
+      ansible.builtin.tempfile:
+        state: directory
+      register: tmp_aws
+
+    - name: Set the temporary AWS CLI directory fact
+      ansible.builtin.set_fact:
+        tmp_aws_dir: "{{ tmp_aws.path }}"
+
+    - name: Set the downloaded AWS CLI package fact
+      ansible.builtin.set_fact:
+        aws_package: "{{ tmp_aws_dir }}/AWSCLIV2.pkg"
+
+    - name: Ensure clean AWS CLI package download destination
+      ansible.builtin.file:
+        path: "{{ aws_package }}"
+        state: absent
+
+    - name: Download the AWS CLI package
+      ansible.builtin.get_url:
+        url: "https://awscli.amazonaws.com/AWSCLIV2.pkg"
+        dest: "{{ aws_package }}"
+        mode: "0644"
+        force: true
+      notify:
+        - Clean up the downloaded AWS CLI package
+
+    - name: Ensure clean AWS CLI installation destination
+      ansible.builtin.file:
+        path: "{{ aws_dir }}"
+        state: absent
+
+    - name: Copy the installer choices file
+      ansible.builtin.template:
+        src: choices.xml.j2
+        dest: "{{ tools_dir }}/aws_choices.xml"
+        mode: "0644"
+        force: true
+
+    - name: Install the AWS CLI
+      ansible.builtin.shell:
+        cmd:
+          "installer -pkg {{ aws_package }} -target CurrentUserHomeDirectory
+          -applyChoiceChangesXML {{ tools_dir }}/aws_choices.xml"
+      changed_when: true
+
+    - name: Remove old link to the aws executable
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/bin/aws"
+        state: absent
+
+    - name: Create link to the aws executable
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/bin/aws"
+        src: "{{ aws_dir }}/aws"
+        state: link
+        mode: "0755"
+
+    - name: Remove old link to the aws_completer executable
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/bin/aws_completer"
+        state: absent
+
+    - name: Create link to the aws_completer executable
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/bin/aws_completer"
+        src: "{{ aws_dir }}/aws_completer"
+        state: link
+        mode: "0755"
+
+- name: Ensure the AWS configuration directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.aws"
+    state: directory
+    mode: "0755"
+
+- name: Copy the AWS configuration
+  ansible.builtin.copy:
+    src: config
+    dest: "{{ ansible_user_dir }}/.aws/config"
+    mode: "0644"
+    force: true
+# vi: ft=yaml.ansible

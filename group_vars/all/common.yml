@@ -1,0 +1,64 @@
+default_roles:
+  - aws
+  - build
+  - clang
+  - dirs
+  - dotfiles
+  - gh
+  - git
+  - gcloud
+  - go
+  - jq
+  - lua
+  - node
+  - nvim
+  - php
+  - rust
+  - scripts
+  - sh
+  - ssh
+  - terraform
+  - tmux
+  - utils
+  - zsh
+
+dotfiles_dir: "{{ ansible_user_dir }}/dotfiles"
+personal_dir: "{{ ansible_user_dir }}/personal"
+projects_dir: "{{ ansible_user_dir }}/projects"
+tools_dir: "{{ ansible_user_dir }}/tools"
+visiosto_dir: "{{ ansible_user_dir }}/visiosto"
+
+git_user_name: Antti Kivi
+git_user_email: "{{ vault_git_user_email }}"
+git_signingkey: 501D24478EA632F0
+
+# The possible values for the Neovim release type are 'stable' and 'nightly'.
+nvim:
+  release: nightly
+
+# The Google Cloud CLI is not installed even if a newer version is available
+# when `force` is set to `false`.
+gcloud:
+  version: 458.0.1
+  force: false
+
+# The AWS CLI is not installed even if a newer version is available
+# when `force` is set to `false`.
+aws:
+  force: false
+
+go:
+  modules:
+    - module: mvdan.cc/sh/v3/cmd/shfmt@latest
+      cmd: shfmt
+
+ssh_keys:
+  id_rsa: "{{ vault_id_rsa }}"
+  id_rsa.pub: "{{ vault_id_rsa_pub }}"
+  id_ed25519: "{{ vault_id_ed25519 }}"
+  id_ed25519.pub: "{{ vault_id_ed25519_pub }}"
+
+gpg_keys:
+  signing: "{{ vault_gpg_signing }}"
+  signing_pub: "{{ vault_gpg_signing_pub }}"
+# vi: ft=yaml.ansible

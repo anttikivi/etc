@@ -1,0 +1,11 @@
+---
+- name: Clean up the downloaded Rustup script
+  ansible.builtin.file:
+    path: "{{ rustup }}"
+    state: absent
+
+- name: Clean up the temporary Rustup directory
+  ansible.builtin.file:
+    path: "{{ tmp_rust_dir }}"
+    state: absent
+# vi: ft=yaml.ansible

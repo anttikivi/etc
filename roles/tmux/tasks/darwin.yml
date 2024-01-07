@@ -1,0 +1,15 @@
+---
+- name: Install Tmux and its dependencies
+  community.general.homebrew:
+    name:
+      - tmux
+      - reattach-to-user-namespace
+    state: present
+
+- name: Copy Tmux configuration
+  ansible.builtin.copy:
+    src: tmux.conf
+    dest: "{{ ansible_user_dir }}/.tmux.conf"
+    mode: "0644"
+    force: true
+# vi: ft=yaml.ansible

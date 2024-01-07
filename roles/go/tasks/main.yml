@@ -1,0 +1,8 @@
+---
+- name: Run Darwin tasks
+  ansible.builtin.import_tasks: darwin.yml
+  when: ansible_os_family == 'Darwin'
+
+- name: Install modules
+  ansible.builtin.import_tasks: modules.yml
+# vi: ft=yaml.ansible
