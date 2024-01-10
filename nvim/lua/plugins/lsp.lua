@@ -42,6 +42,7 @@ return {
         end,
         build = ":MasonUpdate",
         cmd = "Mason",
+        keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "[M]ason" } },
       },
       "williamboman/mason-lspconfig.nvim",
       {
@@ -143,11 +144,13 @@ return {
           },
         },
         lua_ls = {
-          Lua = {
-            workspace = { checkThirdParty = false },
-            telemetry = { enable = false },
-            -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            -- diagnostics = { disable = { 'missing-fields' } },
+          settings = {
+            Lua = {
+              workspace = { checkThirdParty = false },
+              telemetry = { enable = false },
+              -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+              -- diagnostics = { disable = { 'missing-fields' } },
+            },
           },
         },
         marksman = {},
@@ -338,9 +341,9 @@ return {
             return
           end
 
-          -- if client.name == "tsserver" then
-          --   return
-          -- end
+          if client.name == "tsserver" then
+            return
+          end
 
           vim.api.nvim_create_autocmd("BufWritePre", {
             group = get_augroup(client),
