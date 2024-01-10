@@ -22,14 +22,14 @@ return {
       "nvim-lua/plenary.nvim",
     },
     config = function()
-      local harpoon = require("harpoon")
-      harpoon:setup({})
+      local harpoon = require "harpoon"
+      harpoon:setup {}
     end,
     -- TODO: Update this when the branch is merged into master.
     branch = "harpoon2",
     event = "VeryLazy",
     keys = function()
-      local harpoon = require("harpoon")
+      local harpoon = require "harpoon"
 
       return {
         {
@@ -85,6 +85,15 @@ return {
   --   "nvim-pack/nvim-spectre",
   --   enabled = false,
   -- },
+  {
+    "nvim-telescope/telescope.nvim",
+    opts = {
+      defaults = {
+        prompt_prefix = "> ",
+        selection_caret = "> ",
+      },
+    },
+  },
   {
     "RRethy/vim-illuminate",
     enabled = false,
