@@ -17,6 +17,7 @@ return {
       bashls = {},
       cssls = {},
       html = {},
+      phpactor = {},
       stylelint_lsp = {},
       vimls = {},
     },
