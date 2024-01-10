@@ -51,28 +51,28 @@ return {
           function()
             harpoon:list():select(1)
           end,
-          desc = "Switch the first marked Harpoon file",
+          desc = "Switch to the first marked Harpoon file",
         },
         {
           "<leader>hj",
           function()
             harpoon:list():select(2)
           end,
-          desc = "Switch the second marked Harpoon file",
+          desc = "Switch to the second marked Harpoon file",
         },
         {
           "<leader>hk",
           function()
             harpoon:list():select(3)
           end,
-          desc = "Switch the third marked Harpoon file",
+          desc = "Switch to the third marked Harpoon file",
         },
         {
           "<leader>hl",
           function()
             harpoon:list():select(4)
           end,
-          desc = "Switch the fourth marked Harpoon file",
+          desc = "Switch to the fourth marked Harpoon file",
         },
       }
     end,
