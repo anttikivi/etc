@@ -5,6 +5,7 @@ local opt = vim.opt
 
 opt.autowrite = false
 opt.colorcolumn = "80"
+opt.completeopt = "menuone,noselect"
 opt.guicursor = ""
 opt.pumblend = 0
 opt.termguicolors = false
