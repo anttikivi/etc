@@ -35,9 +35,11 @@ map(
   { expr = true, silent = true }
 )
 
+-- Centre the view after jumping up or down
 map("n", "<C-d>", "<C-d>zz", { desc = "Move down half a page" })
 map("n", "<C-u>", "<C-u>zz", { desc = "Move up half a page" })
 
+-- Easier increment and decrement
 map("n", "+", "<C-a>", { desc = "Increment number" })
 map("n", "-", "<C-x>", { desc = "Decrement number" })
 
@@ -95,6 +97,13 @@ map(
   { expr = true, desc = "Previous search result" }
 )
 
+-- Format buffer
+-- map("n", "<leader>cf<cr>", "", { desc = "[f]ormat" })
+
+-- Open lazy.nvim
+map("n", "<leader>cl", "<cmd>Lazy<cr>", { desc = "[l]azy.nvim" })
+
+-- Open lazygit
 map("n", "<leader>gg", function()
   require("anttikivi.terminal").open(
     { "lazygit" },
@@ -102,6 +111,7 @@ map("n", "<leader>gg", function()
   )
 end, { desc = "Open lazy[g]it" })
 
+-- Deleting without yanking
 map(
   { "n", "v" },
   "<leader>d",
@@ -110,6 +120,8 @@ map(
 )
 map({ "n", "v" }, "<leader>p", [["_dP]], { desc = "Delete and [p]aste" })
 
+-- Make file an executable
 map("n", "<leader>x", [[:!chmod +x %<CR>]], { desc = "Make file e[x]ecutable" })
 
+-- Tmux sessioniser
 map("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")

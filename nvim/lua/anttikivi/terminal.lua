@@ -2,13 +2,19 @@
 -- [LazyVim/LazyVim](https://github.com/LazyVim/LazyVim).
 -- Copyright (c) 2024 LazyVim, Inc.
 -- Licensed under Apache License 2.0.
+--
+-- The custom highlights are modifications.
 local M = {}
 
 local terminals = {}
 
+---@class TerminalOptions
+---@field esc_esc? boolean
+---@field ctrl_hjkl? boolean
+
 -- Opens a floating terminal (interactive by default)
 ---@param cmd? string[]|string
----@param opts? table
+---@param opts? TerminalOptions
 function M.open(cmd, opts)
   opts = vim.tbl_deep_extend("force", {
     ft = "anttikiviterm",
@@ -24,7 +30,7 @@ function M.open(cmd, opts)
     local buf = terminals[key].buf
     vim.b[buf].anttikiviterm_cmd = cmd
     if opts.esc_esc == false then
-      vim.keymap.set("t", "<esc>", "<esc", { buffer = buf, nowait = true })
+      vim.keymap.set("t", "<esc>", "<esc>", { buffer = buf, nowait = true })
     end
     if opts.ctrl_hjkl == false then
       vim.keymap.set("t", "<c-h>", "<c-h>", { buffer = buf, nowait = true })
