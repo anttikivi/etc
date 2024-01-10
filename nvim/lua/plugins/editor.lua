@@ -1,5 +1,9 @@
 return {
   {
+    "folke/flash.nvim",
+    enabled = false,
+  },
+  {
     "lewis6991/gitsigns.nvim",
     opts = {
       signs = {
@@ -18,14 +22,14 @@ return {
       "nvim-lua/plenary.nvim",
     },
     config = function()
-      local harpoon = require "harpoon"
-      harpoon:setup {}
+      local harpoon = require("harpoon")
+      harpoon:setup({})
     end,
     -- TODO: Update this when the branch is merged into master.
     branch = "harpoon2",
     event = "VeryLazy",
     keys = function()
-      local harpoon = require "harpoon"
+      local harpoon = require("harpoon")
 
       return {
         {
@@ -43,84 +47,46 @@ return {
           desc = "[T]oggle Harpoon quick menu",
         },
         {
-          "<C-h>",
+          "<leader>hh",
           function()
             harpoon:list():select(1)
           end,
-          desc = "Switch the first marked Harpoon file",
+          desc = "Switch to the first marked Harpoon file",
         },
         {
-          "<C-j>",
+          "<leader>hj",
           function()
             harpoon:list():select(2)
           end,
-          desc = "Switch the second marked Harpoon file",
+          desc = "Switch to the second marked Harpoon file",
         },
         {
-          "<C-k>",
+          "<leader>hk",
           function()
             harpoon:list():select(3)
           end,
-          desc = "Switch the third marked Harpoon file",
+          desc = "Switch to the third marked Harpoon file",
         },
         {
-          "<C-l>",
+          "<leader>hl",
           function()
             harpoon:list():select(4)
           end,
-          desc = "Switch the fourth marked Harpoon file",
+          desc = "Switch to the fourth marked Harpoon file",
         },
       }
     end,
   },
   {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      {
-        "nvim-telescope/telescope-fzf-native.nvim",
-        build = "make",
-        cond = function()
-          return vim.fn.executable "make" == 1
-        end,
-        config = function()
-          pcall(require("telescope").load_extension, "fzf")
-        end,
-      },
-    },
-    opts = {
-      defaults = {
-        mappings = {
-          i = {
-            ["<C-u>"] = false,
-            ["<C-d>"] = false,
-          },
-        },
-      },
-    },
-    cmd = "Telescope",
-    keys = function()
-      local builtin = require "telescope.builtin"
-      return {
-        {
-          "<leader><leader>",
-          function()
-            builtin.git_files { show_untracked = true }
-          end,
-        },
-      }
-    end,
+    "nvim-neo-tree/neo-tree.nvim",
+    enabled = false,
   },
+  -- {
+  --   "nvim-pack/nvim-spectre",
+  --   enabled = false,
+  -- },
   {
-    "folke/which-key.nvim",
-    config = function()
-      local which_key = require "which-key"
-      which_key.setup()
-      which_key.register {
-        ["g"] = { name = "+Goto" },
-        ["<leader>g"] = { name = "+[g]it" },
-      }
-    end,
-    event = "VeryLazy",
+    "RRethy/vim-illuminate",
+    enabled = false,
   },
 }

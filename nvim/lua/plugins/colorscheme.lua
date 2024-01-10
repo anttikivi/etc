@@ -2,17 +2,14 @@ return {
   {
     "anttikivi/brunch.nvim",
     dev = true,
-    config = function()
-      require("brunch").load()
-      vim.cmd.colorscheme "brunch"
-    end,
-    priority = 1000,
+    lazy = true,
   },
   {
-    "cormacrelf/dark-notify",
-    event = "VeryLazy",
-    config = function()
-      require("dark_notify").run()
-    end,
+    "catppuccin/nvim",
+    enabled = false,
+  },
+  {
+    "folke/tokyonight.nvim",
+    enabled = false,
   },
 }
