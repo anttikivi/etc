@@ -28,12 +28,12 @@ return {
           lualine_a = { "mode" },
           lualine_b = {
             "branch",
-            { "diff",        colored = false },
+            { "diff", colored = false },
             { "diagnostics", colored = false },
           },
           lualine_c = {
             Util.lualine.root_dir(),
-            "filename",
+            -- "filename",
             { Util.lualine.pretty_path() },
           },
           lualine_x = { "encoding", "fileformat", "filetype" },
