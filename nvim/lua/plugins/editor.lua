@@ -103,9 +103,9 @@ return {
       keywords = {
         FIX = { icon = "☣︎ " },
         TODO = { icon = "✓ " },
-        HACK = { icon = "⽕ " },
+        HACK = { icon = "♯ " },
         WARN = { icon = "⚠ " },
-        PERF = { icon = "⚡︎ " },
+        PERF = { icon = "✦ " },
         NOTE = { icon = "♫ " },
         TEST = { icon = "⏲ " },
       },
