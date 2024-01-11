@@ -97,6 +97,7 @@ return {
         })
     end,
   },
+  -- TODO: Fix the highlights for the comments.
   {
     "folke/todo-comments.nvim",
     opts = {
