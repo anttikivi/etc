@@ -87,12 +87,15 @@ return {
   -- },
   {
     "nvim-telescope/telescope.nvim",
-    opts = {
-      defaults = {
-        prompt_prefix = "> ",
-        selection_caret = "> ",
-      },
-    },
+    opts = function(_, opts)
+      opts.defaults.prompt_prefix = "> "
+      opts.defaults.selection_caret = "> "
+      local actions = require "telescope.actions"
+      opts.defaults.mappings.i =
+        vim.tbl_extend("force", opts.defaults.mappings.i, {
+          ["<esc>"] = actions.close,
+        })
+    end,
   },
   {
     "RRethy/vim-illuminate",
