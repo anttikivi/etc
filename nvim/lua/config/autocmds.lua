@@ -13,3 +13,10 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     vim.wo.conceallevel = 0
   end,
 })
+
+-- Set filetype for `.blade.php` files.
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  group = augroup "blade",
+  pattern = "*.blade.php",
+  command = "set ft=blade",
+})
