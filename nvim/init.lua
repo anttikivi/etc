@@ -33,3 +33,5 @@ if vim.version.cmp(parsed_expected_version, version) > 0 then
 end
 
 require "config.lazy"
+
+require "anttikivi.parsers"
