@@ -20,18 +20,22 @@ readonly DOTFILES_DIR="${HOME}/.dotfiles_tmp"
 darwin() {
   printf "%s %sUninstalling %sHomebrew%s...%s\n" "${CHAR_X_MARK}" "${ESC_RED}" "${ESC_BOLD}" "${ESC_RESET}${ESC_RED}" "${ESC_RESET}"
 
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
+  if ! command -v brew >/dev/null 2>&1; then
+    printf "Homebrew not found!"
+  else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 
-  # Homebrew leaves behind some directories we need to delete ourselves.
-  rm -rf /opt/homebrew/Frameworks/
-  rm -rf /opt/homebrew/bin/
-  rm -rf /opt/homebrew/etc/
-  rm -rf /opt/homebrew/include/
-  rm -rf /opt/homebrew/lib/
-  rm -rf /opt/homebrew/opt/
-  rm -rf /opt/homebrew/sbin/
-  rm -rf /opt/homebrew/share/
-  rm -rf /opt/homebrew/var/
+    # Homebrew leaves behind some directories we need to delete ourselves.
+    rm -rf /opt/homebrew/Frameworks/
+    rm -rf /opt/homebrew/bin/
+    rm -rf /opt/homebrew/etc/
+    rm -rf /opt/homebrew/include/
+    rm -rf /opt/homebrew/lib/
+    rm -rf /opt/homebrew/opt/
+    rm -rf /opt/homebrew/sbin/
+    rm -rf /opt/homebrew/share/
+    rm -rf /opt/homebrew/var/
+  fi
 
   printf "%s %sHomebrew uninstalled!%s\n" "${CHAR_CHECK_MARK}" "${ESC_YELLOW}" "${ESC_RESET}"
 
