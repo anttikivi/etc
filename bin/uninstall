@@ -60,7 +60,13 @@ darwin() {
   rm -rf "${HOME}/.zsh_history"
   rm -rf "${HOME}/.zshrc"
 
-  sudo rm -rf "/usr/local/go"
+  stty -echo
+  printf "Password: "
+  read password
+  stty echo
+  printf "\n"
+
+  echo "${password}" | sudo -S rm -rf "/usr/local/go"
 
   printf "%s %sConfiguration files and temporary files uninstalled!%s\n" "${CHAR_CHECK_MARK}" "${ESC_YELLOW}" "${ESC_RESET}"
 }
