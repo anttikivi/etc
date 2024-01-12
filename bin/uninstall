@@ -65,12 +65,12 @@ darwin() {
   echo "${password}" | sudo -S rm -rf "${HOME}/go"
   rm -rf "${HOME}/tools"
 
-  rm "${HOME}/.gitconfig"
-  rm "${HOME}/.gitignore_global"
-  rm "${HOME}/.tmux.conf"
+  rm -f "${HOME}/.gitconfig"
+  rm -f "${HOME}/.gitignore_global"
+  rm -f "${HOME}/.tmux.conf"
   find . -type f -name ".zcompdump-*" -maxdepth 1 -exec rm -f {} \;
-  rm "${HOME}/.zsh_history"
-  rm "${HOME}/.zshrc"
+  rm -f "${HOME}/.zsh_history"
+  rm -f "${HOME}/.zshrc"
 
   echo "${password}" | sudo -S rm -rf "/usr/local/go"
 
