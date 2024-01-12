@@ -18,11 +18,11 @@ readonly CHAR_X_MARK="${ESC_BOLD}${ESC_RED}\xE2\x9C\x96${ESC_RESET}"
 readonly DOTFILES_DIR="${HOME}/.dotfiles_tmp"
 
 darwin() {
-  printf "${CHAR_X_MARK} ${ESC_RED}Uninstalling ${ESC_BOLD}Homebrew${ESC_RESET}${ESC_RED}...${ESC_RESET}\n"
-
   if ! command -v brew >/dev/null 2>&1; then
-    printf "Homebrew not found!"
+    printf "Homebrew not found!\n"
   else
+    printf "${CHAR_X_MARK} ${ESC_RED}Uninstalling ${ESC_BOLD}Homebrew${ESC_RESET}${ESC_RED}...${ESC_RESET}\n"
+
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 
     # Homebrew leaves behind some directories we need to delete ourselves.
@@ -35,9 +35,9 @@ darwin() {
     rm -rf /opt/homebrew/sbin/
     rm -rf /opt/homebrew/share/
     rm -rf /opt/homebrew/var/
-  fi
 
-  printf "${CHAR_CHECK_MARK} ${ESC_YELLOW}Homebrew uninstalled!${ESC_RESET}\n"
+    printf "${CHAR_CHECK_MARK} ${ESC_YELLOW}Homebrew uninstalled!${ESC_RESET}\n"
+  fi
 
   stty -echo
   printf "Password: "
@@ -84,6 +84,9 @@ not_supported() {
 
 printf "${ESC_BOLD}${ESC_BLUE}Running the environment uninstallation...${ESC_RESET}\n"
 
+old_pwd="$(pwd)"
+cd "${HOME}"
+
 os_name="$(uname)"
 printf "${CHAR_CHECK_MARK} Running on ${ESC_UNDERLINE}${os_name}${ESC_RESET}\n"
 if [ "${os_name}" = "Darwin" ]; then
@@ -91,5 +94,7 @@ if [ "${os_name}" = "Darwin" ]; then
 else
   not_supported
 fi
+
+cd "${old_pwd}"
 
 printf "${ESC_BOLD}${ESC_MAGENTA}Finished the environment uninstallation!${ESC_RESET}\n"
