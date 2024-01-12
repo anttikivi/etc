@@ -53,12 +53,12 @@ darwin() {
   rm -rf "${HOME}/go"
   rm -rf "${HOME}/tools"
 
-  rm -rf "${HOME}/.gitconfig"
-  rm -rf "${HOME}/.gitignore_global"
-  rm -rf "${HOME}/.tmux.conf"
-  rm -rf "${HOME}/.zcompdump*"
-  rm -rf "${HOME}/.zsh_history"
-  rm -rf "${HOME}/.zshrc"
+  rm "${HOME}/.gitconfig"
+  rm "${HOME}/.gitignore_global"
+  rm "${HOME}/.tmux.conf"
+  rm "${HOME}/.zcompdump*"
+  rm "${HOME}/.zsh_history"
+  rm "${HOME}/.zshrc"
 
   stty -echo
   printf "Password: "
