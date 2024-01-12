@@ -35,6 +35,12 @@ darwin() {
 
   printf "%s %sHomebrew uninstalled!%s\n" "${CHAR_CHECK_MARK}" "${ESC_YELLOW}" "${ESC_RESET}"
 
+  stty -echo
+  printf "Password: "
+  read password
+  stty echo
+  printf "\n"
+
   printf "%s %sUninstalling configuration files and temporary files created by programs...%s\n" "${CHAR_X_MARK}" "${ESC_RED}" "${ESC_RESET}"
   rm -rf "${HOME}/.ansible"
   rm -rf "${HOME}/.aws"
@@ -51,6 +57,7 @@ darwin() {
   rm -rf "${HOME}/.ssh"
   rm -rf "${HOME}/.terraform.d"
   rm -rf "${HOME}/.zsh_sessions"
+  echo "${password}" | sudo -S rm -rf "${HOME}/go"
   rm -rf "${HOME}/go"
   rm -rf "${HOME}/tools"
 
@@ -60,12 +67,6 @@ darwin() {
   rm "${HOME}/.zcompdump*"
   rm "${HOME}/.zsh_history"
   rm "${HOME}/.zshrc"
-
-  stty -echo
-  printf "Password: "
-  read password
-  stty echo
-  printf "\n"
 
   echo "${password}" | sudo -S rm -rf "/usr/local/go"
 
