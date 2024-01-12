@@ -1,0 +1,75 @@
+#!/bin/sh
+
+set -e
+
+readonly ESC="\033"
+readonly ESC_RESET="${ESC}[0m"
+readonly ESC_BOLD="${ESC}[1m"
+readonly ESC_DIM="${ESC}[2m"
+readonly ESC_UNDERLINE="${ESC}[4m"
+
+readonly ESC_RED="${ESC}[31m"
+readonly ESC_GREEN="${ESC}[32m"
+readonly ESC_YELLOW="${ESC}[33m"
+readonly ESC_BLUE="${ESC}[34m"
+readonly ESC_MAGENTA="${ESC}[35m"
+readonly ESC_CYAN="${ESC}[36m"
+
+readonly ESC_SEA="${ESC}[38;5;49m"
+
+readonly CHAR_ARROW="${ESC_SEA}\xE2\x96\xB6${ESC_RESET}"
+readonly CHAR_CLIPBOARD="${ESC_BOLD}${ESC_RED}\xF0\x9F\x93\x8B${ESC_RESET}"
+readonly CHAR_CHECK_MARK="${ESC_BOLD}${ESC_GREEN}\xE2\x9C\x94${ESC_RESET}"
+readonly CHAR_RIGHT_ANGLE="${ESC_BOLD}${ESC_GREEN}\xE2\x88\x9F${ESC_RESET}"
+readonly CHAR_X_MARK="${ESC_BOLD}${ESC_RED}\xE2\x9C\x96${ESC_RESET}"
+
+readonly DOTFILES_DIR="${HOME}/.dotfiles_tmp"
+
+darwin() {
+  printf "%s %sUninstalling %sHomebrew%s...%s\n" "${CHAR_X_MARK}" "${ESC_RED}" "${ESC_BOLD}" "${ESC_RESET}${ESC_RED}" "${ESC_RESET}"
+
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
+
+  # Homebrew leaves behind some directories we need to delete ourselves.
+  rm -rf /opt/homebrew/Frameworks/
+  rm -rf /opt/homebrew/bin/
+  rm -rf /opt/homebrew/etc/
+  rm -rf /opt/homebrew/include/
+  rm -rf /opt/homebrew/lib/
+  rm -rf /opt/homebrew/opt/
+  rm -rf /opt/homebrew/sbin/
+  rm -rf /opt/homebrew/share/
+  rm -rf /opt/homebrew/var/
+
+  printf "%s %sHomebrew uninstalled!%s\n" "${CHAR_CHECK_MARK}" "${ESC_YELLOW}" "${ESC_RESET}"
+
+  printf "%s %sUninstalling configuration files and temporary files created by programs...%s\n" "${CHAR_X_MARK}" "${ESC_RED}" "${ESC_RESET}"
+  rm -rf "${HOME}/.ansible"
+  rm -rf "${HOME}/.aws"
+  rm -rf "${HOME}/.cache"
+  rm -rf "${HOME}/.cargo"
+  rm -rf "${HOME}/.config"
+  rm -rf "${HOME}/.local"
+  rm -rf "${HOME}/.npm"
+  rm -rf "${HOME}/.nvm"
+  rm -rf "${HOME}/.oh-my-zsh"
+  rm -rf "${HOME}/.rustup"
+  rm -rf "${HOME}/.ssh"
+}
+
+not_supported() {
+  printf "%s %sThis operating system is not supported!%s\n" "${CHAR_X_MARK}" "${ESC_BOLD}${ESC_RED}" "${ESC_RESET}"
+  exit 1
+}
+
+printf "%sRunning the environment uninstallation...%s\n" "${ESC_BOLD}${ESC_BLUE}" "${ESC_RESET}"
+
+os_name="$(uname)"
+printf "%s Running on %s%s%s\n" "${CHAR_CHECK_MARK}" "${ESC_UNDERLINE}" "${os_name}" "${ESC_RESET}"
+if [ "${os_name}" = "Darwin" ]; then
+  darwin
+else
+  not_supported
+fi
+
+printf "%sFinished the environment uninstallation!%s\n" "${ESC_BOLD}${ESC_MAGENTA}" "${ESC_RESET}"
