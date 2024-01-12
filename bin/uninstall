@@ -68,7 +68,7 @@ darwin() {
   rm "${HOME}/.gitconfig"
   rm "${HOME}/.gitignore_global"
   rm "${HOME}/.tmux.conf"
-  rm "${HOME}/.zcompdump*"
+  find . -type f -name ".zcompdump-*" -maxdepth 1 -exec rm -f {} \;
   rm "${HOME}/.zsh_history"
   rm "${HOME}/.zshrc"
 
