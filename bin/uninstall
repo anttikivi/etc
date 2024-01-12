@@ -41,6 +41,7 @@ darwin() {
   rm -rf "${DOTFILES_DIR}"
   rm -rf "${HOME}/.cache"
   rm -rf "${HOME}/.cargo"
+  rm -rf "${HOME}/.composer"
   rm -rf "${HOME}/.config"
   rm -rf "${HOME}/.local"
   rm -rf "${HOME}/.npm"
