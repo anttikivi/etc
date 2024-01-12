@@ -29,21 +29,18 @@ Ansible playbook. The script should be
 If you don&rsquo;t have `curl` or you wish to download the script separately
 before running it, that&rsquo;s also possible.
 
-```sh
-# Don't mind the `curl` command here, you can download the script however you
-# like.
-curl -OL https://raw.githubusercontent.com/anttikivi/dotfiles/main/bin/install
-chmod +x install
-./install
-```
+    curl -OL https://raw.githubusercontent.com/anttikivi/dotfiles/main/bin/install
+    chmod +x install
+    ./install
+
+> Don&rsquo;t mind the `curl` command here, you can download the script however
+> you like.
 
 For subsequent runs, you can either run the `bin/install` script again or run
 the Ansible playbook.
 
-```sh
-cd ~/dotfiles
-ansible-playbook local.yml -K
-```
+    cd ~/dotfiles
+    ansible-playbook local.yml -K
 
 Even though the script clones a temporary copy of this repository for the
 duration of the script run, the Ansible playbook also clones this repository
@@ -76,6 +73,17 @@ The script does the following steps:
    The temporary clone is removed by the script after a successful playbook run.
 5. Install [Ansible Galaxy](https://galaxy.ansible.com/) dependencies.
 6. Run the Ansible playbook.
+
+### Uninstalling
+
+To uninstall the configuration, you can run the `uninstall` script in the `bin`
+directory. The script should be
+[POSIX-compliant](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html).
+
+    /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/anttikivi/dotfiles/main/bin/uninstall)"
+
+Proceed with caution, as the script will remove all of the configuration files
+and may not regard any changes you have made to the configuration files.
 
 ## Development
 
