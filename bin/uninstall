@@ -18,7 +18,7 @@ readonly CHAR_X_MARK="${ESC_BOLD}${ESC_RED}\xE2\x9C\x96${ESC_RESET}"
 readonly DOTFILES_DIR="${HOME}/.dotfiles_tmp"
 
 darwin() {
-  printf "%s %sUninstalling %sHomebrew%s...%s\n" "${CHAR_X_MARK}" "${ESC_RED}" "${ESC_BOLD}" "${ESC_RESET}${ESC_RED}" "${ESC_RESET}"
+  printf "${CHAR_X_MARK} ${ESC_RED}Uninstalling ${ESC_BOLD}Homebrew${ESC_RESET}${ESC_RED}...${ESC_RESET}\n"
 
   if ! command -v brew >/dev/null 2>&1; then
     printf "Homebrew not found!"
@@ -37,7 +37,7 @@ darwin() {
     rm -rf /opt/homebrew/var/
   fi
 
-  printf "%s %sHomebrew uninstalled!%s\n" "${CHAR_CHECK_MARK}" "${ESC_YELLOW}" "${ESC_RESET}"
+  printf "${CHAR_CHECK_MARK} ${ESC_YELLOW}Homebrew uninstalled!${ESC_RESET}\n"
 
   stty -echo
   printf "Password: "
@@ -45,7 +45,8 @@ darwin() {
   stty echo
   printf "\n"
 
-  printf "%s %sUninstalling configuration files and temporary files created by programs...%s\n" "${CHAR_X_MARK}" "${ESC_RED}" "${ESC_RESET}"
+  printf "${CHAR_X_MARK} ${ESC_RED}Uninstalling configuration files and temporary files created by programs...${ESC_RESET}\n"
+
   rm -rf "${HOME}/.ansible"
   rm -rf "${HOME}/.aws"
   rm -rf "${DOTFILES_DIR}"
@@ -62,7 +63,6 @@ darwin() {
   rm -rf "${HOME}/.terraform.d"
   rm -rf "${HOME}/.zsh_sessions"
   echo "${password}" | sudo -S rm -rf "${HOME}/go"
-  rm -rf "${HOME}/go"
   rm -rf "${HOME}/tools"
 
   rm "${HOME}/.gitconfig"
@@ -74,22 +74,22 @@ darwin() {
 
   echo "${password}" | sudo -S rm -rf "/usr/local/go"
 
-  printf "%s %sConfiguration files and temporary files uninstalled!%s\n" "${CHAR_CHECK_MARK}" "${ESC_YELLOW}" "${ESC_RESET}"
+  printf "${CHAR_CHECK_MARK} ${ESC_YELLOW}Configuration files and temporary files uninstalled!${ESC_RESET}\n" "" "" ""
 }
 
 not_supported() {
-  printf "%s %sThis operating system is not supported!%s\n" "${CHAR_X_MARK}" "${ESC_BOLD}${ESC_RED}" "${ESC_RESET}"
+  printf "${CHAR_X_MARK} ${ESC_BOLD}${ESC_RED}This operating system is not supported!${ESC_RESET}\n"
   exit 1
 }
 
-printf "%sRunning the environment uninstallation...%s\n" "${ESC_BOLD}${ESC_BLUE}" "${ESC_RESET}"
+printf "${ESC_BOLD}${ESC_BLUE}Running the environment uninstallation...${ESC_RESET}\n"
 
 os_name="$(uname)"
-printf "%s Running on %s%s%s\n" "${CHAR_CHECK_MARK}" "${ESC_UNDERLINE}" "${os_name}" "${ESC_RESET}"
+printf "${CHAR_CHECK_MARK} Running on ${ESC_UNDERLINE}${os_name}${ESC_RESET}\n"
 if [ "${os_name}" = "Darwin" ]; then
   darwin
 else
   not_supported
 fi
 
-printf "%sFinished the environment uninstallation!%s\n" "${ESC_BOLD}${ESC_MAGENTA}" "${ESC_RESET}"
+printf "${ESC_BOLD}${ESC_MAGENTA}Finished the environment uninstallation!${ESC_RESET}\n"
