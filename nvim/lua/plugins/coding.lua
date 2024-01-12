@@ -1,5 +1,13 @@
 return {
   {
+    "lukas-reineke/headlines.nvim",
+    opts = {
+      markdown = {
+        fat_headline_lower_string = "⿳",
+      },
+    },
+  },
+  {
     "hrsh7th/nvim-cmp",
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
