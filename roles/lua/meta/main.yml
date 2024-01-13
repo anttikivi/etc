@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: rust
+# vi: ft=yaml.ansible
