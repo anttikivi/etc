@@ -1,13 +1,17 @@
 return {
   {
     "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "ansible-lint",
-        "shfmt",
-        "stylua",
-      },
-    },
+    opts = function(_, opts)
+      if type(opts.ensure_installed) == "table" then
+        vim.list_extend(opts.ensure_installed, {
+          "ansible-lint",
+          "luacheck",
+          "selene",
+          "shfmt",
+          "stylua",
+        })
+      end
+    end,
   },
   {
     "neovim/nvim-lspconfig",
