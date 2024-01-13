@@ -10,7 +10,7 @@
 
 - name: Set the current Neovim version fact
   ansible.builtin.set_fact:
-    current_nvim_version: "{{ current_nvim_version_sh.stdout|default('') }}"
+    current_nvim_version: "{{ current_nvim_version_sh.stdout | default('') }}"
 
 - name: Query the latest Neovim version
   ansible.builtin.shell:
@@ -22,7 +22,7 @@
 
 - name: Set the latest Neovim version fact
   ansible.builtin.set_fact:
-    latest_nvim_version: "{{ latest_nvim_version_sh.stdout|default('') }}"
+    latest_nvim_version: "{{ latest_nvim_version_sh.stdout | default('') }}"
 
 - name: Debug the current Neovim version
   ansible.builtin.debug:
@@ -139,6 +139,11 @@
     path: "{{ init_lua_dir }}/lua"
   register: lua_link
 
+- name: Stat the `after` directory link
+  ansible.builtin.stat:
+    path: "{{ init_lua_dir }}/after"
+  register: after_link
+
 - name: Set the init.lua fact
   ansible.builtin.set_fact:
     init_lua: "{{ init_lua_link.stat.exists and init_lua_link.stat.islnk }}"
@@ -155,13 +160,19 @@
   ansible.builtin.set_fact:
     lua_dir: "{{ lua_link.stat.exists and lua_link.stat.islnk }}"
 
+- name: Set the `after` directory fact
+  ansible.builtin.set_fact:
+    after_dir: "{{ after_link.stat.exists and after_link.stat.islnk }}"
+
 - name: Set restow fact
   ansible.builtin.set_fact:
-    nvim_restow: "{{ init_lua or lazy_lock or lazyvim_link or lua_dir }}"
+    nvim_restow:
+      "{{ init_lua or lazy_lock or lazyvim_link or lua_dir or after_dir }}"
 
 - name: Set no-stow fact
   ansible.builtin.set_fact:
-    nvim_nostow: "{{ init_lua and lazy_lock and lazyvim_link and lua_dir }}"
+    nvim_nostow:
+      "{{ init_lua and lazy_lock and lazyvim_link and lua_dir and after_dir }}"
 
 - name: Debug the restow fact
   ansible.builtin.debug:
