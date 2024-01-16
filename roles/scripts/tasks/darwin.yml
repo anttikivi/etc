@@ -1,7 +1,7 @@
 ---
 - name: Install the login script
   ansible.builtin.copy:
-    src: login
+    src: cloudauth
     dest: "{{ ansible_user_dir }}/.local/bin/"
     mode: "0755"
     force: true
