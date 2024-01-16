@@ -1,4 +1,11 @@
 ---
+- name: Install the login script
+  ansible.builtin.copy:
+    src: login
+    dest: "{{ ansible_user_dir }}/.local/bin/"
+    mode: "0755"
+    force: true
+
 - name: Install the password generator script
   ansible.builtin.copy:
     src: pwgen
