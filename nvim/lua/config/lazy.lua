@@ -100,7 +100,7 @@ require("lazy").setup {
     version = false,
   },
   install = { colorscheme = { "brunch" } },
-  checker = { enabled = true },
+  checker = { enabled = false },
   performance = {
     rtp = {
       disabled_plugins = {
