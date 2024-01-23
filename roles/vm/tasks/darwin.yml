@@ -4,5 +4,6 @@
     name:
       - roots/tap/trellis-cli
       - lima
+      - hashicorp/tap/hashicorp-vagrant
     state: present
 # vi: ft=yaml.ansible

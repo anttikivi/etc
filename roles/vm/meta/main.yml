@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: brew
+# vi: ft=yaml.ansible

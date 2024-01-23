@@ -1,0 +1,6 @@
+---
+- name: Tap the HashiCorp repository
+  community.general.homebrew_tap:
+    name: hashicorp/tap
+    state: present
+# vi: ft=yaml.ansible

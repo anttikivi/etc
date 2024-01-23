@@ -1,9 +1,4 @@
 ---
-- name: Tap the HashiCorp repository
-  community.general.homebrew_tap:
-    name: hashicorp/tap
-    state: present
-
 - name: Install Terraform
   community.general.homebrew:
     name: hashicorp/tap/terraform
