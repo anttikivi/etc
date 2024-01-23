@@ -1,0 +1,8 @@
+---
+- name: Install virtual machine utilities
+  community.general.homebrew:
+    name:
+      - roots/tap/trellis-cli
+      - lima
+    state: present
+# vi: ft=yaml.ansible
