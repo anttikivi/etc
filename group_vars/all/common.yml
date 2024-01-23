@@ -1,6 +1,5 @@
 default_roles:
   - aws
-  - brew
   - build
   - clang
   - dirs
