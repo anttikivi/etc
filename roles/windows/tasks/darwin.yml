@@ -1,0 +1,14 @@
+---
+- name: Install Amethyst
+  community.general.homebrew_cask:
+    name:
+      - amethyst
+    state: present
+
+- name: Copy Amethyst configuration
+  ansible.builtin.copy:
+    src: amethyst.yml
+    dest: "{{ ansible_user_dir }}/.amethyst.yml"
+    mode: "0644"
+    force: true
+# vi: ft=yaml.ansible
