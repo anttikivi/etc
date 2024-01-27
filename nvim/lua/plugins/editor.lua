@@ -47,32 +47,46 @@ return {
           desc = "[T]oggle Harpoon quick menu",
         },
         {
-          "<leader>hh",
+          "<C-h>",
           function()
             harpoon:list():select(1)
           end,
           desc = "Switch to the first marked Harpoon file",
         },
         {
-          "<leader>hj",
+          "<C-j>",
           function()
             harpoon:list():select(2)
           end,
           desc = "Switch to the second marked Harpoon file",
         },
         {
-          "<leader>hk",
+          "<C-k>",
           function()
             harpoon:list():select(3)
           end,
           desc = "Switch to the third marked Harpoon file",
         },
         {
-          "<leader>hl",
+          "<C-l>",
           function()
             harpoon:list():select(4)
           end,
           desc = "Switch to the fourth marked Harpoon file",
+        },
+        {
+          "<C-ö>",
+          function()
+            harpoon:list():select(5)
+          end,
+          desc = "Switch to the fifth marked Harpoon file",
+        },
+        {
+          "<C-ä>",
+          function()
+            harpoon:list():select(6)
+          end,
+          desc = "Switch to the sixth marked Harpoon file",
         },
       }
     end,
