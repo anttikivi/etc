@@ -160,7 +160,7 @@ window-margins: true
 smart-window-margins: false
 
 # The size of the margins between windows (in px, default 0).
-window-margin-size: 6
+window-margin-size: 2
 
 # The max number of windows that may be visible on a screen at one time before
 # additional windows are minimized. A value of 0 disables the feature.
@@ -178,6 +178,7 @@ floating:
     "com.apple.systempreferences",
     "com.microsoft.teams",
     "net.whatsapp.WhatsApp",
+    "ru.keepcoder.Telegram",
   ]
 
 # Boolean flag determining behavior of the floating list. true if the applications should be floating and all others tiled. false if the applications should be tiled and all others floating (default true).
