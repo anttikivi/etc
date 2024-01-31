@@ -12,4 +12,10 @@
       - fzf
       - ripgrep
     state: present
+
+- name: Install Hugo
+  community.general.homebrew:
+    name:
+      - hugo
+    state: present
 # vi: ft=yaml.ansible
