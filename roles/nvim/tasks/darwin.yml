@@ -144,6 +144,11 @@
     path: "{{ init_lua_dir }}/after"
   register: after_link
 
+- name: Stat the `ftdetect` directory link
+  ansible.builtin.stat:
+    path: "{{ init_lua_dir }}/ftdetect"
+  register: ftdetect_link
+
 - name: Set the init.lua fact
   ansible.builtin.set_fact:
     init_lua: "{{ init_lua_link.stat.exists and init_lua_link.stat.islnk }}"
@@ -164,15 +169,21 @@
   ansible.builtin.set_fact:
     after_dir: "{{ after_link.stat.exists and after_link.stat.islnk }}"
 
+- name: Set the `ftdetect` directory fact
+  ansible.builtin.set_fact:
+    ftdetect_dir: "{{ ftdetect_link.stat.exists and ftdetect_link.stat.islnk }}"
+
 - name: Set restow fact
   ansible.builtin.set_fact:
     nvim_restow:
-      "{{ init_lua or lazy_lock or lazyvim_link or lua_dir or after_dir }}"
+      "{{ init_lua or lazy_lock or lazyvim_link or lua_dir or after_dir or
+      ftdetect_dir }}"
 
 - name: Set no-stow fact
   ansible.builtin.set_fact:
     nvim_nostow:
-      "{{ init_lua and lazy_lock and lazyvim_link and lua_dir and after_dir }}"
+      "{{ init_lua and lazy_lock and lazyvim_link and lua_dir and after_dir and
+      ftdetect_dir }}"
 
 - name: Debug the restow fact
   ansible.builtin.debug:
