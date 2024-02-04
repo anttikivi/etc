@@ -20,7 +20,9 @@ return {
       astro = {},
       bashls = {},
       cssls = {},
-      html = {},
+      html = {
+        provideFormatter = false,
+      },
       phpactor = {},
       stylelint_lsp = {},
       vimls = {},
