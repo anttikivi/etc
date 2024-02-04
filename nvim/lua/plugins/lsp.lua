@@ -16,17 +16,25 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      ansiblels = {},
-      astro = {},
-      bashls = {},
-      cssls = {},
-      html = {
-        filetypes = { "gotmpl", "html", "templ" },
-        provideFormatter = false,
+      servers = {
+        ansiblels = {},
+        astro = {},
+        bashls = {},
+        cssls = {},
+        gopls = {
+          filetypes = { "go", "gomod", "gowork", "gotmpl", "gohtmltmpl" },
+          templateExtension = { "gotmpl", "gohtmltmpl" },
+        },
+        html = {
+          filetypes = { "gohtmltmpl", "html", "templ" },
+          init_options = {
+            provideFormatter = false,
+          },
+        },
+        phpactor = {},
+        stylelint_lsp = {},
+        vimls = {},
       },
-      phpactor = {},
-      stylelint_lsp = {},
-      vimls = {},
     },
   },
 }
