@@ -176,6 +176,7 @@ window-minimum-width: 0
 floating:
   [
     "com.apple.systempreferences",
+    "com.f-secure.fsmac.gui",
     "com.microsoft.teams",
     "net.whatsapp.WhatsApp",
     "ru.keepcoder.Telegram",
