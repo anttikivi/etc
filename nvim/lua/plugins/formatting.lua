@@ -3,6 +3,7 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
+        gohtmltmpl = { "prettier" },
         lua = { "stylua" },
         sh = { "shfmt" },
         toml = { "taplo" },
