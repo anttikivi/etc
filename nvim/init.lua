@@ -34,4 +34,5 @@ end
 
 require "config.lazy"
 
+require "anttikivi.filetypes"
 require "anttikivi.parsers"
