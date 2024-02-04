@@ -1,4 +1,6 @@
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+---@diagnostic disable-next-line: inject-field
 parser_config.blade = {
   install_info = {
     url = "https://github.com/EmranMR/tree-sitter-blade",
@@ -8,11 +10,13 @@ parser_config.blade = {
   filetype = "blade",
 }
 
+---@diagnostic disable-next-line: inject-field
 parser_config.gotmpl = {
   install_info = {
     url = "https://github.com/ngalaiko/tree-sitter-go-template",
     files = { "src/parser.c" },
   },
   filetype = "gotmpl",
-  used_by = { "gotmpl" },
 }
+
+vim.treesitter.language.register("gotmpl", { "gohtmltmpl" })
