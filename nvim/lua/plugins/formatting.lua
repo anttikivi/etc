@@ -5,6 +5,7 @@ return {
       formatters_by_ft = {
         lua = { "stylua" },
         sh = { "shfmt" },
+        toml = { "taplo" },
         typescript = { "prettier" },
         typescriptreact = { "prettier" },
       },
