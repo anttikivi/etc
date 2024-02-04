@@ -21,6 +21,7 @@ return {
       bashls = {},
       cssls = {},
       html = {
+        filetypes = { "gotmpl", "html", "templ" },
         provideFormatter = false,
       },
       phpactor = {},

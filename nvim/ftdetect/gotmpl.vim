@@ -1,3 +1,3 @@
 augroup filetypedetect
-autocmd BufNewFile,BufRead *.tmpl, if search('{{.\+}}', 'nw') | setlocal filetype=gotmpl | endif
+autocmd BufNewFile,BufRead *.html, if search('{{.\+}}', 'nw') | setlocal filetype=gotmpl | endif
 augroup END
