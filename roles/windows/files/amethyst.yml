@@ -175,6 +175,7 @@ window-minimum-width: 0
 # List of bundle identifiers for applications to either be automatically floating or automatically tiled based on floating-is-blacklist (default []).
 floating:
   [
+    "com.adobe.acc.AdobeCreativeCloud",
     "com.apple.systempreferences",
     "com.f-secure.fsmac.gui",
     "com.microsoft.teams",
