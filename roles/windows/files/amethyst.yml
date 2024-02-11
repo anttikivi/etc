@@ -176,6 +176,7 @@ window-minimum-width: 0
 floating:
   [
     "com.adobe.acc.AdobeCreativeCloud",
+    "com.apple.calculator",
     "com.apple.systempreferences",
     "com.f-secure.fsmac.gui",
     "com.microsoft.teams",
