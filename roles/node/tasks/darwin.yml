@@ -39,7 +39,7 @@
 
 - name: Set the latest nvm version fact
   ansible.builtin.set_fact:
-    latest_nvm_version: "{{ latest_nvm_version_sh.stdout|default('') }}"
+    latest_nvm_version: "{{ latest_nvm_version_sh.stdout | default('') }}"
 
 - name: Install nvm
   ansible.builtin.shell: |
@@ -74,7 +74,7 @@
 
 - name: Set the current Node.js 20 version fact
   ansible.builtin.set_fact:
-    current_node_20_version: "v{{ node_20_version_sh.stdout|default('') }}"
+    current_node_20_version: "v{{ node_20_version_sh.stdout | default('') }}"
 
 - name: Query the latest available Node.js 20 version
   ansible.builtin.shell:
@@ -87,7 +87,7 @@
 - name: Set the latest available Node.js 20 version fact
   ansible.builtin.set_fact:
     latest_node_20_version:
-      "v{{ latest_node_20_version_sh.stdout|default('') }}"
+      "v{{ latest_node_20_version_sh.stdout | default('') }}"
 
 # Do a clean installation of Node.js 20.
 - name: Install Node.js 20
@@ -137,7 +137,7 @@
 
 - name: Set the current Node.js 18 version fact
   ansible.builtin.set_fact:
-    current_node_18_version: "v{{ node_18_version_sh.stdout|default('') }}"
+    current_node_18_version: "v{{ node_18_version_sh.stdout | default('') }}"
 
 - name: Query the latest available Node.js 18 version
   ansible.builtin.shell:
@@ -150,7 +150,7 @@
 - name: Set the latest available Node.js 18 version fact
   ansible.builtin.set_fact:
     latest_node_18_version:
-      "v{{ latest_node_18_version_sh.stdout|default('') }}"
+      "v{{ latest_node_18_version_sh.stdout | default('') }}"
 
 # Do a clean installation of Node.js 18.
 - name: Install Node.js 18
