@@ -19,4 +19,11 @@
     dest: "{{ ansible_user_dir }}/.local/bin/"
     mode: "0755"
     force: true
+
+- name: Install the Terraform environment utility
+  ansible.builtin.copy:
+    src: tfenv
+    dest: "{{ ansible_user_dir }}/.local/bin/"
+    mode: "0755"
+    force: true
 # vi: ft=yaml.ansible
