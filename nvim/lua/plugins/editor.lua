@@ -33,7 +33,7 @@ return {
 
       return {
         {
-          "<leader>ha",
+          "<C-a>",
           function()
             harpoon:list():append()
           end,
