@@ -43,6 +43,11 @@
     scope: global
     value: "{{ ansible_user_dir }}/.gitignore_global"
 
+- name: Tap the repository for lazygit
+  community.general.homebrew_tap:
+    name: jesseduffield/lazygit
+    state: present
+
 - name: Install lazygit
   community.general.homebrew:
     name:
