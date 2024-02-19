@@ -108,13 +108,18 @@ if [ $# -ne 0 ]; then
   printf "   ${CHAR_RIGHT_ANGLE} ${ESC_DIM}Using the following user-supplied additional arguments: ${ESC_BOLD}$*${ESC_RESET}\n"
 fi
 
-if [ -f "$VAULT_SECRET_FILE" ]; then
-  printf "   ${CHAR_RIGHT_ANGLE} ${ESC_DIM}Decrypting the ${ESC_BOLD}Ansible${ESC_RESET}${ESC_DIM} vault...${ESC_RESET}\n"
-  ansible-playbook "${PLAYBOOK}" --ask-become-pass --vault-password-file "${VAULT_SECRET_FILE}" "$@"
-else
-  printf "   ${CHAR_RIGHT_ANGLE} ${ESC_YELLOW}No Ansible Vault secret file found...${ESC_RESET}\n"
-  ansible-playbook "${PLAYBOOK}" --ask-become-pass "$@"
-fi
+(
+  # Add the Cargo directory to the path as it's needed to install some Homebrew formulae in the playbook.
+  PATH="${HOME}/.cargo/bin:${PATH}"
+
+  if [ -f "$VAULT_SECRET_FILE" ]; then
+    printf "   ${CHAR_RIGHT_ANGLE} ${ESC_DIM}Decrypting the ${ESC_BOLD}Ansible${ESC_RESET}${ESC_DIM} vault...${ESC_RESET}\n"
+    ansible-playbook "${PLAYBOOK}" --ask-become-pass --vault-password-file "${VAULT_SECRET_FILE}" "$@"
+  else
+    printf "   ${CHAR_RIGHT_ANGLE} ${ESC_YELLOW}No Ansible Vault secret file found...${ESC_RESET}\n"
+    ansible-playbook "${PLAYBOOK}" --ask-become-pass "$@"
+  fi
+)
 
 printf "${CHAR_CHECK_MARK} ${ESC_GREEN}Ansible playbook run!${ESC_RESET}\n"
 
