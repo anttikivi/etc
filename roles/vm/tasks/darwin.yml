@@ -1,4 +1,9 @@
 ---
+- name: Tap the Roots repository
+  community.general.homebrew_tap:
+    name: roots/tap
+    state: present
+
 - name: Install virtual machine utilities
   community.general.homebrew:
     name:
