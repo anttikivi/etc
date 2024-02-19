@@ -82,6 +82,11 @@
         src: "{{ nvim_archive }}"
         dest: "{{ tools_dir }}"
 
+- name: Tap the repository for dark-notify
+  community.general.homebrew_tap:
+    name: cormacrelf/tap
+    state: present
+
 - name: Install dark-notify
   community.general.homebrew:
     name:
