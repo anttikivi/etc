@@ -177,6 +177,7 @@ floating:
   [
     "com.adobe.acc.AdobeCreativeCloud",
     "com.apple.calculator",
+    "com.apple.MobileSMS",
     "com.apple.systempreferences",
     "com.f-secure.fsmac.gui",
     "com.microsoft.teams",
