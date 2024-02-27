@@ -65,7 +65,7 @@ darwin() {
 
   if ! pip list | grep ansible >/dev/null; then
     printf "${CHAR_ARROW} ${ESC_CYAN}Installing ${ESC_BOLD}Ansible${ESC_RESET}${ESC_CYAN}...${ESC_RESET}\n"
-    pip install ansible
+    brew_install ansible
     printf "${CHAR_CHECK_MARK} ${ESC_BOLD}${ESC_GREEN}Ansible${ESC_RESET}${ESC_GREEN} installed!${ESC_RESET}\n"
   else
     printf "${CHAR_CHECK_MARK} ${ESC_DIM}${ESC_BOLD}Ansible${ESC_RESET}${ESC_DIM} is already installed!${ESC_RESET}\n"
