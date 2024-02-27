@@ -185,4 +185,11 @@
       source {{ nvm_dir }}/nvm.sh
       nvm alias default 20 --no-colors
   changed_when: true
+
+- name: Copy the global `.npmrc`
+  ansible.builtin.copy:
+    src: npmrc
+    dest: "{{ ansible_user_dir }}/.npmrc"
+    mode: "0644"
+    force: true
 # vi: ft=yaml.ansible
