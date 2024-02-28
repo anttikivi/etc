@@ -201,23 +201,9 @@
   when: not nvim_nostow
   changed_when: not nvim_nostow
 
-- name: Stat the new Neovim configuration directory link
-  ansible.builtin.stat:
-    path: "{{ ansible_user_dir }}/.config/nvim-2024"
-  register: nvim_2024_link
-
-- name: Set the new Neovim configuration directory fact
-  ansible.builtin.set_fact:
-    lua_dir: "{{ nvim_2024_link.stat.exists and nvim_2024_link.stat.islnk }}"
-
-- name: Debug the new Neovim configuration directory fact
-  ansible.builtin.debug:
-    var: nvim_2024_link
-
-- name: Stow the new Neovim configuration
-  ansible.builtin.command:
-    cmd:
-      "stow -d {{ dotfiles_dir }} -t {{ ansible_user_dir }}/.config nvim-2024"
-  when: not nvim_2024_link
-  changed_when: not nvim_2024_link
+- name: Link the new Neovim configuration
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/nvim-2024"
+    dest: "{{ ansible_user_dir }}/.config/nvim-2024"
+    state: link
 # vi: ft=yaml.ansible
