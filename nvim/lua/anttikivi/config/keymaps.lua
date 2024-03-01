@@ -12,6 +12,9 @@ vim.keymap.set(
   { desc = "Resume to file [E]xplorer" }
 )
 
+-- To normal mode
+vim.keymap.set("i", "<C-c>", "<Esc>")
+
 -- Diagnostic keymaps
 vim.keymap.set(
   "n",
@@ -84,4 +87,29 @@ vim.keymap.set(
   "<Esc><Esc>",
   "<C-\\><C-n>",
   { desc = "Exit terminal mode" }
+)
+
+-- Make up and down take line wrapping into account
+vim.keymap.set(
+  { "n", "x" },
+  "j",
+  "v:count == 0 ? 'gj' : 'j'",
+  { expr = true, silent = true }
+)
+vim.keymap.set(
+  { "n", "x" },
+  "k",
+  "v:count == 0 ? 'gk' : 'k'",
+  { expr = true, silent = true }
+)
+
+-- Use the sessionizer
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+
+-- Paste without overwriting the clipboard
+vim.keymap.set(
+  "x",
+  "<leader>p",
+  [["_dP]],
+  { desc = "[P]aste without overwriting the clipboard" }
 )
