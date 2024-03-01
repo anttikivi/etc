@@ -19,6 +19,10 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
+      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-path",
+      "rafamadriz/friendly-snippets",
       {
         "L3MON4D3/LuaSnip",
         build = (function()
@@ -28,10 +32,6 @@ return {
           return "make install_jsregexp"
         end)(),
       },
-      "saadparwaiz1/cmp_luasnip",
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-path",
-      "rafamadriz/friendly-snippets",
     },
     config = function()
       local cmp = require "cmp"
