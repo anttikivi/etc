@@ -5,6 +5,12 @@ vim.keymap.set(
   "<cmd>Rex<CR>",
   { desc = "Resume to file [E]xplorer" }
 )
+vim.keymap.set(
+  "n",
+  "<leader>E",
+  "<cmd>Ex<CR>",
+  { desc = "Resume to file [E]xplorer" }
+)
 
 -- Diagnostic keymaps
 vim.keymap.set(
