@@ -1,4 +1,15 @@
 ---
+- name: Tap the repository for yabai
+  community.general.homebrew_tap:
+    name: koekeishiya/formulae
+    state: present
+
+- name: Install yabai
+  community.general.homebrew:
+    name:
+      - koekeishiya/formulae/yabai
+    state: present
+
 - name: Install Amethyst
   community.general.homebrew_cask:
     name:

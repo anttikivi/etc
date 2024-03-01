@@ -13,6 +13,17 @@
       - ripgrep
     state: present
 
+- name: Tap the repository for skhd
+  community.general.homebrew_tap:
+    name: koekeishiya/formulae
+    state: present
+
+- name: Install skhd
+  community.general.homebrew:
+    name:
+      - koekeishiya/formulae/skhd
+    state: present
+
 - name: Install Hugo
   community.general.homebrew:
     name:
