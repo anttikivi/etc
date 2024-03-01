@@ -9,7 +9,7 @@ alt - h : yabai -m window --focus west
 alt - l : yabai -m window --focus east
 
 # rotate layout clockwise
-shift + alt - r : yabai -m space --rotate 270
+alt - r : yabai -m space --rotate 270
 
 # flip along y-axis
 shift + alt - y : yabai -m space --mirror y-axis
@@ -44,4 +44,4 @@ shift + alt - 8 : yabai -m window --space 8
 shift + alt - 9 : yabai -m window --space 9
 
 shift + alt - e : yabai --stop-service
-shift + alt - c : yabai --restart-service && skhd --restart-service
+shift + alt - c : skhd -r && yabai --restart-service
