@@ -24,6 +24,13 @@
       - koekeishiya/formulae/skhd
     state: present
 
+- name: Link the skhd configuration
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/config/skhdrc"
+    dest: "{{ ansible_user_dir }}/.skhdrc"
+    state: link
+    force: true
+
 - name: Install Hugo
   community.general.homebrew:
     name:

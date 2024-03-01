@@ -10,16 +10,10 @@
       - koekeishiya/formulae/yabai
     state: present
 
-- name: Install Amethyst
-  community.general.homebrew_cask:
-    name:
-      - amethyst
-    state: present
-
-- name: Copy Amethyst configuration
-  ansible.builtin.copy:
-    src: amethyst.yml
-    dest: "{{ ansible_user_dir }}/.amethyst.yml"
-    mode: "0644"
+- name: Link the yabai configuration
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/config/yabairc"
+    dest: "{{ ansible_user_dir }}/.yabairc"
+    state: link
     force: true
 # vi: ft=yaml.ansible
