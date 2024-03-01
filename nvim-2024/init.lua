@@ -44,3 +44,6 @@ require("lazy").setup("anttikivi.plugins", {
     },
   },
 })
+
+require "anttikivi.filetypes"
+require "anttikivi.parsers"
