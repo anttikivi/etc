@@ -186,7 +186,7 @@ return {
     opts = { signs = false },
   },
   {
-    "fojke/which-key.nvim",
+    "folke/which-key.nvim",
     event = "VeryLazy",
     config = function()
       require("which-key").setup()
