@@ -26,12 +26,12 @@ vim.keymap.set(
   { desc = "Go to next [D]iagnostic message" }
 )
 -- TODO: Set a keymap for this.
--- vim.keymap.set(
---   "n",
---   "<leader>e",
---   vim.diagnostic.open_float,
---   { desc = "Show diagnostic [E]rror messages" }
--- )
+vim.keymap.set(
+  "n",
+  "<leader>ce",
+  vim.diagnostic.open_float,
+  { desc = "Show diagnostic [E]rror messages" }
+)
 vim.keymap.set(
   "n",
   "<leader>q",
