@@ -99,6 +99,10 @@ require("lazy").setup {
     lazy = false,
     version = false,
   },
+  ---@diagnostic disable-next-line: assign-type-mismatch
+  dev = {
+    path = "~/plugins",
+  },
   install = { colorscheme = { "brunch" } },
   checker = { enabled = false },
   performance = {
