@@ -1,6 +1,6 @@
 return {
   { "numToStr/Comment.nvim", opts = {} },
-  "github/copilot.vim",
+  { "github/copilot.vim", opts ={} },
   {
     "echasnovski/mini.nvim",
     config = function()

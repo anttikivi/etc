@@ -12,13 +12,13 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
+    "--branch=stable", -- latest stable release
     lazypath,
   }
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("anttikivi.plugins", {
+local lazy_opts = {
   dev = {
     path = "~/plugins",
     patterns = { "anttikivi" },
@@ -43,7 +43,9 @@ require("lazy").setup("anttikivi.plugins", {
       lazy = "💤 ",
     },
   },
-})
+}
+
+require("lazy").setup("plugins", lazy_opts)
 
 require "anttikivi.filetypes"
 require "anttikivi.parsers"
