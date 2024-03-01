@@ -8,7 +8,7 @@ return {
         ensure_installed = {
           "astro",
           "bash",
-          "blade",
+          -- "blade",
           "c",
           "css",
           "diff",
@@ -16,7 +16,7 @@ return {
           "gomod",
           "gowork",
           "gosum",
-          "gotmpl",
+          -- "gotmpl",
           "hcl",
           "html",
           "javascript",
