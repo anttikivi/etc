@@ -5,9 +5,9 @@
     state: directory
     mode: "0755"
 
-- name: Ensure the projects directory exists
+- name: Ensure the plugins directory exists
   ansible.builtin.file:
-    path: "{{ projects_dir }}"
+    path: "{{ plugins_dir }}"
     state: directory
     mode: "0755"
 

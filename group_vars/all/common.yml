@@ -27,7 +27,7 @@ default_roles:
 
 dotfiles_dir: "{{ ansible_user_dir }}/dotfiles"
 personal_dir: "{{ ansible_user_dir }}/personal"
-projects_dir: "{{ ansible_user_dir }}/projects"
+plugins_dir: "{{ ansible_user_dir }}/plugins"
 tools_dir: "{{ ansible_user_dir }}/tools"
 visiosto_dir: "{{ ansible_user_dir }}/visiosto"
 

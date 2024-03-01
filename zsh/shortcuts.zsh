@@ -1,7 +1,7 @@
 alpinejs_ls=$HOME/personal/alpinejs-language-server
 ansible_dir=$HOME/ansible
 aoc=$HOME/personal/advent-of-code
-brunch=$HOME/projects/brunch.nvim
+brunch=$HOME/plugins/brunch.nvim
 dot=$HOME/dotfiles
 obsidian="$HOME/Library/Mobile\ Documents/iCloud\~md\~obsidian/Documents"
 visiosto=$HOME/visiosto
