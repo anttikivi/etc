@@ -113,3 +113,11 @@ vim.keymap.set(
   [["_dP]],
   { desc = "[P]aste without overwriting the clipboard" }
 )
+
+-- Make file an executable
+vim.keymap.set(
+  "n",
+  "<leader>x",
+  [[:!chmod +x %<CR>]],
+  { desc = "Make file e[x]ecutable" }
+)
