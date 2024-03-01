@@ -1,6 +1,7 @@
 local util = require "anttikivi.util"
 
 return {
+  { "folke/neodev.nvim", opts = {} },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
