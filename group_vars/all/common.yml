@@ -37,7 +37,7 @@ git_signingkey: 501D24478EA632F0
 
 # The possible values for the Neovim release type are 'stable' and 'nightly'.
 nvim:
-  release: stable
+  release: nightly
 
 # The Google Cloud CLI is not installed even if a newer version is available
 # when `force` is set to `false`.
