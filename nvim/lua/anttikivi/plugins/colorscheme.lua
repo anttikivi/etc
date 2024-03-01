@@ -1,7 +1,12 @@
 return {
   {
     "anttikivi/brunch.nvim",
+    dev = true,
     lazy = false,
+    config = function()
+      require("brunch").load()
+      vim.cmd.colorscheme "brunch"
+    end,
     priority = 1000,
   },
   {
