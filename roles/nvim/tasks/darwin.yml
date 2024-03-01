@@ -114,96 +114,9 @@
     accept_newhostkey: true
   when: not brunch_installed
 
-- name: Register the Neovim configuration directory fact
-  ansible.builtin.set_fact:
-    init_lua_dir: "{{ ansible_user_dir }}/.config/nvim"
-
-- name: Ensure the configuration directory exists
+- name: Link the Neovim configuration
   ansible.builtin.file:
-    path: "{{ init_lua_dir }}"
-    state: directory
-    mode: "0755"
-
-- name: Stat the init.lua link
-  ansible.builtin.stat:
-    path: "{{ init_lua_dir }}/init.lua"
-  register: init_lua_link
-
-- name: Stat the lazy-lock.json link
-  ansible.builtin.stat:
-    path: "{{ init_lua_dir }}/lazy-lock.json"
-  register: lazy_lock_link
-
-- name: Stat the lazyvim.json link
-  ansible.builtin.stat:
-    path: "{{ init_lua_dir }}/lazyvim.json"
-  register: lazyvim_link
-
-- name: Stat the Lua directory link
-  ansible.builtin.stat:
-    path: "{{ init_lua_dir }}/lua"
-  register: lua_link
-
-- name: Stat the `after` directory link
-  ansible.builtin.stat:
-    path: "{{ init_lua_dir }}/after"
-  register: after_link
-
-- name: Set the init.lua fact
-  ansible.builtin.set_fact:
-    init_lua: "{{ init_lua_link.stat.exists and init_lua_link.stat.islnk }}"
-
-- name: Set the lazy-lock.json fact
-  ansible.builtin.set_fact:
-    lazy_lock: "{{ lazy_lock_link.stat.exists and lazy_lock_link.stat.islnk }}"
-
-- name: Set the lazyvim.json fact
-  ansible.builtin.set_fact:
-    lazy_lock: "{{ lazyvim_link.stat.exists and lazyvim_link.stat.islnk }}"
-
-- name: Set the Lua directory fact
-  ansible.builtin.set_fact:
-    lua_dir: "{{ lua_link.stat.exists and lua_link.stat.islnk }}"
-
-- name: Set the `after` directory fact
-  ansible.builtin.set_fact:
-    after_dir: "{{ after_link.stat.exists and after_link.stat.islnk }}"
-
-- name: Set restow fact
-  ansible.builtin.set_fact:
-    nvim_restow:
-      "{{ init_lua or lazy_lock or lazyvim_link or lua_dir or after_dir }}"
-
-- name: Set no-stow fact
-  ansible.builtin.set_fact:
-    nvim_nostow:
-      "{{ init_lua and lazy_lock and lazyvim_link and lua_dir and after_dir }}"
-
-- name: Debug the restow fact
-  ansible.builtin.debug:
-    var: nvim_restow
-
-- name: Debug the no-stow fact
-  ansible.builtin.debug:
-    var: nvim_nostow
-
-- name: Restow the Neovim configuration
-  ansible.builtin.command:
-    cmd:
-      "stow -d {{ dotfiles_dir }} -t {{ ansible_user_dir }}/.config/nvim -R nvim"
-  when: not nvim_nostow and nvim_restow
-  changed_when: not nvim_nostow and nvim_restow
-
-- name: Stow the Neovim configuration
-  ansible.builtin.command:
-    cmd:
-      "stow -d {{ dotfiles_dir }} -t {{ ansible_user_dir }}/.config/nvim nvim"
-  when: not nvim_nostow
-  changed_when: not nvim_nostow
-
-- name: Link the new Neovim configuration
-  ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/nvim-2024"
-    dest: "{{ ansible_user_dir }}/.config/nvim-2024"
+    src: "{{ dotfiles_dir }}/nvim"
+    dest: "{{ ansible_user_dir }}/.config/nvim"
     state: link
 # vi: ft=yaml.ansible
