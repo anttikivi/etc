@@ -1,38 +1,54 @@
---  █████╗ ███╗   ██╗████████╗████████╗██╗    ██╗  ██╗██╗██╗   ██╗██╗
--- ██╔══██╗████╗  ██║╚══██╔══╝╚══██╔══╝██║    ██║ ██╔╝██║██║   ██║██║
--- ███████║██╔██╗ ██║   ██║      ██║   ██║    █████╔╝ ██║██║   ██║██║
--- ██╔══██║██║╚██╗██║   ██║      ██║   ██║    ██╔═██╗ ██║╚██╗ ██╔╝██║
--- ██║  ██║██║ ╚████║   ██║      ██║   ██║    ██║  ██╗██║ ╚████╔╝ ██║
--- ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝      ╚═╝   ╚═╝    ╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═╝
-
 -- Enable the experimental Lua module loader.
 if vim.loader then
   vim.loader.enable()
 end
 
--- Make sure that we're running up-to-date version of Neovim.
-local expected_version = "0.9.5"
----@type Version?
-local parsed_expected_version = vim.version.parse(expected_version) --[[@as Version?]]
-local version = vim.version()
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-assert(
-  parsed_expected_version,
-  string.format("Invalid expected version string: %s", expected_version)
-)
+require "anttikivi.config.options"
+require "anttikivi.config.keymaps"
+require "anttikivi.config.autocmds"
 
-if vim.version.cmp(parsed_expected_version, version) > 0 then
-  local msg = string.format(
-    "Expected at least nvim %s but got %s.%s.%s instead. The configuration may not work as expected. Use at your own risk!",
-    expected_version,
-    version.major,
-    version.minor,
-    version.patch
-  )
-  vim.api.nvim_err_writeln(msg)
+local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system {
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  }
 end
+vim.opt.rtp:prepend(lazypath)
 
-require "config.lazy"
+require("lazy").setup("plugins", {
+  dev = {
+    path = "~/plugins",
+    patterns = { "anttikivi" },
+  },
+  install = {
+    colorscheme = { "brunch" },
+  },
+  ui = {
+    icons = {
+      cmd = "⌘",
+      config = "🛠",
+      event = "📅",
+      ft = "📂",
+      init = "⚙",
+      keys = "🗝",
+      plugin = "🔌",
+      runtime = "💻",
+      require = "🌙",
+      source = "📄",
+      start = "🚀",
+      task = "📌",
+      lazy = "💤 ",
+    },
+  },
+})
 
 require "anttikivi.filetypes"
 require "anttikivi.parsers"
