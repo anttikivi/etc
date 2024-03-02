@@ -1,7 +1,9 @@
+.PHONY: all fmt lint
+
 fmt:
 	@printf "\nFormatting...\n"
 	@printf "\nRunning Stylua...\n"
-	stylua --config-path nvim/
+	stylua nvim/
 	@printf "\nRunning Prettier...\n"
 	prettier --write "**/*.{?(c)js?(on),md,yml}"
 	@printf "\nRunning shfmt...\n"
