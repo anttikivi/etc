@@ -41,7 +41,7 @@ jobs:
         run: sudo apt install luarocks
 
       - name: Install Lua tools
-        run: luarocks install luacheck --local
+        run: sudo luarocks install luacheck
 
       - name: Install ShellCheck
         run: sudo apt install shellcheck
