@@ -1,4 +1,5 @@
 default_roles:
+  - ansible
   - aws
   - build
   - clang
