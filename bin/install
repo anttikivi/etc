@@ -127,4 +127,24 @@ cd "${old_pwd}"
 
 rm -rf "${DOTFILES_DIR}"
 
+if [ "${os_name}" = "Darwin" ]; then
+  printf "%bInstalling the launchd service for %bskhd%b%b...%b\n" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+  skhd --install-service
+  printf "%b %bThe launchd service for %bskhd%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+
+  printf "%bStarting the launchd service for %bskhd%b%b...%b\n" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+  skhd --start-service
+  printf "%b %bThe launchd service for %bskhd%b%b started!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+
+  printf "%bInstalling the launchd service for %byabai%b%b...%b\n" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+  yabai --install-service
+  printf "%b %bThe launchd service for %byabai%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+
+  printf "%bStarting the launchd service for %byabai%b%b...%b\n" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+  yabai --start-service
+  printf "%b %bThe launchd service for %byabai%b%b started!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+else
+  not_supported
+fi
+
 printf "%b%bFinished the environment setup!%b\n" "${ESC_BOLD}" "${ESC_MAGENTA}" "${ESC_RESET}"
