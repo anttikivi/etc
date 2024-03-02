@@ -38,9 +38,7 @@ jobs:
         run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
       - name: Install LuaRocks
-        uses: leafo/gh-actions-luarocks@v4.3.0
-        with:
-          luarocksVersion: "3.8.0"
+        run: sudo apt install luarocks
 
       - name: Install Lua tools
         run: luarocks install luacheck
