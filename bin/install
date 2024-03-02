@@ -129,7 +129,7 @@ rm -rf "${DOTFILES_DIR}"
 
 if [ "${os_name}" = "Darwin" ]; then
   printf "%bInstalling the launchd service for %bskhd%b%b...%b\n" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
-  skhd --install-service
+  skhd --install-service >/dev/null 2>&1 || true
   printf "%b %bThe launchd service for %bskhd%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
 
   printf "%bStarting the launchd service for %bskhd%b%b...%b\n" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
@@ -137,12 +137,17 @@ if [ "${os_name}" = "Darwin" ]; then
   printf "%b %bThe launchd service for %bskhd%b%b started!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
 
   printf "%bInstalling the launchd service for %byabai%b%b...%b\n" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
-  yabai --install-service
+  yabai --install-service >/dev/null 2>&1 || true
   printf "%b %bThe launchd service for %byabai%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
 
   printf "%bStarting the launchd service for %byabai%b%b...%b\n" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
   yabai --start-service
   printf "%b %bThe launchd service for %byabai%b%b started!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+
+  printf "%bRestarting %bskhd%b%b and %byabai%b%b services...%b\n" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
+  skhd --restart-service
+  yabai --restart-service
+  printf "%b %bRestarted %bskhd%b%b and %byabai%b%b services!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
 else
   not_supported
 fi
