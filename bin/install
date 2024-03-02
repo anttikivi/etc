@@ -63,8 +63,7 @@ darwin() {
 
   printf "%b %bChecking whether %bAnsible%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
 
-  # TODO: Fix the Ansible check as it's installed with Homebrew now.
-  if ! pip list | grep ansible >/dev/null; then
+  if ! brew list | grep ansible >/dev/null; then
     printf "%b %bInstalling %bAnsible%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
     brew_install ansible
     printf "%b %b%bAnsible%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
