@@ -28,27 +28,27 @@ readonly DOTFILES_DIR="${HOME}/.dotfiles_tmp"
 readonly PLAYBOOK="${DOTFILES_DIR}/local.yml"
 
 brew_install() {
-  printf "${CHAR_CLIPBOARD} ${ESC_DIM}Checking whether ${ESC_BOLD}$1${ESC_RESET}${ESC_DIM} is installed...${ESC_RESET}\n"
+  printf "%b %bChecking whether %b%s%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "$1" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
   if brew list --versions "$1" >/dev/null; then
-    printf "${CHAR_CHECK_MARK} ${ESC_DIM}${ESC_BOLD}$1${ESC_RESET}${ESC_DIM} is already installed!${ESC_RESET}\n"
+    printf "%b %b%b%s%b%b is already installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "$1" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
   else
-    printf "${CHAR_ARROW} ${ESC_CYAN}Installing ${ESC_BOLD}$1${ESC_RESET}${ESC_CYAN}...${ESC_RESET}\n"
+    printf "%b %bInstalling %b%s%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "$1" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
     brew install "$1"
-    printf "${CHAR_CHECK_MARK} ${ESC_BOLD}${ESC_GREEN}$1${ESC_RESET}${ESC_GREEN} installed!${ESC_RESET}\n"
+    printf "%b %b%b%s%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "$1" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
   fi
 }
 
 darwin() {
-  printf "${CHAR_CLIPBOARD} ${ESC_DIM}Checking whether ${ESC_BOLD}Homebrew${ESC_RESET}${ESC_DIM} is installed...${ESC_RESET}\n"
+  printf "%b %bChecking whether %bHomebrew%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
 
   if ! command -v brew >/dev/null 2>&1; then
-    printf "${CHAR_ARROW} ${ESC_CYAN}Installing ${ESC_BOLD}Homebrew${ESC_RESET}${ESC_CYAN}...${ESC_RESET}\n"
+    printf "%b %bInstalling %bHomebrew%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    printf "   ${CHAR_RIGHT_ANGLE} ${ESC_DIM}Evaluating the ${ESC_BOLD}Homebrew${ESC_RESET}${ESC_DIM} shell environment and adding it to ${ESC_BOLD}PATH${ESC_RESET}${ESC_DIM}...${ESC_RESET}\n"
+    printf "   %b %bEvaluating the %bHomebrew%b%b shell environment and adding it to %bPATH%b%b...%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
     eval "$(/opt/homebrew/bin/brew shellenv)"
-    printf "${CHAR_CHECK_MARK} ${ESC_BOLD}${ESC_GREEN}Homebrew${ESC_RESET}${ESC_GREEN} installed!${ESC_RESET}\n"
+    printf "%b %b%bHomebrew%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
   else
-    printf "${CHAR_CHECK_MARK} ${ESC_DIM}${ESC_BOLD}Homebrew${ESC_RESET}${ESC_DIM} is already installed!${ESC_RESET}\n"
+    printf "%b %b%bHomebrew%b%b is already installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
   fi
 
   brew_install python
@@ -59,28 +59,29 @@ darwin() {
   PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
   export PYTHONPATH
 
-  printf "${CHAR_CHECK_MARK} ${ESC_BOLD}${ESC_GREEN}Python${ESC_RESET}${ESC_GREEN} paths set!${ESC_RESET}\n"
+  printf "%b %b%bPython%b%b paths set!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
 
-  printf "${CHAR_CLIPBOARD} ${ESC_DIM}Checking whether ${ESC_BOLD}Ansible${ESC_RESET}${ESC_DIM} is installed...${ESC_RESET}\n"
+  printf "%b %bChecking whether %bAnsible%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
 
+  # TODO: Fix the Ansible check as it's installed with Homebrew now.
   if ! pip list | grep ansible >/dev/null; then
-    printf "${CHAR_ARROW} ${ESC_CYAN}Installing ${ESC_BOLD}Ansible${ESC_RESET}${ESC_CYAN}...${ESC_RESET}\n"
+    printf "%b %bInstalling %bAnsible%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
     brew_install ansible
-    printf "${CHAR_CHECK_MARK} ${ESC_BOLD}${ESC_GREEN}Ansible${ESC_RESET}${ESC_GREEN} installed!${ESC_RESET}\n"
+    printf "%b %b%bAnsible%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
   else
-    printf "${CHAR_CHECK_MARK} ${ESC_DIM}${ESC_BOLD}Ansible${ESC_RESET}${ESC_DIM} is already installed!${ESC_RESET}\n"
+    printf "%b %b%bAnsible%b%b is already installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
   fi
 }
 
 not_supported() {
-  printf "${CHAR_X_MARK} ${ESC_BOLD}${ESC_RED}This operating system is not supported!${ESC_RESET}\n"
+  printf "%b %b%bThis operating system is not supported!%b\n" "${CHAR_X_MARK}" "${ESC_BOLD}" "${ESC_RED}" "${ESC_RESET}"
   exit 1
 }
 
-printf "${ESC_BOLD}${ESC_BLUE}Running the environment setup...${ESC_RESET}\n"
+printf "%b%bRunning the environment setup...%b\n" "${ESC_BOLD}" "${ESC_BLUE}" "${ESC_RESET}"
 
 os_name="$(uname)"
-printf "${CHAR_CHECK_MARK} Running on ${ESC_UNDERLINE}${os_name}${ESC_RESET}\n"
+printf "%b Running on %b%s%b\n" "${CHAR_CHECK_MARK}" "${ESC_UNDERLINE}" "${os_name}" "${ESC_RESET}"
 if [ "${os_name}" = "Darwin" ]; then
   darwin
 else
@@ -88,43 +89,43 @@ else
 fi
 
 if ! [ -d "${DOTFILES_DIR}" ]; then
-  printf "${ESC_CYAN}Cloning the dotfiles repository from ${ESC_UNDERLINE}github.com/anttikivi/dotfiles${ESC_RESET}${ESC_CYAN}...${ESC_RESET}\n"
+  printf "%bCloning the dotfiles repository from %bgithub.com/anttikivi/dotfiles%b%b...%b\n" "${ESC_CYAN}" "${ESC_UNDERLINE}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
   { git clone --quiet "https://github.com/anttikivi/dotfiles.git" "${DOTFILES_DIR}" >/dev/null; } 2>&1
 else
-  printf "${ESC_CYAN}Updating the dotfiles repository from ${ESC_UNDERLINE}github.com/anttikivi/dotfiles${ESC_RESET}${ESC_CYAN}...${ESC_RESET}\n"
+  printf "%bUpdating the dotfiles repository from %bgithub.com/anttikivi/dotfiles%b%b...%b\n" "${ESC_CYAN}" "${ESC_UNDERLINE}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
   git -C "${DOTFILES_DIR}" pull --quiet >/dev/null
 fi
 
 old_pwd="$(pwd)"
 cd "${DOTFILES_DIR}"
 
-printf "${CHAR_ARROW} ${ESC_CYAN}Updating Ansible ${ESC_BOLD}Galaxy${ESC_RESET}${ESC_CYAN}...${ESC_RESET}\n"
+printf "%b %bUpdating Ansible %bGalaxy%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
 { ansible-galaxy install -r requirements.yml >/dev/null; } 2>&1
-printf "${CHAR_CHECK_MARK} ${ESC_GREEN}Ansible ${ESC_BOLD}Galaxy${ESC_RESET}${ESC_GREEN} updated!${ESC_RESET}\n"
+printf "%b %bAnsible %bGalaxy%b%b updated!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
 
-printf "${CHAR_ARROW} ${ESC_CYAN}Running the ${ESC_BOLD}Ansible${ESC_RESET}${ESC_CYAN} playbook...${ESC_RESET}\n"
+printf "%b %bRunning the %bAnsible%b%b playbook...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
 
 if [ $# -ne 0 ]; then
-  printf "   ${CHAR_RIGHT_ANGLE} ${ESC_DIM}Using the following user-supplied additional arguments: ${ESC_BOLD}$*${ESC_RESET}\n"
+  printf "   %b %bUsing the following user-supplied additional arguments: %b%s%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_DIM}" "${ESC_BOLD}" "$*" "${ESC_RESET}"
 fi
 
 (
   # Add the Cargo directory to the path as it's needed to install some Homebrew formulae in the playbook.
   PATH="${HOME}/.cargo/bin:${PATH}"
 
-  if [ -f "$VAULT_SECRET_FILE" ]; then
-    printf "   ${CHAR_RIGHT_ANGLE} ${ESC_DIM}Decrypting the ${ESC_BOLD}Ansible${ESC_RESET}${ESC_DIM} vault...${ESC_RESET}\n"
+  if [ -f "${VAULT_SECRET_FILE}" ]; then
+    printf "   %b %bDecrypting the %bAnsible%b%b vault...%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
     ansible-playbook "${PLAYBOOK}" --ask-become-pass --vault-password-file "${VAULT_SECRET_FILE}" "$@"
   else
-    printf "   ${CHAR_RIGHT_ANGLE} ${ESC_YELLOW}No Ansible Vault secret file found...${ESC_RESET}\n"
+    printf "   %b %bNo Ansible Vault secret file found...%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_YELLOW}" "${ESC_RESET}"
     ansible-playbook "${PLAYBOOK}" --ask-become-pass "$@"
   fi
 )
 
-printf "${CHAR_CHECK_MARK} ${ESC_GREEN}Ansible playbook run!${ESC_RESET}\n"
+printf "%b %bAnsible playbook run!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_RESET}"
 
 cd "${old_pwd}"
 
 rm -rf "${DOTFILES_DIR}"
 
-printf "${ESC_BOLD}${ESC_MAGENTA}Finished the environment setup!${ESC_RESET}\n"
+printf "%b%bFinished the environment setup!%b\n" "${ESC_BOLD}" "${ESC_MAGENTA}" "${ESC_RESET}"
