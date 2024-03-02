@@ -15,3 +15,5 @@ lint:
 	selene .
 	@printf "\nRunning shfmt...\n"
 	shfmt -l -d -i 2 -ci -bn .
+	@printf "\nRunning shellcheck...\n"
+	shellcheck bin/install
