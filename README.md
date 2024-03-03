@@ -94,8 +94,3 @@ tasks. Run `make fmt` to format the code and `make lint` to lint the code.
 
 This repository is licensed under the MIT License. See the [LICENSE](LICENSE)
 file for more information.
-
-The Neovim configuration in this repository includes parts from the
-[`LazyVim/LazyVim`](https://github.com/LazyVim/LazyVim) project, licensed under
-the Apache-2.0 licence. See the [`LICENSE_APACHE`](LICENSE_APACHE) file for more
-information.
