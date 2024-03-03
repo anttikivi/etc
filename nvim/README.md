@@ -31,7 +31,7 @@ to manage plugins. You can find the plugin specification in the
 The language servers are set in the
 [`anttikivi.plugins.lsp`](lua/anttikivi/plugins/lsp.lua) module.
 
-## Licence
+## License
 
 This repository is licensed under the MIT License. See the [LICENSE](../LICENSE)
 file for more information.
