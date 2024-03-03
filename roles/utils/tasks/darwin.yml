@@ -36,4 +36,11 @@
     name:
       - hugo
     state: present
+
+- name: Link the global `.editorconfig`
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/config/editorconfig"
+    dest: "{{ ansible_user_dir }}/.editorconfig"
+    state: link
+    force: true
 # vi: ft=yaml.ansible
