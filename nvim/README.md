@@ -24,14 +24,14 @@ NVIM_APPNAME=anttikivi/dotfiles/nvim nvim
 
 The configuration uses [`folke/lazy.nvim`](https://github.com/folke/lazy.nvim)
 to manage plugins. You can find the plugin specification in the
-[`anttikivi.plugins`](nvim/lua/anttikivi/plugins) module.
+[`anttikivi.plugins`](lua/anttikivi/plugins) module.
 
 ## Language Servers
 
 The language servers are set in the
-[`anttikivi.plugins.lsp`](nvim/lua/anttikivi/plugins/lsp.lua) module.
+[`anttikivi.plugins.lsp`](lua/anttikivi/plugins/lsp.lua) module.
 
 ## Licence
 
-This repository is licensed under the MIT License. See the [LICENSE](LICENSE)
+This repository is licensed under the MIT License. See the [LICENSE](../LICENSE)
 file for more information.
