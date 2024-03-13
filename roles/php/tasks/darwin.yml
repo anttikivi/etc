@@ -13,11 +13,13 @@
   register: current_phpactor_version_sh
   changed_when: false
   failed_when: false
+  tags: [never]
 
 - name: Set the current Phpactor version fact
   ansible.builtin.set_fact:
     current_phpactor_version:
       "{{ current_phpactor_version_sh.stdout | default('') }}"
+  tags: [never]
 
 - name: Query the latest Phpactor version
   ansible.builtin.shell:
@@ -26,22 +28,27 @@
       echo $(curl -LsS https://api.github.com/repos/phpactor/phpactor/releases/latest | jq -r '.tag_name')
   register: latest_phpactor_version_sh
   changed_when: false
+  tags: [never]
 
 - name: Set the latest Phpactor version fact
   ansible.builtin.set_fact:
     latest_phpactor_version:
       "{{ latest_phpactor_version_sh.stdout | default('') }}"
+  tags: [never]
 
 - name: Debug the current Phpactor version
   ansible.builtin.debug:
     var: current_phpactor_version
+  tags: [never]
 
 - name: Debug the latest Phpactor version
   ansible.builtin.debug:
     var: latest_phpactor_version
+  tags: [never]
 
 - name: Install Phpactor
   when: latest_phpactor_version not in current_phpactor_version
+  tags: [never]
   block:
     - name: Remove existing Phpactor installation
       ansible.builtin.file:
