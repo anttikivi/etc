@@ -20,6 +20,14 @@ Open Neovim with this config:
 NVIM_APPNAME=anttikivi/dotfiles/nvim nvim
 ```
 
+After installing the configuration, you still need to install the custom
+Tree-sitter parsers for `blade` and `gotmpl`. Run the following command in
+Neovim to do so:
+
+```vim
+:TSInstall blade gotmpl
+```
+
 ## Plugins
 
 The configuration uses [`folke/lazy.nvim`](https://github.com/folke/lazy.nvim)
