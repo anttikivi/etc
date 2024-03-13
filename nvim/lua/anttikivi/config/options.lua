@@ -27,3 +27,4 @@ vim.opt.termguicolors = false -- True color support
 vim.opt.timeoutlen = 300
 vim.opt.undofile = true
 vim.opt.updatetime = 250
+vim.opt.wrap = true -- Line wrap
