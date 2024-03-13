@@ -17,7 +17,7 @@
 - name: Set the current Phpactor version fact
   ansible.builtin.set_fact:
     current_phpactor_version:
-      "{{ current_phpactor_version_sh.stdout|default('') }}"
+      "{{ current_phpactor_version_sh.stdout | default('') }}"
 
 - name: Query the latest Phpactor version
   ansible.builtin.shell:
@@ -30,7 +30,7 @@
 - name: Set the latest Phpactor version fact
   ansible.builtin.set_fact:
     latest_phpactor_version:
-      "{{ latest_phpactor_version_sh.stdout|default('') }}"
+      "{{ latest_phpactor_version_sh.stdout | default('') }}"
 
 - name: Debug the current Phpactor version
   ansible.builtin.debug:
