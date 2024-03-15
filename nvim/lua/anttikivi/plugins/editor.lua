@@ -1,5 +1,73 @@
 return {
   {
+    "tpope/vim-fugitive",
+    event = "VeryLazy",
+    keys = function()
+      return {
+        {
+          "<leader>gs",
+          ":Git<CR>",
+          desc = "Open [G]it status",
+        },
+        {
+          "<leader>gc",
+          ":Git commit<CR>",
+          desc = "Open [G]it [C]ommit",
+        },
+        {
+          "<leader>gp",
+          ":Git push<CR>",
+          desc = "Open [G]it [P]ush",
+        },
+        {
+          "<leader>gd",
+          ":Gdiff<CR>",
+          desc = "Open [G]it [D]iff",
+        },
+        {
+          "<leader>gb",
+          ":Gblame<CR>",
+          desc = "Open [G]it [B]lame",
+        },
+        {
+          "<leader>gl",
+          ":Glog<CR>",
+          desc = "Open [G]it [L]og",
+        },
+        {
+          "<leader>gw",
+          ":Gwrite<CR>",
+          desc = "Open [G]it [W]rite",
+        },
+        {
+          "<leader>gr",
+          ":Gread<CR>",
+          desc = "Open [G]it [R]ead",
+        },
+        {
+          "<leader>ge",
+          ":Gedit<CR>",
+          desc = "Open [G]it [E]dit",
+        },
+        {
+          "<leader>gt",
+          ":Gstatus<CR>",
+          desc = "Open [G]it [T]atus",
+        },
+        {
+          "<leader>gj",
+          ":diffget //3<CR>",
+          desc = "Get [J]oin",
+        },
+        {
+          "<leader>gk",
+          ":diffget //2<CR>",
+          desc = "Get [K]eep",
+        },
+      }
+    end,
+  },
+  {
     "lewis6991/gitsigns.nvim",
     opts = {
       signs = {
@@ -203,6 +271,7 @@ return {
       require("which-key").register {
         ["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
         ["<leader>d"] = { name = "[D]ocument", _ = "which_key_ignore" },
+        ["<leader>g"] = { name = "[G]it", _ = "which_key_ignore" },
         ["<leader>r"] = { name = "[R]ename", _ = "which_key_ignore" },
         ["<leader>s"] = { name = "[S]earch", _ = "which_key_ignore" },
         ["<leader>w"] = { name = "[W]orkspace", _ = "which_key_ignore" },
