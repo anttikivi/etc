@@ -27,7 +27,7 @@
 
 - name: Set the current nvm version fact
   ansible.builtin.set_fact:
-    current_nvm_version: "v{{ current_nvm_version_sh.stdout|default('') }}"
+    current_nvm_version: "v{{ current_nvm_version_sh.stdout | default('') }}"
 
 - name: Query the latest nvm version
   ansible.builtin.shell:
