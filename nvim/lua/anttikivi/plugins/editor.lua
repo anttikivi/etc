@@ -7,62 +7,7 @@ return {
         {
           "<leader>gs",
           ":Git<CR>",
-          desc = "Open [G]it status",
-        },
-        {
-          "<leader>gc",
-          ":Git commit<CR>",
-          desc = "Open [G]it [C]ommit",
-        },
-        {
-          "<leader>gp",
-          ":Git push<CR>",
-          desc = "Open [G]it [P]ush",
-        },
-        {
-          "<leader>gd",
-          ":Gdiff<CR>",
-          desc = "Open [G]it [D]iff",
-        },
-        {
-          "<leader>gb",
-          ":Gblame<CR>",
-          desc = "Open [G]it [B]lame",
-        },
-        {
-          "<leader>gl",
-          ":Glog<CR>",
-          desc = "Open [G]it [L]og",
-        },
-        {
-          "<leader>gw",
-          ":Gwrite<CR>",
-          desc = "Open [G]it [W]rite",
-        },
-        {
-          "<leader>gr",
-          ":Gread<CR>",
-          desc = "Open [G]it [R]ead",
-        },
-        {
-          "<leader>ge",
-          ":Gedit<CR>",
-          desc = "Open [G]it [E]dit",
-        },
-        {
-          "<leader>gt",
-          ":Gstatus<CR>",
-          desc = "Open [G]it [T]atus",
-        },
-        {
-          "<leader>gj",
-          ":diffget //3<CR>",
-          desc = "Get [J]oin",
-        },
-        {
-          "<leader>gk",
-          ":diffget //2<CR>",
-          desc = "Get [K]eep",
+          desc = "Open [G]it [S]tatus",
         },
       }
     end,
