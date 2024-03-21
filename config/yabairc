@@ -26,9 +26,11 @@ yabai -m config focus_follows_mouse autoraise
 # set mouse follows focus mode (default: off)
 yabai -m config mouse_follows_focus on
 
+yabai -m rule --add app="^Adobe.*" manage=off
 yabai -m rule --add app="^App Store$" manage=off
-yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app=".*Creative Cloud.*" manage=off
 yabai -m rule --add app=".*F-Secure.*" manage=off
+yabai -m rule --add app="^Messages$" manage=off
 yabai -m rule --add app=".*Steam.*" manage=off
+yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app=".*WhatsApp.*" manage=off
