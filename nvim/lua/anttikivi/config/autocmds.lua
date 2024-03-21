@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- Detect Go HTML templates
 -- autocmd BufNewFile,BufRead * if search('{{.\+}}', 'nw') | setlocal filetype=gotmpl | endif
-vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
   desc = "Detect Go HTML templates",
   pattern = "*.html",
   callback = function()
