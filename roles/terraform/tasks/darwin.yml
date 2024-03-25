@@ -8,4 +8,11 @@
   community.general.homebrew:
     name: hashicorp/tap/terraform
     state: present
+
+- name: Create the Terraform variables file
+  ansible.builtin.template:
+    src: terraform.tfvars.j2
+    dest: "{{ dotfiles_dir }}/terraform.tfvars"
+    mode: "0644"
+    force: true
 # vi: ft=yaml.ansible
