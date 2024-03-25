@@ -37,6 +37,10 @@
   notify:
     - Clean up the temporary Neovim directory
   block:
+    - name: Set the Neovim archive name fact
+      ansible.builtin.set_fact:
+        nvim_archive_name: "{{ 'nvim-macos-arm64' if nvim.release == 'nightly' else 'nvim-macos' }}"
+
     - name: Create a temporary directory for the Neovim archive
       ansible.builtin.tempfile:
         state: directory
@@ -48,7 +52,7 @@
 
     - name: Set the downloaded Neovim archive fact
       ansible.builtin.set_fact:
-        nvim_archive: "{{ tmp_nvim_dir }}/nvim-macos.tar.gz"
+        nvim_archive: "{{ tmp_nvim_dir }}/{{ nvim_archive_name }}.tar.gz"
 
     - name: Ensure clean Neovim archive download destination
       ansible.builtin.file:
@@ -59,7 +63,7 @@
       ansible.builtin.get_url:
         url:
           "https://github.com/neovim/neovim/releases/download/{{ nvim.release
-          }}/nvim-macos-arm64.tar.gz"
+          }}/{{ nvim_archive_name }}.tar.gz"
         dest: "{{ nvim_archive }}"
         mode: "0644"
         force: true
@@ -68,7 +72,12 @@
 
     - name: Remove existing Neovim installation
       ansible.builtin.file:
-        path: "{{ tools_dir }}/nvim-macos"
+        path: "{{ tools_dir }}/{{ nvim_archive_name }}"
+        state: absent
+
+    - name: Remove existing Neovim installation with the new directory if it exists
+      ansible.builtin.file:
+        path: "{{ tools_dir }}/nvim-macos-arm64"
         state: absent
 
     - name: Ensure that the tools directory exists
@@ -81,6 +90,20 @@
       ansible.builtin.unarchive:
         src: "{{ nvim_archive }}"
         dest: "{{ tools_dir }}"
+
+    - name: Copy the Neovim directory to the correct destination
+      ansible.builtin.copy:
+        src: "{{ tools_dir }}/{{ nvim_archive_name }}"
+        dest: "{{ tools_dir }}/nvim-macos-arm64"
+        mode: "0755"
+        force: true
+      when: nvim_archive_name == "nvim-macos"
+
+    - name: Remove the incorrect Neovim directory
+      ansible.builtin.file:
+        path: "{{ tools_dir }}/{{ nvim_archive_name }}"
+        state: absent
+      when: nvim_archive_name == "nvim-macos"
 
 - name: Tap the repository for dark-notify
   community.general.homebrew_tap:

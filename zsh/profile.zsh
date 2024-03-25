@@ -6,7 +6,7 @@ export PATH="$HOME/.local/bin:$PATH"
 bindkey -s ^f "tmux-sessionizer\n"
 
 # Set up Neovim.
-export PATH="$TOOLSPATH/nvim-macos/bin:$PATH"
+export PATH="$TOOLSPATH/nvim-macos-arm64/bin:$PATH"
 
 # Set up the Homebrew shell environment.
 eval "$(/opt/homebrew/bin/brew shellenv)"
