@@ -59,7 +59,7 @@
       ansible.builtin.get_url:
         url:
           "https://github.com/neovim/neovim/releases/download/{{ nvim.release
-          }}/nvim-macos.tar.gz"
+          }}/nvim-macos-arm64.tar.gz"
         dest: "{{ nvim_archive }}"
         mode: "0644"
         force: true
