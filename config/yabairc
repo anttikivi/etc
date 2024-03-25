@@ -28,6 +28,7 @@ yabai -m config mouse_follows_focus on
 
 yabai -m rule --add app="^Adobe.*" manage=off
 yabai -m rule --add app="^App Store$" manage=off
+yabai -m rule --add app="^Calculator$" manage=off
 yabai -m rule --add app=".*Creative Cloud.*" manage=off
 yabai -m rule --add app=".*F-Secure.*" manage=off
 yabai -m rule --add app="^Messages$" manage=off
