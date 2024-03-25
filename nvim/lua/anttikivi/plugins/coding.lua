@@ -1,12 +1,13 @@
 return {
   {
     "Exafunction/codeium.vim",
+    enabled = false,
     event = "BufEnter",
     -- TODO: Add custom keybingings as the regular Codeium uses keybindings that
     -- are reserved for skhd.
   },
   { "numToStr/Comment.nvim", opts = {} },
-  { "github/copilot.vim", enabled = false },
+  { "github/copilot.vim", enabled = true },
   {
     "echasnovski/mini.nvim",
     config = function()
