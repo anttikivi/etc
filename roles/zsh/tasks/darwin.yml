@@ -38,4 +38,10 @@
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.zshrc.pre-oh-my-zsh"
     state: absent
+
+- name: Copy the environment variables file
+  ansible.builtin.template:
+    src: zshenv
+    dest: "{{ ansible_user_dir }}/.zshenv"
+    mode: "0600"
 # vi: ft=yaml.ansible
