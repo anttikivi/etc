@@ -51,6 +51,8 @@ aws:
   force: false
 
 go:
+  hugo:
+    version: v0.123.0
   modules:
     - module: mvdan.cc/sh/v3/cmd/shfmt@latest
       cmd: shfmt
