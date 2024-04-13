@@ -102,6 +102,7 @@ return {
             },
           },
         },
+        eslint = {},
         gopls = {
           templateExtension = { "gotmpl", "gohtmltmpl" },
         },
