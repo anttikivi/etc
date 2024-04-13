@@ -31,12 +31,6 @@
       - koekeishiya/formulae/skhd
     state: present
 
-- name: Install Hugo
-  community.general.homebrew:
-    name:
-      - hugo
-    state: present
-
 - name: Link the global `.editorconfig`
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/config/editorconfig"
