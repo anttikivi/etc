@@ -5,4 +5,8 @@
 
 - name: Install modules
   ansible.builtin.import_tasks: modules.yml
+
+- name: Install modules with Darwin-specific tasks
+  ansible.builtin.import_tasks: darwin_modules.yml
+  when: ansible_os_family == 'Darwin'
 # vi: ft=yaml.ansible
