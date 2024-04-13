@@ -7,7 +7,7 @@ return {
     -- are reserved for skhd.
   },
   { "numToStr/Comment.nvim", opts = {} },
-  { "github/copilot.vim", enabled = true },
+  { "github/copilot.vim", enabled = false },
   {
     "echasnovski/mini.nvim",
     config = function()
