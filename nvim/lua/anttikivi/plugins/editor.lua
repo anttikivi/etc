@@ -43,7 +43,7 @@ return {
         {
           "<C-a>",
           function()
-            harpoon:list():append()
+            harpoon:list():add()
           end,
           desc = "[A]ppend file to Harpoon list",
         },
