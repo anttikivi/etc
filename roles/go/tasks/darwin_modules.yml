@@ -77,4 +77,3 @@
   when: wanted_hugo_version != current_hugo_version
   changed_when: hugo_install.rc != 0
 # vi: ft=yaml.ansible
-
