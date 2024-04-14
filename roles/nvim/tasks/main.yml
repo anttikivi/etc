@@ -1,4 +1,15 @@
 ---
+- name: Install Neovim on Darwin
+  when: ansible_os_family == 'Darwin'
+  block:
+    - name: Install stable neovim
+      ansible.builtin.import_tasks: darwin_stable.yml
+      when: nvim.release == 'stable'
+
+    - name: Install nightly neovim
+      ansible.builtin.import_tasks: darwin_nightly.yml
+      when: nvim.release == 'nightly'
+
 - name: Run Darwin tasks
   ansible.builtin.import_tasks: darwin.yml
   when: ansible_os_family == 'Darwin'
