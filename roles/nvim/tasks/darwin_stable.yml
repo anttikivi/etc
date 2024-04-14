@@ -25,8 +25,7 @@
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      curl -LsS https://api.github.com/repos/neovim/neovim/releases?per_page=30 | jq -r '.[] | .tag_name' \
-      | grep "{{ required_nvim_minor_version | replace('.', '\\.') }}" | sort -V | tail -1
+      curl -LsS https://api.github.com/repos/neovim/neovim/releases?per_page=30 | jq -r '.[] | .tag_name' | grep "{{ required_nvim_minor_version | replace('.', '\\.') }}" | sort -V | tail -1
   register: wanted_nvim_version_sh
   changed_when: false
   failed_when: wanted_nvim_version_sh.rc != 0
@@ -92,8 +91,7 @@
       ansible.builtin.shell:
         cmd: |
           set -o pipefail
-          curl -LsS https://api.github.com/repos/neovim/neovim/releases/tags/{{ wanted_nvim_version }} \
-          | jq -r '.assets.[] | select(.name | endswith("{{ nvim_archive_filename }}")) | .browser_download_url'
+          curl -LsS https://api.github.com/repos/neovim/neovim/releases/tags/{{ wanted_nvim_version }} | jq -r '.assets.[] | select(.name | endswith("{{ nvim_archive_filename }}")) | .browser_download_url'
       register: nvim_url_sh
       changed_when: false
       failed_when: nvim_url_sh.rc != 0

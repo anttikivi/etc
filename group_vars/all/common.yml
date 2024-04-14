@@ -52,6 +52,7 @@ aws:
   force: false
 
 go:
+  version: go1.21.0
   hugo:
     version: v0.123.0
   modules:
