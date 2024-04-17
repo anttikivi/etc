@@ -114,6 +114,14 @@ vim.keymap.set(
   { desc = "[P]aste without overwriting the clipboard" }
 )
 
+-- Delete without yanking
+vim.keymap.set(
+  { "n", "v" },
+  "<leader>d",
+  [["_d]],
+  { desc = "[D]elete without yanking" }
+)
+
 -- Make file an executable
 vim.keymap.set(
   "n",
