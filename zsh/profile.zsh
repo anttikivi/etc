@@ -68,6 +68,3 @@ if [ -f "$TOOLSPATH/google-cloud-sdk/path.zsh.inc" ]; then . "$TOOLSPATH/google-
 
 # The next line enables shell command completion for gcloud.
 if [ -f "$TOOLSPATH/google-cloud-sdk/completion.zsh.inc" ]; then . "$TOOLSPATH/google-cloud-sdk/completion.zsh.inc"; fi
-
-# Set up Tailwind CSS.
-export PATH="$TOOLSPATH/tailwindcss:$PATH"

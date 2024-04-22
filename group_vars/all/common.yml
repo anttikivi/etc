@@ -58,6 +58,7 @@ go:
     - module: mvdan.cc/sh/v3/cmd/shfmt@latest
       cmd: shfmt
 
+cloudflare_api_token: "{{ vault_cloudflare_api_token }}"
 gsap_npm_token: "{{ vault_gsap_npm_token }}"
 
 ssh_keys:
