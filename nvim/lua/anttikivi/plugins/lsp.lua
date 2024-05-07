@@ -141,6 +141,7 @@ return {
         },
         marksman = {},
         phpactor = {},
+        r_language_server = {},
         stylelint_lsp = {},
         tailwindcss = {
           filetypes_exclude = { "markdown" },

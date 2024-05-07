@@ -29,6 +29,7 @@ return {
           "markdown_inline",
           "php",
           "query",
+          "r",
           "regex",
           "terraform",
           "tmux",
