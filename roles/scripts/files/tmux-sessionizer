@@ -3,7 +3,7 @@
 if [ $# -eq 1 ]; then
   selected=$1
 else
-  selected=$(find ~ ~/visiosto ~/personal ~/plugins -mindepth 1 -maxdepth 1 -type d ! -path "${HOME}/Creative Cloud Files Personal Account*" ! -path "${HOME}/Music" | fzf)
+  selected=$(find ~ ~/visiosto ~/personal ~/plugins ~/tmcr/tmcr-projects/hy-tiltu-ja-r-ii-kesa-24 -mindepth 1 -maxdepth 1 -type d ! -path "${HOME}/Creative Cloud Files Personal Account*" ! -path "${HOME}/Music" | fzf)
 fi
 
 if [ -z "${selected}" ]; then
