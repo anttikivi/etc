@@ -85,6 +85,7 @@ return {
       local servers = {
         ansiblels = {},
         astro = {},
+        basedpyright = {},
         bashls = {},
         clangd = {
           keys = {
@@ -151,6 +152,7 @@ return {
         marksman = {},
         phpactor = {},
         r_language_server = {},
+        ruff_lsp = {},
         stylelint_lsp = {},
         tailwindcss = {
           filetypes_exclude = { "markdown" },
