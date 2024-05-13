@@ -86,6 +86,15 @@ return {
         ansiblels = {},
         astro = {},
         bashls = {},
+        clangd = {
+          keys = {
+            {
+              "<leader>ch",
+              "<cmd>ClangdSwitchSourceHeader<cr>",
+              desc = "Switch Source/Header (C/C++)",
+            },
+          },
+        },
         cssls = {
           settings = {
             css = {

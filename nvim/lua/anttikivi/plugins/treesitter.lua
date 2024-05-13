@@ -10,6 +10,7 @@ return {
           "bash",
           -- "blade",
           "c",
+          "cpp",
           "css",
           "diff",
           "go",
