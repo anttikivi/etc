@@ -19,6 +19,7 @@ return {
         lua = { "stylua" },
         markdown = { "prettier" },
         ["markdown.mdx"] = { "prettier" },
+        python = { "black" },
         sh = { "shfmt" },
         terraform = { "terraform_fmt" },
         ["terraform-vars"] = { "terraform_fmt" },
