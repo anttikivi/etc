@@ -13,6 +13,7 @@ default_roles:
   - node
   - nvim
   - php
+  - python
   - rust
   - scripts
   - sh
