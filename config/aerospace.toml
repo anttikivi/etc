@@ -1,7 +1,7 @@
 start-at-login = true
 
-enable-normalization-flatten-containers = false
-enable-normalization-opposite-orientation-for-nested-containers = false
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
 
 [mode.main.binding]
 alt-enter = 'exec-and-forget open -n /System/Applications/Utilities/Terminal.app'
@@ -16,8 +16,8 @@ alt-shift-j = 'move down'
 alt-shift-k = 'move up'
 alt-shift-l = 'move right'
 
-alt-b = 'split horizontal' # originally as 'alt-h', but I prefer the Vim-like keybindings for windows
-alt-v = 'split vertical'
+# alt-b = 'split horizontal' # originally as 'alt-h', but I prefer the Vim-like keybindings for windows
+# alt-v = 'split vertical'
 
 alt-f = 'fullscreen'
 
