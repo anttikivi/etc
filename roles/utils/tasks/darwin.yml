@@ -13,6 +13,27 @@
       - ripgrep
     state: present
 
+- name: Install AeroSpace
+  when: utils_install_aerospace | bool
+  block:
+    - name: Link the AeroSpace configuration
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/config/aerospace.toml"
+        dest: "{{ ansible_user_dir }}/.aerospace.toml"
+        state: link
+        force: true
+
+    - name: Tap the repository for AeroSpace
+      community.general.homebrew_tap:
+        name: nikitabobko/tap
+        state: present
+
+    - name: Install AeroSpace
+      community.general.homebrew:
+        name:
+          - nikitabobko/tap/aerospace
+        state: present
+
 - name: Install skhd
   when: utils_install_skhd | bool
   block:
