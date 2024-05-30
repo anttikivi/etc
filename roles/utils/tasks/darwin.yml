@@ -13,23 +13,47 @@
       - ripgrep
     state: present
 
-- name: Link the skhd configuration
-  ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/config/skhdrc"
-    dest: "{{ ansible_user_dir }}/.skhdrc"
-    state: link
-    force: true
-
-- name: Tap the repository for skhd
-  community.general.homebrew_tap:
-    name: koekeishiya/formulae
-    state: present
-
 - name: Install skhd
-  community.general.homebrew:
-    name:
-      - koekeishiya/formulae/skhd
-    state: present
+  when: utils_install_skhd | bool
+  block:
+    - name: Link the skhd configuration
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/config/skhdrc"
+        dest: "{{ ansible_user_dir }}/.skhdrc"
+        state: link
+        force: true
+
+    - name: Tap the repository for skhd
+      community.general.homebrew_tap:
+        name: koekeishiya/formulae
+        state: present
+
+    - name: Install skhd
+      community.general.homebrew:
+        name:
+          - koekeishiya/formulae/skhd
+        state: present
+
+- name: Install yabai
+  when: utils_install_yabai | bool
+  block:
+    - name: Link the yabai configuration
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/config/yabairc"
+        dest: "{{ ansible_user_dir }}/.yabairc"
+        state: link
+        force: true
+
+    - name: Tap the repository for yabai
+      community.general.homebrew_tap:
+        name: koekeishiya/formulae
+        state: present
+
+    - name: Install yabai
+      community.general.homebrew:
+        name:
+          - koekeishiya/formulae/yabai
+        state: present
 
 - name: Link the global `.editorconfig`
   ansible.builtin.file:

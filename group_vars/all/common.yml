@@ -22,7 +22,6 @@ default_roles:
   - tmux
   - utils
   - vm
-  - windows
   - zsh
 
 dotfiles_dir: "{{ ansible_user_dir }}/dotfiles"

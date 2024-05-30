@@ -1,0 +1,3 @@
+utils_install_skhd: false
+utils_install_yabai: false
+# vi: ft=yaml.ansible
