@@ -18,6 +18,8 @@ alt-shift-l = 'move right'
 
 # alt-b = 'split horizontal' # originally as 'alt-h', but I prefer the Vim-like keybindings for windows
 # alt-v = 'split vertical'
+alt-b = 'join-with left'
+alt-v = 'join-with down'
 
 alt-f = 'fullscreen'
 
