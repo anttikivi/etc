@@ -27,6 +27,13 @@ alt-e = 'layout tiles horizontal vertical' # 'layout toggle split' in i3
 
 alt-shift-space = 'layout floating tiling' # 'floating toggle' in i3
 
+# The we just pretend that `mod1` is different for these actions.
+cmd-1 = 'workspace 1' # the main workspace
+cmd-2 = 'workspace 2' # the work workspace
+
+cmd-shift-1 = 'move-node-to-workspace 1'
+cmd-shift-2 = 'move-node-to-workspace 2'
+
 # Not supported, because this command is redundant in AeroSpace mental model.
 # See: https://nikitabobko.github.io/AeroSpace/guide#floating-windows
 #alt-space = 'focus toggle_tiling_floating'
@@ -37,18 +44,18 @@ alt-shift-space = 'layout floating tiling' # 'floating toggle' in i3
 
 alt-shift-c = 'reload-config'
 
-alt-shift-w = 'mode workspaces'
+# alt-shift-w = 'mode workspaces'
 alt-r = 'mode resize'
 
 # Not quite i3, but the default keybinding conflict with important keys on
 # Finnish keyboard.
-[mode.workspaces.binding]
-alt-1 = 'workspace 1'                    # the main workspace
-alt-w = 'workspace w'                    # the work workspace
-alt-shift-1 = 'move-node-to-workspace 1'
-alt-shift-w = 'move-node-to-workspace w'
-enter = 'mode main'
-esc = 'mode main'
+# [mode.workspaces.binding]
+# alt-1 = 'workspace 1'                    # the main workspace
+# alt-w = 'workspace w'                    # the work workspace
+# alt-shift-1 = 'move-node-to-workspace 1'
+# alt-shift-w = 'move-node-to-workspace w'
+# enter = 'mode main'
+# esc = 'mode main'
 
 [mode.resize.binding]
 h = 'resize width -50'
