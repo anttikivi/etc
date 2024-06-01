@@ -32,7 +32,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Setup Go environment
-        uses: actions/setup-go@v5.0.0
+        uses: actions/setup-go@v5.0.1
 
       - name: Install Go modules
         run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
