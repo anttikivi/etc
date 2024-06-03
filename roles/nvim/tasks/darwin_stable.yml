@@ -63,7 +63,7 @@
     - name: Set the Neovim archive name fact
       ansible.builtin.set_fact:
         # TODO: This apparently needs to be changed for Neovim v0.10.
-        nvim_archive_name: nvim-macos
+        nvim_archive_name: nvim-macos-arm64
 
     - name: Set the Neovim archive filename fact
       ansible.builtin.set_fact:
