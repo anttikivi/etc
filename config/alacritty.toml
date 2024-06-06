@@ -3,7 +3,7 @@ import = [
   # "~/.config/alacritty/catppuccin-latte.toml",
   # "~/.config/alacritty/catppuccin-frappe.toml",
   # "~/.config/alacritty/catppuccin-macchiato.toml",
-  # "~/.config/alacritty/catppuccin-mocha.toml",
+  "~/.config/alacritty/catppuccin-mocha.toml",
 ]
 
 live_config_reload = true
@@ -28,4 +28,4 @@ normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
 bold = { style = "Bold" }
 italic = { style = "Italic" }
 bold_italic = { style = "Bold Italic" }
-size = 12
+size = 12.25
