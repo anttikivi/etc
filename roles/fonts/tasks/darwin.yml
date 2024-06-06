@@ -1,0 +1,7 @@
+---
+- name: Install JetBrains Mono font
+  community.general.homebrew_cask:
+    name:
+      - font-jetbrains-mono-nerd-font
+    state: present
+# vi: ft=yaml.ansible

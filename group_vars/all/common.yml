@@ -5,6 +5,7 @@ default_roles:
   - clang
   - dirs
   - dotfiles
+  - fonts
   - git
   - gcloud
   - go
@@ -18,6 +19,7 @@ default_roles:
   - scripts
   - sh
   - ssh
+  - terminal
   - terraform
   - tmux
   - utils
@@ -38,6 +40,9 @@ git_signingkey: 501D24478EA632F0
 nvim:
   release: stable
   version: v0.10.0
+
+alacritty:
+  version: v0.13.2
 
 # The Google Cloud CLI is not installed even if a newer version is available
 # when `force` is set to `false`.
