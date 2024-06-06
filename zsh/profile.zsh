@@ -11,6 +11,12 @@ export PATH="$TOOLSPATH/nvim/bin:$PATH"
 # Set up the Homebrew shell environment.
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Set up Alacritty.
+export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
+
+# Source the Alacritty completions.
+source $HOME/.zsh_completion/_alacritty
+
 # Set up Go.
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
