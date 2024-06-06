@@ -1,4 +1,5 @@
 default_roles:
+  - alacritty
   - ansible
   - aws
   - build
@@ -19,7 +20,6 @@ default_roles:
   - scripts
   - sh
   - ssh
-  - terminal
   - terraform
   - tmux
   - utils

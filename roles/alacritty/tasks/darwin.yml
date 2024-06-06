@@ -25,7 +25,7 @@
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      curl -LsS https://api.github.com/repos/alacritty/alacritty/releases?per_page=30 | jq -r '.[] | .tag_name' | grep "{{ required_alacritty_minor_version | replace('.', '\\.') }}" | grep "\\-rc" | sort -V | tail -1
+      curl -LsS https://api.github.com/repos/alacritty/alacritty/releases?per_page=30 | jq -r '.[] | .tag_name' | grep "{{ required_alacritty_minor_version | replace('.', '\\.') }}" | grep -v "\\-rc" | sort -V | tail -1
   register: wanted_alacritty_version_sh
   changed_when: false
   failed_when: wanted_alacritty_version_sh.rc != 0
@@ -44,7 +44,7 @@
     cmd: |
       set -o pipefail
       # TODO: The lengths shouldn't be hard-coded.
-      alacritty --version | head --lines 1 | cut -c 11-17
+      alacritty --version | head --lines 1 | cut -c 11-16
   register: current_alacritty_version_sh
   changed_when: false
   failed_when: false
@@ -63,6 +63,11 @@
   notify:
     - Clean up the temporary Alacritty directory
   block:
+    - name: Remove previous Alacritty installation
+      ansible.builtin.file:
+        path: /Applications/Alacritty.app
+        state: absent
+
     - name: Create a temporary directory for Alacritty
       ansible.builtin.tempfile:
         state: directory
@@ -98,16 +103,17 @@
       ansible.builtin.command:
         cmd: tic -xe alacritty,alacritty-direct extra/alacritty.info
         chdir: "{{ alacritty_dir }}"
+      become: true
       changed_when: true
 
     - name: Ensure that the `man1` directory exists
-      ansible.builtint.file:
+      ansible.builtin.file:
         path: /usr/local/share/man/man1
         state: directory
         mode: "755"
 
     - name: Ensure that the `man5` directory exists
-      ansible.builtint.file:
+      ansible.builtin.file:
         path: /usr/local/share/man/man5
         state: directory
         mode: "755"
