@@ -25,7 +25,10 @@ vim.opt.smartindent = true -- Insert indents automatically
 vim.opt.splitbelow = true -- Put new windows below current
 vim.opt.splitright = true -- Put new windows right of current
 vim.opt.tabstop = 2 -- Number of spaces tabs count for
-vim.opt.termguicolors = false -- True color support
+
+local true_colors = require("anttikivi.util").true_colors
+
+vim.opt.termguicolors = true_colors -- True color support
 vim.opt.textwidth = 0 -- Maximum width of text
 vim.opt.timeoutlen = 300
 vim.opt.undofile = true

@@ -1,3 +1,5 @@
+local true_color = require("anttikivi.util").true_colors
+
 return {
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -16,7 +18,7 @@ return {
       return {
         options = {
           icons_enabled = false,
-          theme = "brunch",
+          theme = true_color and "catppuccin" or "brunch",
           component_separators = "|",
           section_separators = "",
           globalstatus = true,
