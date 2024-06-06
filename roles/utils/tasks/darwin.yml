@@ -11,6 +11,7 @@
     name:
       - fzf
       - ripgrep
+      - scdoc
     state: present
 
 - name: Install AeroSpace
