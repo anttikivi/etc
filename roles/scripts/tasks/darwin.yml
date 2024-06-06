@@ -1,7 +1,7 @@
 ---
 - name: Install the script for adding keys to the keychain
   ansible.builtin.copy:
-    src: addkeys
+    src: addkey
     dest: "{{ ansible_user_dir }}/.local/bin/"
     mode: "0755"
     force: true
