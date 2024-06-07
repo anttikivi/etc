@@ -41,7 +41,7 @@
 
 - name: Copy the environment variables file
   ansible.builtin.template:
-    src: zshenv
+    src: zshenv.j2
     dest: "{{ ansible_user_dir }}/.zshenv"
     mode: "0600"
 # vi: ft=yaml.ansible
