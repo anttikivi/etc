@@ -1,15 +1,4 @@
 ---
-- name: Tap the repository for dark-notify
-  community.general.homebrew_tap:
-    name: cormacrelf/tap
-    state: present
-
-- name: Install dark-notify
-  community.general.homebrew:
-    name:
-      - cormacrelf/tap/dark-notify
-    state: present
-
 - name: Stat Brunch
   ansible.builtin.stat:
     path: "{{ plugins_dir }}/brunch.nvim"
