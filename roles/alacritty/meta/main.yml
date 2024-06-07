@@ -1,5 +1,7 @@
 ---
 dependencies:
+  - role: colors
+  - role: dirs
   - role: git
   - role: rust
   - role: utils

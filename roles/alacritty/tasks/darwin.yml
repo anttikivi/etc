@@ -142,14 +142,96 @@
 
 - name: Ensure that the Alacritty configuration directory exists
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config/alacritty"
+    path: "{{ alacritty_config_dir }}"
     state: directory
     mode: "755"
+
+- name: Ensure that the Alacritty colors directory exists
+  ansible.builtin.file:
+    path: "{{ alacritty_colors_dir }}"
+    state: directory
+    mode: "755"
+
+- name: Get Catppuccin for Alacritty
+  when: color_scheme.name == "catppuccin"
+  block:
+    - name: Get the `latte` flavor for Catppuccin
+      ansible.builtin.get_url:
+        url: https://github.com/catppuccin/alacritty/raw/main/catppuccin-latte.toml
+        dest: "{{ alacritty_colors_dir }}"
+        mode: "644"
+
+    - name: Get the `frappe` flavor for Catppuccin
+      ansible.builtin.get_url:
+        url: https://github.com/catppuccin/alacritty/raw/main/catppuccin-frappe.toml
+        dest: "{{ alacritty_colors_dir }}"
+        mode: "644"
+
+    - name: Get the `macchiato` flavor for Catppuccin
+      ansible.builtin.get_url:
+        url: https://github.com/catppuccin/alacritty/raw/main/catppuccin-macchiato.toml
+        dest: "{{ alacritty_colors_dir }}"
+        mode: "644"
+
+    - name: Get the `mocha` flavor for Catppuccin
+      ansible.builtin.get_url:
+        url: https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
+        dest: "{{ alacritty_colors_dir }}"
+        mode: "644"
+
+- name: Copy the script for changing the Alacritty colors
+  ansible.builtin.template:
+    src: "{{ alacritty_change_colors_script }}.j2"
+    dest: "{{ local_bin_dir }}/{{ alacritty_change_colors_script }}"
+    mode: "755"
+
+- name: Copy the script for watching color scheme changes for Alacritty
+  ansible.builtin.template:
+    src: "{{ alacritty_watch_script }}.j2"
+    dest: "{{ local_bin_dir }}/{{ alacritty_watch_script }}"
+    mode: "755"
+
+- name: Copy the service for watching color scheme changes for Alacritty
+  ansible.builtin.template:
+    src: alacrittycolors.plist.j2
+    dest:
+      "{{ ansible_user_dir }}/Library/LaunchAgents/{{
+      alacritty_color_service_label }}.plist"
+    mode: "644"
+
+- name:
+    Check if the service for watching color scheme changes for Alacritty exists
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      launchctl list | grep "{{ alacritty_color_service_label }}"
+  changed_when: true
+  failed_when: false
+  register: alacritty_colors_launchd_list
+
+- name: Debug the return value for checking the service
+  ansible.builtin.debug:
+    var: alacritty_colors_launchd_list
+
+- name: Launch the service for watching color scheme changes for Alacritty
+  ansible.builtin.command:
+    cmd: |
+      launchctl load -w "{{ ansible_user_dir }}/Library/LaunchAgents/{{ alacritty_color_service_label }}.plist"
+  when: alacritty_colors_launchd_list.rc != 0
+  changed_when: true
+
+- name: Reload the service for watching color scheme changes for Alacritty
+  ansible.builtin.shell:
+    cmd: |
+      launchctl unload -w "{{ ansible_user_dir }}/Library/LaunchAgents/{{ alacritty_color_service_label }}.plist"
+      launchctl load -w "{{ ansible_user_dir }}/Library/LaunchAgents/{{ alacritty_color_service_label }}.plist"
+  when: alacritty_colors_launchd_list.rc == 0
+  changed_when: true
 
 - name: Link the Alacritty configuration
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/config/alacritty.toml"
-    dest: "{{ ansible_user_dir }}/.config/alacritty/alacritty.toml"
+    dest: "{{ alacritty_config_dir }}/alacritty.toml"
     state: link
     force: true
 # vi: ft=yaml.ansible

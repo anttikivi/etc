@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ "$1" = "light" ]; then
+  cp -f "{{ alacritty_colors_dir }}/{{ color_scheme.name }}-{{ color_scheme.light_flavor }}.toml" "{{ alacritty_config_dir }}/colors.toml"
+  touch "{{ alacritty_config_dir }}/alacritty.toml"
+  echo "Changed to the light color scheme"
+elif [ "$1" = "dark" ]; then
+  cp -f "{{ alacritty_colors_dir }}/{{ color_scheme.name }}-{{ color_scheme.dark_flavor }}.toml" "{{ alacritty_config_dir }}/colors.toml"
+  touch "{{ alacritty_config_dir }}/alacritty.toml"
+  echo "Changed to the dark color scheme"
+else
+  cp -f "{{ alacritty_colors_dir }}/{{ color_scheme.name }}-{{ color_scheme.light_flavor }}.toml" "{{ alacritty_config_dir }}/colors.toml"
+  touch "{{ alacritty_config_dir }}/alacritty.toml"
+  echo "Changed to the light color scheme"
+fi
