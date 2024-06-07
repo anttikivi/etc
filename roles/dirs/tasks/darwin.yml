@@ -19,13 +19,13 @@
 
 - name: Ensure the Visiosto directory exists
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/visiosto"
+    path: "{{ visiosto_dir }}"
     state: directory
     mode: "0755"
 
-- name: Ensure that the .config directory exists
+- name: Ensure that the `.config` directory exists
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config"
+    path: "{{ config_dir }}"
     state: directory
     mode: "0755"
 

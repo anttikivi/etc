@@ -1,6 +1,9 @@
 # Set utility environment variables.
 export TOOLSPATH="$HOME/tools"
 
+# Source the colors scheme environment variables.
+source $HOME/.config/colors.sh
+
 # Set up local binaries and scripts.
 export PATH="$HOME/.local/bin:$PATH"
 bindkey -s ^f "tmux-sessionizer\n"
