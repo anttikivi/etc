@@ -209,10 +209,6 @@
   failed_when: false
   register: alacritty_colors_launchd_list
 
-- name: Debug the return value for checking the service
-  ansible.builtin.debug:
-    var: alacritty_colors_launchd_list
-
 - name: Launch the service for watching color scheme changes for Alacritty
   ansible.builtin.command:
     cmd: |
