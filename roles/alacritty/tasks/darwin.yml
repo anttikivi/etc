@@ -179,6 +179,42 @@
         dest: "{{ alacritty_colors_dir }}"
         mode: "644"
 
+- name: Get Kanagawa for Alacritty
+  when: color_scheme.name == "kanagawa"
+  block:
+    - name: Get the `lotus` flavor of Kanagawa
+      ansible.builtin.get_url:
+        url: https://github.com/anttikivi/kanagawa-alacritty/raw/main/kanagawa-lotus.toml
+        dest: "{{ alacritty_colors_dir }}"
+        mode: "644"
+
+    - name: Get the `wave` flavor of Kanagawa
+      ansible.builtin.get_url:
+        url: https://github.com/anttikivi/kanagawa-alacritty/raw/main/kanagawa-wave.toml
+        dest: "{{ alacritty_colors_dir }}"
+        mode: "644"
+
+- name: Get Rosé Pine for Alacritty
+  when: color_scheme.name == "rose-pine"
+  block:
+    - name: Get the `dawn` flavor for Rosé Pine
+      ansible.builtin.get_url:
+        url: https://github.com/rose-pine/alacritty/raw/main/dist/rose-pine-dawn.toml
+        dest: "{{ alacritty_colors_dir }}"
+        mode: "644"
+
+    - name: Get the `main` flavor for Rosé Pine
+      ansible.builtin.get_url:
+        url: https://github.com/rose-pine/alacritty/raw/main/dist/rose-pine.toml
+        dest: "{{ alacritty_colors_dir }}/rose-pine-main.toml"
+        mode: "644"
+
+    - name: Get the `moon` flavor for Rosé Pine
+      ansible.builtin.get_url:
+        url: https://github.com/rose-pine/alacritty/raw/main/dist/rose-pine-moon.toml
+        dest: "{{ alacritty_colors_dir }}"
+        mode: "644"
+
 - name: Copy the script for changing the Alacritty colors
   ansible.builtin.template:
     src: "{{ alacritty_change_colors_script }}.j2"

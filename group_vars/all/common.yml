@@ -47,11 +47,27 @@ implemented_color_schemes:
         - mocha
       light:
         - latte
+  kanagawa:
+    name: kanagawa
+    variants:
+      dark:
+        - wave
+        # - dragon
+      light:
+        - lotus
+  rose_pine:
+    name: rose-pine
+    variants:
+      dark:
+        - main
+        - moon
+      light:
+        - dawn
 
 color_scheme:
-  name: "{{ implemented_color_schemes.catppuccin.name }}"
-  dark_variant: "{{ implemented_color_schemes.catppuccin.variants.dark[2] }}"
-  light_variant: "{{ implemented_color_schemes.catppuccin.variants.light[0] }}"
+  name: "{{ implemented_color_schemes.rose_pine.name }}"
+  dark_variant: "{{ implemented_color_schemes.rose_pine.variants.dark[1] }}"
+  light_variant: "{{ implemented_color_schemes.rose_pine.variants.light[0] }}"
 
 git_user_name: Antti Kivi
 git_user_email: "{{ vault_git_user_email }}"

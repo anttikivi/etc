@@ -18,8 +18,8 @@ return {
     opts = {
       flavour = "auto",
       background = {
-        light = vim.g.colorscheme_light_variant,
         dark = vim.g.colorscheme_dark_variant,
+        light = vim.g.colorscheme_light_variant,
       },
       transparent_background = false,
     },
@@ -28,6 +28,36 @@ return {
       vim.cmd.colorscheme "catppuccin"
     end,
     priority = 1000,
+  },
+  {
+    "rebelot/kanagawa.nvim",
+    lazy = false,
+    enabled = vim.g.true_colors and vim.g.colorscheme == "kanagawa",
+    opts = {
+      compile = false,
+      background = {
+        dark = vim.g.colorscheme_dark_variant,
+        light = vim.g.colorscheme_light_variant,
+      },
+    },
+    config = function(_, opts)
+      require("kanagawa").setup(opts)
+      vim.cmd.colorscheme "kanagawa"
+    end,
+    priority = 1000,
+  },
+  {
+    "rose-pine/neovim",
+    lazy = false,
+    enabled = vim.g.true_colors and vim.g.colorscheme == "rose-pine",
+    opts = {
+      variant = "auto",
+      dark_variant = vim.g.colorscheme_dark_variant,
+    },
+    config = function(_, opts)
+      require("rose-pine").setup(opts)
+      vim.cmd.colorscheme "rose-pine"
+    end,
   },
   {
     "cormacrelf/dark-notify",

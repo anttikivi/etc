@@ -16,7 +16,7 @@ return {
       return {
         options = {
           icons_enabled = false,
-          theme = vim.g.true_color and vim.g.colorscheme or "brunch",
+          theme = vim.g.colorscheme,
           component_separators = "|",
           section_separators = "",
           globalstatus = true,
