@@ -6,6 +6,8 @@ end
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+require("anttikivi.util").set_global_variables()
+
 require "anttikivi.config.options"
 require "anttikivi.config.keymaps"
 require "anttikivi.config.autocmds"

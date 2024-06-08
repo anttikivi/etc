@@ -37,10 +37,21 @@ xdg_config_home: "{{ config_dir }}"
 local_dir: "{{ ansible_user_dir }}/.local"
 local_bin_dir: "{{ local_dir }}/bin"
 
+implemented_color_schemes:
+  catppuccin:
+    name: catppuccin
+    variants:
+      dark:
+        - frappe
+        - macchiato
+        - mocha
+      light:
+        - latte
+
 color_scheme:
-  name: catppuccin
-  dark_flavor: mocha
-  light_flavor: latte
+  name: "{{ implemented_color_schemes.catppuccin.name }}"
+  dark_variant: "{{ implemented_color_schemes.catppuccin.variants.dark[2] }}"
+  light_variant: "{{ implemented_color_schemes.catppuccin.variants.light[0] }}"
 
 git_user_name: Antti Kivi
 git_user_email: "{{ vault_git_user_email }}"

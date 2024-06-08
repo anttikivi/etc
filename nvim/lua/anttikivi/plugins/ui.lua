@@ -1,5 +1,3 @@
-local true_color = require("anttikivi.util").true_colors
-
 return {
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -18,7 +16,7 @@ return {
       return {
         options = {
           icons_enabled = false,
-          theme = true_color and "catppuccin" or "brunch",
+          theme = vim.g.true_color and vim.g.colorscheme or "brunch",
           component_separators = "|",
           section_separators = "",
           globalstatus = true,

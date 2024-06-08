@@ -1,11 +1,9 @@
-local true_colors = require("anttikivi.util").true_colors
-
 return {
   {
     "anttikivi/brunch.nvim",
     dev = true,
     lazy = false,
-    enabled = not true_colors,
+    enabled = not vim.g.true_colors,
     config = function()
       require("brunch").load()
       vim.cmd.colorscheme "brunch"
@@ -16,12 +14,12 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = false,
-    enabled = true_colors,
+    enabled = vim.g.true_colors and vim.g.colorscheme == "catppuccin",
     opts = {
       flavour = "auto",
       background = {
-        light = "latte",
-        dark = "mocha",
+        light = vim.g.colorscheme_light_variant,
+        dark = vim.g.colorscheme_dark_variant,
       },
       transparent_background = false,
     },
