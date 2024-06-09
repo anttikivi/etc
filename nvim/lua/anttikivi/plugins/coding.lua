@@ -3,8 +3,6 @@ return {
     "Exafunction/codeium.vim",
     enabled = false,
     event = "BufEnter",
-    -- TODO: Add custom keybingings as the regular Codeium uses keybindings that
-    -- are reserved for skhd.
   },
   { "numToStr/Comment.nvim", opts = {} },
   { "github/copilot.vim", enabled = false },
@@ -55,7 +53,7 @@ return {
       local luasnip = require "luasnip"
       luasnip.config.setup {}
 
-      cmp.setup {
+      cmp.setup(vim.tbl_extend("force", {
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -85,7 +83,17 @@ return {
           { name = "luasnip" },
           { name = "path" },
         },
-      }
+      }, vim.g.icons_enabled and {
+        formatting = {
+          format = function(_, item)
+            local icons = require("anttikivi.util").icons.kinds
+            if icons[item.kind] then
+              item.kind = icons[item.kind] .. item.kind
+            end
+            return item
+          end,
+        },
+      } or {}))
     end,
   },
   {
