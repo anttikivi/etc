@@ -99,6 +99,7 @@ return {
         end,
       },
       { "nvim-telescope/telescope-ui-select.nvim" },
+      { "nvim-tree/nvim-web-devicons", enabled = vim.g.icons_enabled },
     },
     config = function()
       require("telescope").setup {
