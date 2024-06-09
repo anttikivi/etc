@@ -1,3 +1,5 @@
+local icons = require("anttikivi.util").icons
+
 return {
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -14,7 +16,11 @@ return {
     enabled = true,
     opts = function()
       return {
-        options = {
+        options = vim.g.icons_enabled and {
+          icons_enabled = true,
+          theme = vim.g.color_scheme,
+          globalstatus = true,
+        } or {
           icons_enabled = false,
           theme = vim.g.color_scheme,
           component_separators = "|",
@@ -25,8 +31,40 @@ return {
           lualine_a = { "mode" },
           lualine_b = {
             "branch",
-            { "diff", colored = false },
-            { "diagnostics", colored = false },
+            vim.tbl_extend("force", {
+              "diff",
+              colored = vim.g.true_colors,
+              source = function()
+                local gitsigns = vim.b.gitsigns_status_dict
+                if gitsigns then
+                  return {
+                    added = gitsigns.added,
+                    modified = gitsigns.changed,
+                    removed = gitsigns.removed,
+                  }
+                end
+              end,
+            }, vim.g.icons_enabled and {
+              symbols = {
+                added = icons.git.added,
+                modified = icons.git.modified,
+                removed = icons.git.removed,
+              },
+            } or {}),
+            vim.tbl_extend(
+              "force",
+              { "diagnostics", colored = vim.g.true_colors },
+              vim.g.icons_enabled
+                  and {
+                    symbols = {
+                      error = icons.diagnostics.Error,
+                      warn = icons.diagnostics.Warn,
+                      info = icons.diagnostics.Info,
+                      hint = icons.diagnostics.Hint,
+                    },
+                  }
+                or {}
+            ),
           },
           -- 0: Just the filename
           -- 1: Relative path

@@ -42,4 +42,18 @@ function M.set_global_variables()
     or "sunday"
 end
 
+M.icons = {
+  diagnostics = {
+    Error = " ",
+    Warn = " ",
+    Hint = " ",
+    Info = " ",
+  },
+  git = {
+    added = " ",
+    modified = " ",
+    removed = " ",
+  },
+}
+
 return M
