@@ -46,8 +46,7 @@ return {
     event = "VeryLazy",
     keys = function()
       local harpoon = require "harpoon"
-
-      return {
+      local keys = {
         {
           "<C-a>",
           function()
@@ -62,35 +61,20 @@ return {
           end,
           desc = "[T]oggle Harpoon quick menu",
         },
-        {
-          "<C-h>",
-          function()
-            harpoon:list():select(1)
-          end,
-          desc = "Switch to the first marked Harpoon file",
-        },
-        {
-          "<C-j>",
-          function()
-            harpoon:list():select(2)
-          end,
-          desc = "Switch to the second marked Harpoon file",
-        },
-        {
-          "<C-k>",
-          function()
-            harpoon:list():select(3)
-          end,
-          desc = "Switch to the third marked Harpoon file",
-        },
-        {
-          "<C-l>",
-          function()
-            harpoon:list():select(4)
-          end,
-          desc = "Switch to the fourth marked Harpoon file",
-        },
       }
+      local ordinal = { "first", "second", "third", "fourth", "fifth" }
+
+      for i, v in ipairs(ordinal) do
+        table.insert(keys, {
+          string.format("<leader>%d", i),
+          function()
+            harpoon:list():select(i)
+          end,
+          desc = string.format("Switch to the %s marked Harpoon file", v),
+        })
+      end
+
+      return keys
     end,
   },
   {
