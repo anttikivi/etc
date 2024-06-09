@@ -15,7 +15,15 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     opts = {
-      signs = {
+      -- TODO: Try these fancy icons and see if they work out.
+      signs = vim.g.icons_enabled and {
+        add = { text = "▎" },
+        change = { text = "▎" },
+        delete = { text = "" },
+        topdelete = { text = "" },
+        changedelete = { text = "▎" },
+        untracked = { text = "▎" },
+      } or {
         add = { text = "+" },
         change = { text = "~" },
         delete = { text = "_" },
@@ -206,7 +214,7 @@ return {
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    opts = { signs = false },
+    opts = { signs = vim.g.icons_enabled },
   },
   {
     "folke/which-key.nvim",
