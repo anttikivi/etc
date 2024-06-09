@@ -9,7 +9,7 @@ local check_version = function()
     return
   end
 
-  if vim.version.cmp(vim.version(), { 0, 9, 4 }) >= 0 then
+  if vim.version.cmp(vim.version(), { 0, 10, 0 }) >= 0 then
     vim.health.ok(
       string.format("Neovim version is: '%s'", tostring(vim.version()))
     )
