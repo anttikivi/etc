@@ -16,7 +16,7 @@ return {
       return {
         options = {
           icons_enabled = false,
-          theme = vim.g.colorscheme,
+          theme = vim.g.color_scheme,
           component_separators = "|",
           section_separators = "",
           globalstatus = true,

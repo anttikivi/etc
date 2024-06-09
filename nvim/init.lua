@@ -31,7 +31,7 @@ require("lazy").setup("anttikivi.plugins", {
     patterns = { "anttikivi" },
   },
   install = {
-    colorscheme = { vim.g.colorscheme },
+    colorscheme = { vim.g.color_scheme },
   },
   ui = vim.g.icons_enabled and {} or {
     icons = {

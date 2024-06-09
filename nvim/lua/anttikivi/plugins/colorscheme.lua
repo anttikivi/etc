@@ -14,12 +14,12 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = false,
-    enabled = vim.g.true_colors and vim.g.colorscheme == "catppuccin",
+    enabled = vim.g.true_colors and vim.g.color_scheme == "catppuccin",
     opts = {
       flavour = "auto",
       background = {
-        dark = vim.g.colorscheme_dark_variant,
-        light = vim.g.colorscheme_light_variant,
+        dark = vim.g.color_scheme_dark_variant,
+        light = vim.g.color_scheme_light_variant,
       },
       transparent_background = false,
     },
@@ -32,12 +32,12 @@ return {
   {
     "rebelot/kanagawa.nvim",
     lazy = false,
-    enabled = vim.g.true_colors and vim.g.colorscheme == "kanagawa",
+    enabled = vim.g.true_colors and vim.g.color_scheme == "kanagawa",
     opts = {
       compile = false,
       background = {
-        dark = vim.g.colorscheme_dark_variant,
-        light = vim.g.colorscheme_light_variant,
+        dark = vim.g.color_scheme_dark_variant,
+        light = vim.g.color_scheme_light_variant,
       },
     },
     config = function(_, opts)
@@ -49,10 +49,10 @@ return {
   {
     "rose-pine/neovim",
     lazy = false,
-    enabled = vim.g.true_colors and vim.g.colorscheme == "rose-pine",
+    enabled = vim.g.true_colors and vim.g.color_scheme == "rose-pine",
     opts = {
       variant = "auto",
-      dark_variant = vim.g.colorscheme_dark_variant,
+      dark_variant = vim.g.color_scheme_dark_variant,
     },
     config = function(_, opts)
       require("rose-pine").setup(opts)

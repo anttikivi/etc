@@ -22,13 +22,14 @@ function M.set_global_variables()
   ---match with the terminal's color scheme.
   ---
   ---@type "catppuccin" | "kanagawa" | "rose-pine" | "brunch"
-  vim.g.colorscheme = vim.g.true_colors and os.getenv "COLOR_SCHEME" or "brunch"
+  vim.g.color_scheme = vim.g.true_colors and os.getenv "COLOR_SCHEME"
+    or "brunch"
 
   ---The name of the dark variant for the current color scheme. Set via
   ---environment variable to match with the terminal's color scheme.
   ---
   ---@type string
-  vim.g.colorscheme_dark_variant = vim.g.true_colors
+  vim.g.color_scheme_dark_variant = vim.g.true_colors
       and os.getenv "COLOR_SCHEME_DARK_VARIANT"
     or "saturday"
 
@@ -36,7 +37,7 @@ function M.set_global_variables()
   ---environment variable to match with the terminal's color scheme.
   ---
   ---@type string
-  vim.g.colorscheme_light_variant = vim.g.true_colors
+  vim.g.color_scheme_light_variant = vim.g.true_colors
       and os.getenv "COLOR_SCHEME_LIGHT_VARIANT"
     or "sunday"
 end
