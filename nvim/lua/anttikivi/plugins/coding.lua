@@ -9,6 +9,16 @@ return {
   { "numToStr/Comment.nvim", opts = {} },
   { "github/copilot.vim", enabled = false },
   {
+    "folke/lazydev.nvim",
+    ft = "lua",
+    cmd = "LazyDev",
+    opts = {
+      library = {
+        { path = "lazy.nvim", words = { "LazyVim" } },
+      },
+    },
+  },
+  {
     "echasnovski/mini.nvim",
     config = function()
       --  - va)  - [V]isually select [A]round [)]parenthen
