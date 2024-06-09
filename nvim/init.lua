@@ -33,7 +33,7 @@ require("lazy").setup("anttikivi.plugins", {
   install = {
     colorscheme = { "brunch" },
   },
-  ui = {
+  ui = vim.g.icons_enabled and {} or {
     icons = {
       cmd = "⌘",
       config = "🛠",
