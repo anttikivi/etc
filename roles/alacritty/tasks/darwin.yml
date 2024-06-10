@@ -155,25 +155,25 @@
 - name: Get Catppuccin for Alacritty
   when: color_scheme.name == "catppuccin"
   block:
-    - name: Get the `latte` flavor for Catppuccin
+    - name: Get the `latte` variant for Catppuccin
       ansible.builtin.get_url:
         url: https://github.com/catppuccin/alacritty/raw/main/catppuccin-latte.toml
         dest: "{{ alacritty_colors_dir }}"
         mode: "644"
 
-    - name: Get the `frappe` flavor for Catppuccin
+    - name: Get the `frappe` variant for Catppuccin
       ansible.builtin.get_url:
         url: https://github.com/catppuccin/alacritty/raw/main/catppuccin-frappe.toml
         dest: "{{ alacritty_colors_dir }}"
         mode: "644"
 
-    - name: Get the `macchiato` flavor for Catppuccin
+    - name: Get the `macchiato` variant for Catppuccin
       ansible.builtin.get_url:
         url: https://github.com/catppuccin/alacritty/raw/main/catppuccin-macchiato.toml
         dest: "{{ alacritty_colors_dir }}"
         mode: "644"
 
-    - name: Get the `mocha` flavor for Catppuccin
+    - name: Get the `mocha` variant for Catppuccin
       ansible.builtin.get_url:
         url: https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
         dest: "{{ alacritty_colors_dir }}"
@@ -182,7 +182,7 @@
 - name: Get Kanagawa for Alacritty
   when: color_scheme.name == "kanagawa"
   block:
-    - name: Get the `lotus` flavor of Kanagawa
+    - name: Get the `lotus` variant of Kanagawa
       ansible.builtin.get_url:
         url: https://github.com/anttikivi/kanagawa-alacritty/raw/main/kanagawa-lotus.toml
         dest: "{{ alacritty_colors_dir }}"
@@ -194,7 +194,7 @@
         regexp: "#f2ecbc"
         replace: "{{ implemented_color_schemes.kanagawa.colors.lotus_white_3 }}"
 
-    - name: Get the `wave` flavor of Kanagawa
+    - name: Get the `wave` variant of Kanagawa
       ansible.builtin.get_url:
         url: https://github.com/anttikivi/kanagawa-alacritty/raw/main/kanagawa-wave.toml
         dest: "{{ alacritty_colors_dir }}"
@@ -203,19 +203,19 @@
 - name: Get Rosé Pine for Alacritty
   when: color_scheme.name == "rose-pine"
   block:
-    - name: Get the `dawn` flavor for Rosé Pine
+    - name: Get the `dawn` variant for Rosé Pine
       ansible.builtin.get_url:
         url: https://github.com/rose-pine/alacritty/raw/main/dist/rose-pine-dawn.toml
         dest: "{{ alacritty_colors_dir }}"
         mode: "644"
 
-    - name: Get the `main` flavor for Rosé Pine
+    - name: Get the `main` variant for Rosé Pine
       ansible.builtin.get_url:
         url: https://github.com/rose-pine/alacritty/raw/main/dist/rose-pine.toml
         dest: "{{ alacritty_colors_dir }}/rose-pine-main.toml"
         mode: "644"
 
-    - name: Get the `moon` flavor for Rosé Pine
+    - name: Get the `moon` variant for Rosé Pine
       ansible.builtin.get_url:
         url: https://github.com/rose-pine/alacritty/raw/main/dist/rose-pine-moon.toml
         dest: "{{ alacritty_colors_dir }}"
