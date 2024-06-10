@@ -35,6 +35,13 @@ return {
     enabled = vim.g.true_colors and vim.g.color_scheme == "kanagawa",
     opts = {
       compile = false,
+      colors = {
+        palette = {
+          lotusWhite3 = os.getenv "KANAGAWA_LOTUS_WHITE_3",
+          lotusWhite4 = os.getenv "KANAGAWA_LOTUS_WHITE_4",
+          lotusWhite5 = os.getenv "KANAGAWA_LOTUS_WHITE_5",
+        },
+      },
       background = {
         dark = vim.g.color_scheme_dark_variant,
         light = vim.g.color_scheme_light_variant,
