@@ -69,9 +69,9 @@ implemented_color_schemes:
         - dawn
 
 color_scheme:
-  name: "{{ implemented_color_schemes.kanagawa.name }}"
-  dark_variant: "{{ implemented_color_schemes.kanagawa.variants.dark[0] }}"
-  light_variant: "{{ implemented_color_schemes.kanagawa.variants.light[0] }}"
+  name: "{{ implemented_color_schemes.rose_pine.name }}"
+  dark_variant: "{{ implemented_color_schemes.rose_pine.variants.dark[0] }}"
+  light_variant: "{{ implemented_color_schemes.rose_pine.variants.light[0] }}"
 
 git_user_name: Antti Kivi
 git_user_email: "{{ vault_git_user_email }}"
