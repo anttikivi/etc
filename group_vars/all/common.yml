@@ -105,6 +105,7 @@ go:
       cmd: shfmt
 
 cloudflare_api_token: "{{ vault_cloudflare_api_token }}"
+gandi_personal_access_token: "{{ vault_gandi_personal_access_token }}"
 gsap_npm_token: "{{ vault_gsap_npm_token }}"
 
 ssh_keys:
