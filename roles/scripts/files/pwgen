@@ -5,7 +5,7 @@ password() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     LC_CTYPE=C
   fi
-  cat /dev/urandom | tr -dc "A-Za-z0-9!@#$%^&*()_+{}|:<>?[]\;,./~" | head -c $len && echo
+  cat /dev/urandom | tr -dc "A-Za-z0-9!@#$%^&*()_+{}|:<>?[]\;,./~" | head -c "${len}" && echo
 }
 
 usage() {
@@ -31,5 +31,5 @@ shift $((OPTIND - 1))
 if [ -z "$length" ]; then
   password
 else
-  password ${length}
+  password "${length}"
 fi
