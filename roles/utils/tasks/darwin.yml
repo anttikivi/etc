@@ -1,17 +1,12 @@
 ---
-- name: Install GNU utilities
-  community.general.homebrew:
-    name:
-      - gnu-tar
-      - stow
-    state: present
-
 - name: Install general utilities
   community.general.homebrew:
     name:
       - fzf
+      - gnu-tar
       - ripgrep
       - scdoc
+      - tree
     state: present
 
 - name: Install AeroSpace
