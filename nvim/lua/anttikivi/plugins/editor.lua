@@ -62,7 +62,17 @@ return {
           desc = "[T]oggle Harpoon quick menu",
         },
       }
-      local ordinal = { "first", "second", "third", "fourth", "fifth" }
+      local ordinal = {
+        "first",
+        "second",
+        "third",
+        "fourth",
+        "fifth",
+        "sixth",
+        "seventh",
+        "eighth",
+        "ninth",
+      }
 
       for i, v in ipairs(ordinal) do
         table.insert(keys, {
