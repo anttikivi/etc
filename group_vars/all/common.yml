@@ -86,11 +86,6 @@ git_user_name: Antti Kivi
 git_user_email: "{{ vault_git_user_email }}"
 git_signingkey: 501D24478EA632F0
 
-# The possible values for the Neovim release type are 'stable' and 'nightly'.
-nvim:
-  release: stable
-  version: v0.10.0
-
 alacritty:
   version: v0.13.2
 
