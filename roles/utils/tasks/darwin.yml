@@ -2,6 +2,7 @@
 - name: Install general utilities
   community.general.homebrew:
     name:
+      - catimg
       - fzf
       - gnu-tar
       - ripgrep
