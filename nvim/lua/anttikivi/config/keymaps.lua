@@ -103,6 +103,10 @@ vim.keymap.set(
   { expr = true, silent = true }
 )
 
+-- Better indenting
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
+
 -- Use the sessionizer
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
