@@ -1,5 +1,5 @@
 ---
 dependencies:
-  - role: jq
+  - role: utils
   - role: zsh
 # vi: ft=yaml.ansible

@@ -3,7 +3,6 @@ dependencies:
   - role: colors
   - role: git
   - role: home
-  - role: jq
   - role: ssh
   - role: utils
 # vi: ft=yaml.ansible

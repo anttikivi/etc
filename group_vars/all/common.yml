@@ -10,7 +10,6 @@ default_roles:
   - git
   - gcloud
   - go
-  - jq
   - lua
   - node
   - nvim
