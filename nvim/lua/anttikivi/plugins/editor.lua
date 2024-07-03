@@ -94,7 +94,20 @@ return {
       { "nvim-tree/nvim-web-devicons", enabled = vim.g.icons_enabled },
     },
     config = function()
-      require("telescope").setup {
+      local telescope = require "telescope"
+      local telescope_config = require "telescope.config"
+
+      local vimgrep_arguments =
+        { unpack(telescope_config.values.vimgrep_arguments) }
+
+      -- Search in hidden directories.
+      table.insert(vimgrep_arguments, "--hidden")
+
+      -- I don't want to search in the `.git` directory.
+      table.insert(vimgrep_arguments, "--glob")
+      table.insert(vimgrep_arguments, "!**/.git/*")
+
+      telescope.setup {
         defaults = {
           mappings = {
             i = {
@@ -103,10 +116,23 @@ return {
               ["<C-k>"] = require("telescope.actions").move_selection_previous,
             },
           },
+          vimgrep_arguments = vimgrep_arguments,
         },
         extensions = {
           ["ui-select"] = {
             require("telescope.themes").get_dropdown(),
+          },
+        },
+        pickers = {
+          find_files = {
+            -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
+            find_command = {
+              "rg",
+              "--files",
+              "--hidden",
+              "--glob",
+              "!**/.git/*",
+            },
           },
         },
       }
