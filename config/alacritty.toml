@@ -8,6 +8,7 @@ TERM = "xterm-256color"
 
 [window]
 dynamic_title = true
+decorations = "Full"
 decorations_theme_variant = "None"
 resize_increments = false
 # TODO: Make sure the option key works as intended
