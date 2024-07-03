@@ -1,13 +1,8 @@
 default_roles:
-  - home
   - alacritty
   - ansible
   - aws
-  - build
   - clang
-  - dotfiles
-  - fonts
-  - git
   - gcloud
   - go
   - lua
@@ -18,10 +13,8 @@ default_roles:
   - rust
   - scripts
   - sh
-  - ssh
   - terraform
   - tmux
-  - utils
   - vm
   - zsh
 
@@ -39,11 +32,7 @@ xdg_state_home: "{{ local_state_dir }}"
 dev_dir: "{{ ansible_user_dir }}/development"
 dotfiles_dir: "{{ dev_dir }}/dotfiles"
 plugins_dir: "{{ dev_dir }}/plugins"
-personal_dir: "{{ ansible_user_dir }}/personal"
-tools_dir: "{{ ansible_user_dir }}/tools"
-dev_tools_dir: "{{ dev_dir }}/tools"
 visiosto_dev_dir: "{{ dev_dir }}/visiosto"
-visiosto_dir: "{{ ansible_user_dir }}/visiosto"
 
 implemented_color_schemes:
   catppuccin:
@@ -84,9 +73,6 @@ color_scheme:
 git_user_name: Antti Kivi
 git_user_email: "{{ vault_git_user_email }}"
 git_signingkey: 501D24478EA632F0
-
-alacritty:
-  version: v0.13.2
 
 # The Google Cloud CLI is not installed even if a newer version is available
 # when `force` is set to `false`.

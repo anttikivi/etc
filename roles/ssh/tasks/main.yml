@@ -1,9 +1,0 @@
----
-- name: Run Darwin tasks
-  ansible.builtin.import_tasks: darwin.yml
-  when: ansible_os_family == 'Darwin'
-
-- name: Run secret Darwin tasks
-  ansible.builtin.import_tasks: darwin_secret.yml
-  when: ansible_os_family == 'Darwin'
-# vi: ft=yaml.ansible

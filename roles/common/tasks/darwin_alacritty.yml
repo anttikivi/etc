@@ -1,13 +1,13 @@
 ---
 - name: Debug the required Alacritty version
   ansible.builtin.debug:
-    var: alacritty_version
+    var: common_alacritty_version
 
 - name: Resolve the required Alacritty minor version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      echo "{{ alacritty_version }}" | head -c $(echo "{{ alacritty_version }}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")
+      echo "{{ common_alacritty_version }}" | head -c $(echo "{{ common_alacritty_version }}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")
   register: required_alacritty_minor_sh
   changed_when: false
   failed_when: false

@@ -1,8 +1,0 @@
----
-- name: Install build utilities
-  community.general.homebrew:
-    name:
-      - cmake
-      - ninja
-    state: present
-# vi: ft=yaml.ansible

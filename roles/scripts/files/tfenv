@@ -1,9 +1,0 @@
-#!/bin/sh
-
-terraform_env="$1"
-shift 1
-
-(
-  cd "$terraform_env" || exit
-  terraform "$@"
-)

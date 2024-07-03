@@ -1,0 +1,23 @@
+---
+- name: Ensure that the SSH directory exists
+  ansible.builtin.file:
+    path: "{{ common_ssh_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy SSH keys
+  ansible.builtin.copy:
+    dest: "{{ common_ssh_dir }}/{{ ssh_key.key }}"
+    content: "{{ ssh_key.value }}"
+    mode: "{{ ('.pub' in ssh_key.key) | ternary('0644', '0600') }}"
+  no_log: true
+  loop_control:
+    loop_var: ssh_key
+  with_dict: "{{ ssh_keys }}"
+
+- name: Copy SSH configuration
+  ansible.builtin.copy:
+    src: ssh_config
+    dest: "{{ common_ssh_dir }}/config"
+    mode: "0644"
+# vi: ft=yaml.ansible

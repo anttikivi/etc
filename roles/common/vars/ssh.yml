@@ -1,0 +1,10 @@
+---
+common_ssh_dir: "{{ ansible_user_dir }}/.ssh"
+common_ssh_secret_keys:
+  id_ed25519_gcloud: "{{ vault_id_ed25519_gcloud }}"
+  id_ed25519_gcloud.pub: "{{ vault_id_ed25519_gcloud_pub }}"
+  id_ed25519_humako: "{{ vault_id_ed25519_humako }}"
+  id_ed25519_humako.pub: "{{ vault_id_ed25519_humako_pub }}"
+  id_ed25519_humako_staging: "{{ vault_id_ed25519_humako_staging }}"
+  id_ed25519_humako_staging.pub: "{{ vault_id_ed25519_humako_staging_pub }}"
+# vi: ft=yaml.ansible

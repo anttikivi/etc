@@ -10,6 +10,11 @@
         - always
 
   tasks:
+    - name: Run the `common` role
+      ansible.builtin.include_role:
+        name: common
+      tags: always
+
     - name: Set roles
       ansible.builtin.set_fact:
         run_roles:
@@ -35,3 +40,4 @@
       with_items: "{{ run_roles }}"
       tags:
         - always
+# vi: ft=yaml.ansible

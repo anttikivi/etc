@@ -1,0 +1,248 @@
+---
+- name: Ensure that the required directories exist
+  block:
+    - name: Ensure that the `.config` directory exists
+      ansible.builtin.file:
+        path: "{{ config_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Ensure that the `.local` directory exists
+      ansible.builtin.file:
+        path: "{{ local_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Ensure that the local binaries directory exists
+      ansible.builtin.file:
+        path: "{{ local_bin_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Ensure that the local libraries directory exists
+      ansible.builtin.file:
+        path: "{{ local_lib_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Ensure that the local data directory exists
+      ansible.builtin.file:
+        path: "{{ local_data_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Ensure that the local state directory exists
+      ansible.builtin.file:
+        path: "{{ local_state_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Ensure that the development directory exists
+      ansible.builtin.file:
+        path: "{{ dev_dir }}"
+        state: directory
+        mode: "0755"
+
+- name: Set up git
+  block:
+    # NOTE: The global `.gitignore_global` is rarely updated, so copying it is
+    # safe.
+    - name: Copy the global Git ignores
+      ansible.builtin.copy:
+        src: gitignore_global
+        dest: "{{ ansible_user_dir }}/.gitignore_global"
+        mode: "0644"
+        force: true
+
+    - name: Set user.name to Git configuration
+      community.general.git_config:
+        name: user.name
+        scope: global
+        value: "{{ git_user_name }}"
+
+    - name: Set user.email to Git configuration
+      community.general.git_config:
+        name: user.email
+        scope: global
+        value: "{{ git_user_email }}"
+      no_log: true
+
+    - name: Set user.signingkey to Git configuration
+      community.general.git_config:
+        name: user.signingkey
+        scope: global
+        value: "{{ git_signingkey }}"
+
+    - name: Set commit.gpgsign to Git configuration
+      community.general.git_config:
+        name: commit.gpgsign
+        scope: global
+        value: true
+
+    - name: Set tag.gpgsign to Git configuration
+      community.general.git_config:
+        name: tag.gpgsign
+        scope: global
+        value: true
+
+    - name: Set core.excludesfile to Git configuration
+      community.general.git_config:
+        name: core.excludesfile
+        scope: global
+        value: "{{ ansible_user_dir }}/.gitignore_global"
+
+- name: Clone the `dotfiles` repository
+  block:
+    - name: Stat dotfiles development directory
+      ansible.builtin.stat:
+        path: "{{ dotfiles_dir }}"
+      register: dotfiles
+
+    - name: Register the dotfiles development directory state fact
+      ansible.builtin.set_fact:
+        dotfiles_cloned: "{{ dotfiles.stat.exists }}"
+
+    - name: Debug the dotfiles development directory fact
+      ansible.builtin.debug:
+        var: dotfiles_cloned
+
+    - name: Clone anttikivi/dotfiles
+      ansible.builtin.git:
+        repo: git@github.com:anttikivi/dotfiles.git
+        dest: "{{ dotfiles_dir }}"
+        version: main
+        accept_newhostkey: true
+      when: not dotfiles_cloned
+
+- name: Install utilities
+  block:
+    - name: Install build utilities
+      community.general.homebrew:
+        name:
+          - cmake
+          - ninja
+        state: present
+
+    - name: Install general utilities
+      community.general.homebrew:
+        name:
+          - catimg
+          - fzf
+          - gnu-tar
+          - jq
+          - ripgrep
+          - scdoc
+          - tree
+        state: present
+
+    - name: Install AeroSpace
+      when: common_install_aerospace | bool
+      block:
+        - name: Link the AeroSpace configuration
+          ansible.builtin.file:
+            src: "{{ dotfiles_dir }}/config/aerospace.toml"
+            dest: "{{ ansible_user_dir }}/.aerospace.toml"
+            state: link
+            force: true
+
+        - name: Tap the repository for AeroSpace
+          community.general.homebrew_tap:
+            name: nikitabobko/tap
+            state: present
+
+        - name: Install AeroSpace
+          community.general.homebrew_cask:
+            name:
+              - nikitabobko/tap/aerospace
+            state: present
+
+    - name: Install skhd
+      when: common_install_skhd | bool
+      block:
+        - name: Link the skhd configuration
+          ansible.builtin.file:
+            src: "{{ dotfiles_dir }}/config/skhdrc"
+            dest: "{{ ansible_user_dir }}/.skhdrc"
+            state: link
+            force: true
+
+        - name: Tap the repository for skhd
+          community.general.homebrew_tap:
+            name: koekeishiya/formulae
+            state: present
+
+        - name: Install skhd
+          community.general.homebrew:
+            name:
+              - koekeishiya/formulae/skhd
+            state: present
+
+    - name: Install yabai
+      when: common_install_yabai | bool
+      block:
+        - name: Link the yabai configuration
+          ansible.builtin.file:
+            src: "{{ dotfiles_dir }}/config/yabairc"
+            dest: "{{ ansible_user_dir }}/.yabairc"
+            state: link
+            force: true
+
+        - name: Tap the repository for yabai
+          community.general.homebrew_tap:
+            name: koekeishiya/formulae
+            state: present
+
+        - name: Install yabai
+          community.general.homebrew:
+            name:
+              - koekeishiya/formulae/yabai
+            state: present
+
+- name: Link the global `.editorconfig`
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/config/editorconfig"
+    dest: "{{ ansible_user_dir }}/.editorconfig"
+    state: link
+    force: true
+
+- name: Install fonts
+  block:
+    - name: Install JetBrains Mono font
+      community.general.homebrew_cask:
+        name:
+          - font-jetbrains-mono-nerd-font
+        state: present
+
+- name: Set up the color schemes
+  block:
+    - name: Copy the color scheme environment variables
+      ansible.builtin.template:
+        src: colors.sh.j2
+        # TODO: See if there is a better directory to put this in.
+        dest: "{{ config_dir }}/colors.sh"
+        mode: "0600"
+
+    - name: Install dark-notify
+      block:
+        - name: Tap the repository for dark-notify
+          community.general.homebrew_tap:
+            name: cormacrelf/tap
+            state: present
+
+        - name: Install dark-notify
+          community.general.homebrew:
+            name:
+              - cormacrelf/tap/dark-notify
+            state: present
+
+        - name: Get the path of dark-notify
+          ansible.builtin.command:
+            cmd: which dark-notify
+          register: which_dark_notify
+          changed_when: true
+          failed_when: which_dark_notify.rc != 0
+
+        - name: Set the dark-notify path fact
+          ansible.builtin.set_fact:
+            dark_notify_path: "{{ which_dark_notify.stdout }}"
+# vi: ft=yaml.ansible
