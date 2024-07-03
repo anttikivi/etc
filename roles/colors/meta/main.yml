@@ -1,4 +1,4 @@
 ---
 dependencies:
-  - role: dirs
+  - role: home
 # vi: ft=yaml.ansible

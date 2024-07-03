@@ -1,10 +1,10 @@
 default_roles:
+  - home
   - alacritty
   - ansible
   - aws
   - build
   - clang
-  - dirs
   - dotfiles
   - fonts
   - git
@@ -27,15 +27,24 @@ default_roles:
   - zsh
 
 config_dir: "{{ ansible_user_dir }}/.config"
-dotfiles_dir: "{{ ansible_user_dir }}/dotfiles"
-personal_dir: "{{ ansible_user_dir }}/personal"
-plugins_dir: "{{ ansible_user_dir }}/plugins"
-tools_dir: "{{ ansible_user_dir }}/tools"
-visiosto_dir: "{{ ansible_user_dir }}/visiosto"
 xdg_config_home: "{{ config_dir }}"
 
 local_dir: "{{ ansible_user_dir }}/.local"
 local_bin_dir: "{{ local_dir }}/bin"
+local_lib_dir: "{{ local_dir }}/lib"
+local_data_dir: "{{ local_dir }}/share"
+local_state_dir: "{{ local_dir }}/state"
+xdg_data_home: "{{ local_data_dir }}"
+xdg_state_home: "{{ local_state_dir }}"
+
+dev_dir: "{{ ansible_user_dir }}/development"
+dotfiles_dir: "{{ dev_dir }}/dotfiles"
+plugins_dir: "{{ dev_dir }}/plugins"
+personal_dir: "{{ ansible_user_dir }}/personal"
+tools_dir: "{{ ansible_user_dir }}/tools"
+dev_tools_dir: "{{ dev_dir }}/tools"
+visiosto_dev_dir: "{{ dev_dir }}/visiosto"
+visiosto_dir: "{{ ansible_user_dir }}/visiosto"
 
 implemented_color_schemes:
   catppuccin:

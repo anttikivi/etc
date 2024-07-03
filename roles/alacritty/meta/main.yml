@@ -1,8 +1,8 @@
 ---
 dependencies:
   - role: colors
-  - role: dirs
   - role: git
+  - role: home
   - role: rust
   - role: utils
 # vi: ft=yaml.ansible

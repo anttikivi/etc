@@ -1,0 +1,61 @@
+---
+- name: Ensure that the `.config` directory exists
+  ansible.builtin.file:
+    path: "{{ config_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure that the `.local` directory exists
+  ansible.builtin.file:
+    path: "{{ local_dir }}/"
+    state: directory
+    mode: "0755"
+
+- name: Ensure that the local binaries directory exists
+  ansible.builtin.file:
+    path: "{{ local_bin_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure that the local libraries directory exists
+  ansible.builtin.file:
+    path: "{{ local_lib_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure that the local data directory exists
+  ansible.builtin.file:
+    path: "{{ local_data_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure that the local state directory exists
+  ansible.builtin.file:
+    path: "{{ local_state_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure the personal directory exists
+  ansible.builtin.file:
+    path: "{{ personal_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure the plugins directory exists
+  ansible.builtin.file:
+    path: "{{ plugins_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure the tools directory exists
+  ansible.builtin.file:
+    path: "{{ tools_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure the Visiosto directory exists
+  ansible.builtin.file:
+    path: "{{ visiosto_dir }}"
+    state: directory
+    mode: "0755"
+# vi: ft=yaml.ansible
