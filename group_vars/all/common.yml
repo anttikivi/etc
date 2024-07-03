@@ -11,7 +11,6 @@ default_roles:
   - php
   - python
   - rust
-  - scripts
   - sh
   - terraform
   - tmux
@@ -93,6 +92,7 @@ go:
     - module: mvdan.cc/sh/v3/cmd/shfmt@latest
       cmd: shfmt
 
+aws_login_session: "{{ vault_aws_login_session }}"
 cloudflare_api_token: "{{ vault_cloudflare_api_token }}"
 gandi_personal_access_token: "{{ vault_gandi_personal_access_token }}"
 gsap_npm_token: "{{ vault_gsap_npm_token }}"

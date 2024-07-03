@@ -198,6 +198,43 @@
               - koekeishiya/formulae/yabai
             state: present
 
+- name: Set up the utility scripts
+  block:
+    - name: Link the script for adding SSH keys to the keychain
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/bin/addkey"
+        dest: "{{ local_bin_dir }}/"
+        state: link
+        force: true
+
+    - name: Link the script for logging in to the cloud services
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/bin/cloudauth"
+        dest: "{{ local_bin_dir }}/"
+        state: link
+        force: true
+
+    - name: Link the password generation script
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/bin/pwgen"
+        dest: "{{ local_bin_dir }}/"
+        state: link
+        force: true
+
+    - name: Link the script for checking the IP address
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/bin/seeip"
+        dest: "{{ local_bin_dir }}/"
+        state: link
+        force: true
+
+    - name: Link the Tmux sessionizer script
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/bin/tmux-sessionizer"
+        dest: "{{ local_bin_dir }}/"
+        state: link
+        force: true
+
 - name: Link the global `.editorconfig`
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/config/editorconfig"
