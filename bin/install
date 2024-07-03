@@ -24,7 +24,8 @@ readonly CHAR_RIGHT_ANGLE="${ESC_BOLD}${ESC_GREEN}\xE2\x88\x9F${ESC_RESET}"
 readonly CHAR_X_MARK="${ESC_BOLD}${ESC_RED}\xE2\x9C\x96${ESC_RESET}"
 
 readonly VAULT_SECRET_FILE="${HOME}/.vault_pass"
-readonly DOTFILES_DIR="${HOME}/.dotfiles_tmp"
+readonly TMP_DIR="${HOME}/tmp"
+readonly DOTFILES_DIR="${TMP_DIR}/dotfiles"
 readonly PLAYBOOK="${DOTFILES_DIR}/local.yml"
 
 brew_install() {
@@ -85,6 +86,11 @@ if [ "${os_name}" = "Darwin" ]; then
   darwin
 else
   not_supported
+fi
+
+if ! [ -d "${TMP_DIR}" ]; then
+  printf "%bCreating the temporary directory at %b%s%b%b...%b\n" "${ESC_CYAN}" "${ESC_UNDERLINE}" "${TMP_DIR}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+  mkdir "${TMP_DIR}"
 fi
 
 if ! [ -d "${DOTFILES_DIR}" ]; then
