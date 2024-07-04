@@ -82,14 +82,6 @@ gcloud:
 aws:
   force: false
 
-go:
-  version: go1.22.2
-  hugo:
-    version: v0.128.0
-  modules:
-    - module: mvdan.cc/sh/v3/cmd/shfmt@latest
-      cmd: shfmt
-
 aws_login_session: "{{ vault_aws_login_session }}"
 cloudflare_api_token: "{{ vault_cloudflare_api_token }}"
 gandi_personal_access_token: "{{ vault_gandi_personal_access_token }}"

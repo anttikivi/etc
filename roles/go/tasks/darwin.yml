@@ -11,13 +11,13 @@
 
 - name: Debug the required Go version
   ansible.builtin.debug:
-    var: go.version
+    var: go_version
 
 - name: Resolve the required Go minor version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      echo "{{ go.version }}" | head -c $(echo "{{ go.version }}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")
+      echo "{{ go_version }}" | head -c $(echo "{{ go_version }}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")
   register: required_go_minor_sh
   changed_when: false
   failed_when: false
@@ -51,7 +51,7 @@
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      /usr/local/go/bin/go version | sed "s/go version //" | sed "s: {{ goos }}/{{ goarch }}::"
+      {{ go_install_dir }}/bin/go version | sed "s/go version //" | sed "s: {{ goos }}/{{ goarch }}::"
   register: current_go_version_sh
   changed_when: false
   failed_when: current_go_version_sh.rc != 0
@@ -67,7 +67,7 @@
 - name: Install Go
   when: wanted_go_version != current_go_version
   notify:
-    - Clean up the temporary Go directory
+    - go_clean_tmp
   block:
     - name: Set the Go filename fact
       ansible.builtin.set_fact:
@@ -98,7 +98,7 @@
         mode: "0644"
         force: true
       notify:
-        - Clean up the downloaded Go archive
+        - go_clean_download
 
     - name: Ensure clean Go extraction destination
       ansible.builtin.file:
@@ -112,7 +112,7 @@
 
     - name: Remove existing Go installation
       ansible.builtin.file:
-        path: /usr/local/go
+        path: "{{ go_install_dir }}"
         state: absent
       become: true
 
@@ -126,5 +126,5 @@
         force: true
       become: true
       notify:
-        - Clean up the extracted Go directory
+        - go_clean_extracted
 # vi: ft=yaml.ansible

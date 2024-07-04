@@ -3,14 +3,17 @@
   ansible.builtin.file:
     path: "{{ go_archive }}"
     state: absent
+  listen: go_clean_download
 
 - name: Clean up the extracted Go directory
   ansible.builtin.file:
     path: "{{ tmp_go_dir }}/go"
     state: absent
+  listen: go_clean_extracted
 
 - name: Clean up the temporary Go directory
   ansible.builtin.file:
     path: "{{ tmp_go_dir }}"
     state: absent
+  listen: go_clean_tmp
 # vi: ft=yaml.ansible
