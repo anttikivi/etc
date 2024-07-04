@@ -61,7 +61,7 @@
 - name: Install Alacritty
   when: wanted_alacritty_version != current_alacritty_version
   notify:
-    - Clean up the temporary Alacritty directory
+    - alacritty_clean_tmp
   block:
     - name: Remove previous Alacritty installation
       ansible.builtin.file:
@@ -223,14 +223,14 @@
 
 - name: Copy the script for changing the Alacritty colors
   ansible.builtin.template:
-    src: "{{ alacritty_change_colors_script }}.j2"
-    dest: "{{ local_bin_dir }}/{{ alacritty_change_colors_script }}"
+    src: "{{ alacritty_change_colors_script_name }}.j2"
+    dest: "{{ alacritty_change_colors_script }}"
     mode: "755"
 
 - name: Copy the script for watching color scheme changes for Alacritty
   ansible.builtin.template:
-    src: "{{ alacritty_watch_script }}.j2"
-    dest: "{{ local_bin_dir }}/{{ alacritty_watch_script }}"
+    src: "{{ alacritty_watch_script_name }}.j2"
+    dest: "{{ alacritty_watch_script }}"
     mode: "755"
 
 - name: Copy the service for watching color scheme changes for Alacritty

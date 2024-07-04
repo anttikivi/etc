@@ -1,6 +1,0 @@
-alacritty_color_service_label: fi.anttikivi.alacrittycolors
-alacritty_change_colors_script: change_alacritty_colors
-alacritty_watch_script: alacritty_watch_colors
-alacritty_color_service_stdout: /var/log/alacrittycolors.log
-alacritty_color_service_stderr: /var/log/alacrittycolors.err
-# vi: ft=yaml.ansible

@@ -2,4 +2,12 @@ alacritty_version: v0.13.2
 alacritty_config_dir: "{{ config_dir }}/alacritty"
 alacritty_colors_config: "{{ alacritty_config_dir }}/colors.toml"
 alacritty_colors_dir: "{{ alacritty_config_dir }}/colors"
+alacritty_color_service_label: fi.anttikivi.alacrittycolors
+alacritty_change_colors_script_name: change_alacritty_colors
+alacritty_change_colors_script:
+  "{{ local_bin_dir }}/{{ alacritty_change_colors_script_name }}"
+alacritty_watch_script_name: alacritty_watch_colors
+alacritty_watch_script: "{{ local_bin_dir }}/{{ alacritty_watch_script_name }}"
+alacritty_color_service_stdout: "{{ local_dir }}/var/log/alacrittycolors.log"
+alacritty_color_service_stderr: "{{ local_dir }}/var/log/alacrittycolors.err"
 # vi: ft=yaml.ansible
