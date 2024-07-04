@@ -13,7 +13,4 @@
 
     - name: Run the tasks
       ansible.builtin.import_tasks: darwin.yml
-
-    - name: Set up Alacritty
-      ansible.builtin.import_tasks: darwin_alacritty.yml
 # vi: ft=yaml.ansible
