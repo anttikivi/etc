@@ -19,24 +19,24 @@ script.
 
 ### Installing
 
-The repository includes a shell script at [`bin/install`](bin/install) that
+The repository includes a shell script at [`setup/install`](setup/install) that
 initializes the environment, install all of the requirements and runs the
 Ansible playbook. The script should be
 [POSIX-compliant](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html).
 
-    /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/anttikivi/dotfiles/main/bin/install)"
+    /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/anttikivi/dotfiles/main/setup/install)"
 
 If you don’t have `curl` or you wish to download the script separately before
 running it, that’s also possible.
 
-    curl -OL https://raw.githubusercontent.com/anttikivi/dotfiles/main/bin/install
+    curl -OL https://raw.githubusercontent.com/anttikivi/dotfiles/main/setup/install
     chmod +x install
     ./install
 
 > Don’t mind the `curl` command here, you can download the script however you
 > like.
 
-For subsequent runs, you can either run the `bin/install` script again or run
+For subsequent runs, you can either run the `setup/install` script again or run
 the Ansible playbook.
 
     cd ~/dotfiles
