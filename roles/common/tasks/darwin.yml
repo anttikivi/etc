@@ -7,6 +7,12 @@
         state: directory
         mode: "0755"
 
+    - name: Ensure that the `.config/env` directory exists
+      ansible.builtin.file:
+        path: "{{ env_dir }}"
+        state: directory
+        mode: "0755"
+
     - name: Ensure that the `.local` directory exists
       ansible.builtin.file:
         path: "{{ local_dir }}"
@@ -206,13 +212,13 @@
         - name: Copy the Zsh environment variables
           ansible.builtin.template:
             src: env.j2
-            dest: "{{ ansible_user_dir }}/.env_from_ansible"
+            dest: "{{ env_dir }}/preset"
             mode: "0600"
 
         - name: Copy the Zsh secret environment variables
           ansible.builtin.template:
             src: env_secrets.j2
-            dest: "{{ ansible_user_dir }}/.env_secrets"
+            dest: "{{ env_dir }}/secrets"
             mode: "0600"
 
         - name: Link `.zshenv`
@@ -308,9 +314,8 @@
   block:
     - name: Copy the color scheme environment variables
       ansible.builtin.template:
-        src: colors.sh.j2
-        # TODO: See if there is a better directory to put this in.
-        dest: "{{ config_dir }}/colors.sh"
+        src: env_colors.j2
+        dest: "{{ env_dir }}/colors"
         mode: "0600"
 
     - name: Install dark-notify
