@@ -1,16 +1,26 @@
-export ZSH="$HOME/.oh-my-zsh"
+fpath+=($HOME/.zsh/pure)
 
-ZSH_THEME="anttikivi"
-ZSH_CUSTOM="$HOME/dotfiles/zsh"
+autoload -U promptinit
+promptinit
 
-plugins=(git)
+zstyle ':prompt:pure:prompt:success' color white
 
-source $ZSH/oh-my-zsh.sh
+prompt pure
 
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR="vim"
-else
-  export EDITOR="nvim"
-fi
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt CHASE_LINKS
 
-export CC="clang"
+export MANPAGER='nvim +Man!'
+
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
+export PATH="/usr/local/go/bin:$PATH"
+export PATH="$GOPATH/bin:$PATH"
+export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+
+bindkey -s ^f "tmux-sessionizer\n"
+
+for file in $DOTFILES_DIR/zsh/*.zsh; do
+  source "$file"
+done

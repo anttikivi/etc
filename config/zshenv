@@ -1,36 +1,23 @@
-# Source the environment variables populated by Ansible.
-source $HOME/.env_from_ansible
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
 
-# Source the secrets.
-source $HOME/.env_secrets
+export ZDOTDIR="$HOME"
 
-# Source the colors scheme environment variables.
-source $HOME/.config/colors.sh
+export SHARED_ENV_DIR="$XDG_CONFIG_HOME/env"
 
-# Set up local binaries and scripts.
-export PATH="$HOME/.local/bin:$PATH"
+for file in $XDG_CONFIG_HOME/env/*; do
+  source $file
+done
 
-# Set up the Homebrew shell environment.
-eval "$(/opt/homebrew/bin/brew shellenv)"
+export GOPATH="$HOME/.local/go"
+export GOBIN="$GOPATH/bin"
 
-# Set up Alacritty.
-export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
-
-# Set up Go.
-# TODO: Change the GOPATH.
-export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
-export PATH="/usr/local/go/bin:$PATH"
-
-# Set up Python.
-export PATH="$(brew --prefix python)/libexec/bin:$PATH"
-export PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
-
-# Set up Rust.
-source "$HOME/.cargo/env"
-
-# Set up PHP.
-export PATH="$HOME/.composer/vendor/bin:$PATH"
-
-# Set up nvm.
 export NVM_DIR="$HOME/.nvm"
+
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+export CC="clang"
+export CXX="clang++"

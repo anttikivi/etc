@@ -204,43 +204,64 @@
               - koekeishiya/formulae/yabai
             state: present
 
-- name: Set up shells
+- name: Set up Zsh
+  when: common_use_zsh | bool
   block:
-    - name: Set up Zsh
-      when: common_use_zsh | bool
+    - name: Copy the Zsh environment variables
+      ansible.builtin.template:
+        src: env.j2
+        dest: "{{ env_dir }}/preset"
+        mode: "0600"
+
+    - name: Copy the Zsh secret environment variables
+      ansible.builtin.template:
+        src: env_secrets.j2
+        dest: "{{ env_dir }}/secrets"
+        mode: "0600"
+
+    - name: Link `.zshenv`
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/config/zshenv"
+        dest: "{{ ansible_user_dir }}/.zshenv"
+        state: link
+        force: true
+
+    - name: Link `.zprofile`
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/config/zprofile"
+        dest: "{{ ansible_user_dir }}/.zprofile"
+        state: link
+        force: true
+
+    - name: Link `.zshrc`
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/config/zshrc"
+        dest: "{{ ansible_user_dir }}/.zshrc"
+        state: link
+        force: true
+
+    - name: Clone the repository for the Pure prompt
       block:
-        - name: Copy the Zsh environment variables
-          ansible.builtin.template:
-            src: env.j2
-            dest: "{{ env_dir }}/preset"
-            mode: "0600"
+        - name: Stat the `pure` repository
+          ansible.builtin.stat:
+            path: "{{ zsh_dir }}/pure"
+          register: zsh_pure
 
-        - name: Copy the Zsh secret environment variables
-          ansible.builtin.template:
-            src: env_secrets.j2
-            dest: "{{ env_dir }}/secrets"
-            mode: "0600"
+        - name: Register the Pure directory state fact
+          ansible.builtin.set_fact:
+            zsh_pure_cloned: "{{ zsh_pure.stat.exists }}"
 
-        - name: Link `.zshenv`
-          ansible.builtin.file:
-            src: "{{ dotfiles_dir }}/config/zshenv"
-            dest: "{{ ansible_user_dir }}/.zshenv"
-            state: link
-            force: true
+        - name: Debug the Pure directory fact
+          ansible.builtin.debug:
+            var: zsh_pure_cloned
 
-        - name: Link `.zprofile`
-          ansible.builtin.file:
-            src: "{{ dotfiles_dir }}/config/zprofile"
-            dest: "{{ ansible_user_dir }}/.zprofile"
-            state: link
-            force: true
-
-        - name: Link `.zshrc`
-          ansible.builtin.file:
-            src: "{{ dotfiles_dir }}/config/zshrc"
-            dest: "{{ ansible_user_dir }}/.zshrc"
-            state: link
-            force: true
+        - name: Clone `sindresorhus/pure`
+          ansible.builtin.git:
+            repo: git@github.com:sindresorhus/pure.git
+            dest: "{{ zsh_dir }}/pure"
+            version: main
+            accept_newhostkey: true
+          when: not zsh_pure_cloned
 
 - name: Set up Tmux
   block:
