@@ -28,6 +28,7 @@ return {
         typescript = { "prettier" },
         typescriptreact = { "prettier" },
         yaml = { "prettier" },
+        zsh = { "shfmt" },
       },
       formatters = {
         shfmt = {
