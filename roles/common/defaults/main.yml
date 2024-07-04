@@ -1,4 +1,6 @@
 common_install_aerospace: true
 common_install_skhd: false
 common_install_yabai: false
+common_use_bash: true
+common_use_zsh: true
 # vi: ft=yaml.ansible
