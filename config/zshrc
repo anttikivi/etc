@@ -7,10 +7,10 @@ zstyle ':prompt:pure:prompt:success' color white
 
 prompt pure
 
-autoload -Uz compinit
+autoload -U +X compinit
 compinit
 
-autoload -Uz bashcompinit
+autoload -U +X bashcompinit
 bashcompinit
 
 export MANPAGER='nvim +Man!'
