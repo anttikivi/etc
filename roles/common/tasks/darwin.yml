@@ -213,6 +213,12 @@
 - name: Set up Zsh
   when: common_use_zsh | bool
   block:
+    - name: Ensure that the `.zfunctions` directory exists
+      ansible.builtin.file:
+        path: "{{ common_zfunctions_dir }}"
+        state: directory
+        mode: "0755"
+
     - name: Copy the Zsh environment variables
       ansible.builtin.template:
         src: env.j2
@@ -246,28 +252,42 @@
         state: link
         force: true
 
-    - name: Clone the repository for the Pure prompt
+    - name: Clone the `purus` repository
       block:
-        - name: Stat the `pure` repository
+        - name: Stat `purus` development directory
           ansible.builtin.stat:
-            path: "{{ zsh_dir }}/pure"
-          register: zsh_pure
+            path: "{{ common_purus_dir }}"
+          register: purus
 
-        - name: Register the Pure directory state fact
+        - name: Register the `purus` development directory state fact
           ansible.builtin.set_fact:
-            zsh_pure_cloned: "{{ zsh_pure.stat.exists }}"
+            purus_cloned: "{{ purus.stat.exists }}"
 
-        - name: Debug the Pure directory fact
+        - name: Debug the `purus` development directory fact
           ansible.builtin.debug:
-            var: zsh_pure_cloned
+            var: purus_cloned
 
-        - name: Clone `sindresorhus/pure`
+        - name: Clone `anttikivi/purus`
           ansible.builtin.git:
-            repo: git@github.com:sindresorhus/pure.git
-            dest: "{{ zsh_dir }}/pure"
+            repo: git@github.com:anttikivi/purus.git
+            dest: "{{ common_purus_dir }}"
             version: main
             accept_newhostkey: true
-          when: not zsh_pure_cloned
+          when: not purus_cloned
+
+    - name: Link the `async` utility
+      ansible.builtin.file:
+        src: "{{ common_purus_dir }}/async.zsh"
+        dest: "{{ common_zfunctions_dir }}/async"
+        state: link
+        force: true
+
+    - name: Link the prompt
+      ansible.builtin.file:
+        src: "{{ common_purus_dir }}/purus.zsh"
+        dest: "{{ common_zfunctions_dir }}/prompt_purus_setup"
+        state: link
+        force: true
 
 - name: Set up Tmux
   block:

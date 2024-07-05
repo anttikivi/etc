@@ -1,11 +1,11 @@
-fpath+=("${HOME}/.zsh/pure")
+fpath+=("${HOME}/.zfunctions")
 
 autoload -U promptinit
 promptinit
 
-zstyle ':prompt:pure:prompt:success' color white
+zstyle ':prompt:purus:prompt:success' color white
 
-prompt pure
+prompt purus
 
 autoload -U +X compinit
 compinit
