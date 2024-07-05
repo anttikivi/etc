@@ -1,0 +1,5 @@
+---
+# The AWS CLI is not installed even if a newer version is available when
+# `aws_force` is set to `false`.
+aws_force: false
+# vi: ft=yaml.ansible

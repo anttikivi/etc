@@ -1,7 +1,7 @@
 default_roles:
   - alacritty
   - ansible
-  # - aws
+  - aws
   - clang
   # - gcloud
   - go
@@ -78,11 +78,6 @@ git_signingkey: 501D24478EA632F0
 # when `force` is set to `false`.
 gcloud:
   version: 458.0.1
-  force: false
-
-# The AWS CLI is not installed even if a newer version is available
-# when `force` is set to `false`.
-aws:
   force: false
 
 aws_login_session: "{{ vault_aws_login_session }}"
