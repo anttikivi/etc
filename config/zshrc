@@ -19,6 +19,9 @@ export PATH="/usr/local/go/bin:$PATH"
 export PATH="$GOPATH/bin:$PATH"
 export PATH="$(brew --prefix python)/libexec/bin:$PATH"
 
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 bindkey -s ^f "tmux-sessionizer\n"
 
 for file in $DOTFILES_DIR/zsh/*.zsh; do
