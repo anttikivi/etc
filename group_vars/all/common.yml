@@ -1,9 +1,9 @@
 default_roles:
   - alacritty
   - ansible
-  - aws
+  # - aws
   - clang
-  - gcloud
+  # - gcloud
   - go
   - lua
   - node
