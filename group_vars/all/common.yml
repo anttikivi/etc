@@ -3,9 +3,9 @@ default_roles:
   - ansible
   - aws
   - clang
-  # - gcloud
+  - gcloud
   - go
-  - lua
+  # - lua
   - node
   - nvim
   - php
@@ -73,12 +73,6 @@ color_scheme:
 git_user_name: Antti Kivi
 git_user_email: "{{ vault_git_user_email }}"
 git_signingkey: 501D24478EA632F0
-
-# The Google Cloud CLI is not installed even if a newer version is available
-# when `force` is set to `false`.
-gcloud:
-  version: 458.0.1
-  force: false
 
 aws_login_session: "{{ vault_aws_login_session }}"
 cloudflare_api_token: "{{ vault_cloudflare_api_token }}"

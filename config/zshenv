@@ -8,6 +8,7 @@ export ZDOTDIR="$HOME"
 export SHARED_ENV_DIR="$XDG_CONFIG_HOME/env"
 
 for file in $XDG_CONFIG_HOME/env/*; do
+  test "$file" = $XDG_CONFIG_HOME/env/gcloud && continue
   source $file
 done
 unset file

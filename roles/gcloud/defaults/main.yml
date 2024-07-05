@@ -1,0 +1,9 @@
+---
+gcloud_dir: "{{ local_opt_dir }}/google-cloud-sdk"
+gcloud_version: 483.0.0
+
+# The Google Cloud CLI is not installed even if a newer version is available
+# when `force` is set to `false`.
+gcloud_force: false
+
+# vi: ft=yaml.ansible

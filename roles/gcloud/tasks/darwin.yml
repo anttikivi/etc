@@ -1,28 +1,27 @@
 ---
 - name: Stat Google Cloud CLI
   ansible.builtin.stat:
-    path: "{{ tools_dir }}/google-cloud-sdk"
+    path: "{{ gcloud_dir }}"
   register: gcloud_stat
 
 - name: Install Google Cloud CLI
-  when: gcloud.force or not gcloud_stat.stat.exists
+  when: gcloud_force or not gcloud_stat.stat.exists
   notify:
-    - Clean up the temporary Google Cloud CLI directory
+    - gcloud_clean_tmp
   block:
     - name: Create a temporary directory for the Google Cloud CLI archive
       ansible.builtin.tempfile:
         state: directory
-      register: tmp_gcloud
+      register: gcloud_tmp
 
     - name: Set the temporary Google Cloud CLI directory fact
       ansible.builtin.set_fact:
-        tmp_gcloud_dir: "{{ tmp_gcloud.path }}"
+        gcloud_tmp_dir: "{{ gcloud_tmp.path }}"
 
     - name: Set the downloaded Google Cloud CLI archive fact
       ansible.builtin.set_fact:
         gcloud_archive:
-          "{{ tmp_gcloud_dir }}/google-cloud-cli-{{ gcloud.version
-          }}-darwin-arm.tar.gz"
+          "{{ gcloud_tmp_dir }}/google-cloud-cli-{{ gcloud_version }}-darwin-arm.tar.gz"
 
     - name: Ensure clean Google Cloud CLI archive download destination
       ansible.builtin.file:
@@ -32,21 +31,26 @@
     - name: Download the Google Cloud CLI archive
       ansible.builtin.get_url:
         url:
-          "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-{{
-          gcloud.version }}-darwin-arm.tar.gz"
+          "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-{{ gcloud_version }}-darwin-arm.tar.gz"
         dest: "{{ gcloud_archive }}"
         mode: "0644"
         force: true
       notify:
-        - Clean up the downloaded Google Cloud CLI archive
+        - gcloud_clean_download
 
     - name: Ensure clean Google Cloud CLI extraction destination
       ansible.builtin.file:
-        path: "{{ tools_dir }}/google-cloud-sdk"
+        path: "{{ gcloud_dir }}/google-cloud-sdk"
         state: absent
 
     - name: Extract the Google Cloud CLI archive
       ansible.builtin.unarchive:
         src: "{{ gcloud_archive }}"
-        dest: "{{ tools_dir }}"
+        dest: "{{ local_opt_dir }}"
+
+- name: Copy the Google Cloud environment variables
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ env_dir }}/gcloud"
+    mode: "0600"
 # vi: ft=yaml.ansible
