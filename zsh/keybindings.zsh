@@ -1,5 +1,6 @@
 bindkey -v
-# bindkey "^C" vi-cmd-mode
+# Close enough to ^C.
+bindkey "^V" vi-cmd-mode
 
 autoload -U edit-command-line
 zle -N edit-command-line
