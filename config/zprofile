@@ -1,3 +1,7 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [ -d "/opt/homebrew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+export PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
 
 # vi: ft=zsh
