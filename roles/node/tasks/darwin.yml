@@ -53,131 +53,135 @@
   when: latest_nvm_version not in current_nvm_version
   changed_when: latest_nvm_version not in current_nvm_version
 
-- name: Check if Node.js 20 is installed
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm which 20
-  register: node_20_sh
-  changed_when: false
-  failed_when: false
-
-- name: Get installed Node.js 20 version
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm version 20
-  register: node_20_version_sh
-  when: node_20_sh.rc == 0
-  changed_when: false
-  failed_when: false
-
-- name: Set the current Node.js 20 version fact
-  ansible.builtin.set_fact:
-    current_node_20_version: "v{{ node_20_version_sh.stdout | default('') }}"
-
-- name: Query the latest available Node.js 20 version
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm version-remote 20
-  register: latest_node_20_version_sh
-  changed_when: false
-
-- name: Set the latest available Node.js 20 version fact
-  ansible.builtin.set_fact:
-    latest_node_20_version:
-      "v{{ latest_node_20_version_sh.stdout | default('') }}"
-
-# Do a clean installation of Node.js 20.
 - name: Install Node.js 20
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm install 20
-  args:
-    creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_20_version }}"
-  when: node_20_sh.rc != 0
-  changed_when: node_20_sh.rc != 0
+  block:
+    - name: Check if Node.js 20 is installed
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm which 20
+      register: node_20_sh
+      changed_when: false
+      failed_when: false
 
-# If Node.js 20 is already installed, update it if necessary.
-- name: Update Node.js 20
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm install --reinstall-packages-from={{ current_node_20_version }} {{ latest_node_20_version }}
-      nvm uninstall {{ current_node_20_version }}
-  args:
-    creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_20_version }}"
-    removes:
-      "{{ ansible_user_dir }}/.nvm/versions/{{ current_node_20_version }}"
-  when:
-    node_20_sh.rc == 0 and latest_node_20_version not in current_node_20_version
-  changed_when:
-    node_20_sh.rc == 0 and latest_node_20_version not in current_node_20_version
+    - name: Get installed Node.js 20 version
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm version 20
+      register: node_20_version_sh
+      when: node_20_sh.rc == 0
+      changed_when: false
+      failed_when: false
 
-- name: Check if Node.js 18 is installed
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm which 18
-  register: node_18_sh
-  changed_when: false
-  failed_when: false
+    - name: Set the current Node.js 20 version fact
+      ansible.builtin.set_fact:
+        current_node_20_version: "v{{ node_20_version_sh.stdout | default('') }}"
 
-- name: Get installed Node.js 18 version
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm version 18
-  register: node_18_version_sh
-  when: node_18_sh.rc == 0
-  changed_when: false
-  failed_when: false
+    - name: Query the latest available Node.js 20 version
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm version-remote 20
+      register: latest_node_20_version_sh
+      changed_when: false
 
-- name: Set the current Node.js 18 version fact
-  ansible.builtin.set_fact:
-    current_node_18_version: "v{{ node_18_version_sh.stdout | default('') }}"
+    - name: Set the latest available Node.js 20 version fact
+      ansible.builtin.set_fact:
+        latest_node_20_version:
+          "v{{ latest_node_20_version_sh.stdout | default('') }}"
 
-- name: Query the latest available Node.js 18 version
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm version-remote 18
-  register: latest_node_18_version_sh
-  changed_when: false
+    # Do a clean installation of Node.js 20.
+    - name: Install Node.js 20
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm install 20
+      args:
+        creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_20_version }}"
+      when: node_20_sh.rc != 0
+      changed_when: node_20_sh.rc != 0
 
-- name: Set the latest available Node.js 18 version fact
-  ansible.builtin.set_fact:
-    latest_node_18_version:
-      "v{{ latest_node_18_version_sh.stdout | default('') }}"
+    # If Node.js 20 is already installed, update it if necessary.
+    - name: Update Node.js 20
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm install --reinstall-packages-from={{ current_node_20_version }} {{ latest_node_20_version }}
+          nvm uninstall {{ current_node_20_version }}
+      args:
+        creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_20_version }}"
+        removes:
+          "{{ ansible_user_dir }}/.nvm/versions/{{ current_node_20_version }}"
+      when:
+        node_20_sh.rc == 0 and latest_node_20_version not in current_node_20_version
+      changed_when:
+        node_20_sh.rc == 0 and latest_node_20_version not in current_node_20_version
 
-# Do a clean installation of Node.js 18.
 - name: Install Node.js 18
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm install 18
-  args:
-    creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_18_version }}"
-  when: node_18_sh.rc != 0
-  changed_when: node_18_sh.rc != 0
+  block:
+    - name: Check if Node.js 18 is installed
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm which 18
+      register: node_18_sh
+      changed_when: false
+      failed_when: false
 
-# If Node.js 18 is already installed, update it if necessary.
-- name: Update Node.js 18
-  ansible.builtin.shell:
-    cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm install --reinstall-packages-from={{ current_node_18_version }} {{ latest_node_18_version }}
-      nvm uninstall {{ current_node_18_version }}
-  args:
-    creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_18_version }}"
-    removes:
-      "{{ ansible_user_dir }}/.nvm/versions/{{ current_node_18_version }}"
-  when:
-    node_18_sh.rc == 0 and latest_node_18_version not in current_node_18_version
-  changed_when:
-    node_18_sh.rc == 0 and latest_node_18_version not in current_node_18_version
+    - name: Get installed Node.js 18 version
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm version 18
+      register: node_18_version_sh
+      when: node_18_sh.rc == 0
+      changed_when: false
+      failed_when: false
+
+    - name: Set the current Node.js 18 version fact
+      ansible.builtin.set_fact:
+        current_node_18_version: "v{{ node_18_version_sh.stdout | default('') }}"
+
+    - name: Query the latest available Node.js 18 version
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm version-remote 18
+      register: latest_node_18_version_sh
+      changed_when: false
+
+    - name: Set the latest available Node.js 18 version fact
+      ansible.builtin.set_fact:
+        latest_node_18_version:
+          "v{{ latest_node_18_version_sh.stdout | default('') }}"
+
+    # Do a clean installation of Node.js 18.
+    - name: Install Node.js 18
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm install 18
+      args:
+        creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_18_version }}"
+      when: node_18_sh.rc != 0
+      changed_when: node_18_sh.rc != 0
+
+    # If Node.js 18 is already installed, update it if necessary.
+    - name: Update Node.js 18
+      ansible.builtin.shell:
+        cmd: |
+          source {{ nvm_dir }}/nvm.sh
+          nvm install --reinstall-packages-from={{ current_node_18_version }} {{ latest_node_18_version }}
+          nvm uninstall {{ current_node_18_version }}
+      args:
+        creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_18_version }}"
+        removes:
+          "{{ ansible_user_dir }}/.nvm/versions/{{ current_node_18_version }}"
+      when:
+        node_18_sh.rc == 0 and latest_node_18_version not in current_node_18_version
+      changed_when:
+        node_18_sh.rc == 0 and latest_node_18_version not in current_node_18_version
 
 - name: Set the default Node.js version
   ansible.builtin.shell:

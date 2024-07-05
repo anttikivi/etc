@@ -1,4 +1,0 @@
----
-dependencies:
-  - role: zsh
-# vi: ft=yaml.ansible
