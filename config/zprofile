@@ -1,7 +1,28 @@
+# TODO: It might be that `PATH` should be set in `.zshrc` on Linux.
 if [ -d "/opt/homebrew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
+export PATH="/usr/local/go/bin:$PATH"
+export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+
+if [ ! -z "${GOBIN+x}" ]; then
+  export PATH="$GOBIN:$PATH"
+fi
+
+# The Google Cloud environment variable file modifies `PATH`.
+if [ -f "$XDG_CONFIG_HOME/env/gcloud" ]; then
+  source $XDG_CONFIG_HOME/env/gcloud
+fi
+
 export PYTHONPATH="$(brew --prefix)/lib/python$(python3 --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
+
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+export CC="clang"
+export CXX="clang++"
 
 # vi: ft=zsh

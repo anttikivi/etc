@@ -8,6 +8,8 @@ export ZDOTDIR="$HOME"
 export SHARED_ENV_DIR="$XDG_CONFIG_HOME/env"
 
 for file in $XDG_CONFIG_HOME/env/*; do
+  # Colors are only needed in interactive shells.
+  test "$file" = $XDG_CONFIG_HOME/env/colors && continue
   # The Google Cloud file modifies path and, thus, it is sourced in `.zshrc`.
   test "$file" = $XDG_CONFIG_HOME/env/gcloud && continue
   source $file
@@ -15,6 +17,3 @@ done
 unset file
 
 export NVM_DIR="$HOME/.nvm"
-
-export CC="clang"
-export CXX="clang++"
