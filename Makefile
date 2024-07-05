@@ -18,7 +18,7 @@ lint:
 	@printf "\nRunning shfmt...\n"
 	shfmt -l -d -i 2 -ci -bn .
 	@printf "\nRunning shellcheck...\n"
-	shellcheck bin/install
+	shellcheck setup/install
 	@printf "\nRunning Ansible Lint...\n"
 	@printf "\nAnsible Lint is currently disabled...\n"
-	# ansible-lint 
+	# ansible-lint
