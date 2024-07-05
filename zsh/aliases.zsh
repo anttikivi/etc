@@ -9,7 +9,7 @@ alias _="sudo "
 
 # Directory stack
 for index in {1..9}; do
-  alias "$index"="cd +${index} > /dev/null"
+  alias "${index}"="cd +${index} > /dev/null"
 done
 unset index
 

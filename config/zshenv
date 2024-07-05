@@ -1,17 +1,17 @@
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_STATE_HOME="${HOME}/.local/state"
 
-export ZDOTDIR="$HOME"
+export ZDOTDIR="${HOME}"
 
-export SHARED_ENV_DIR="$XDG_CONFIG_HOME/env"
+export SHARED_ENV_DIR="${XDG_CONFIG_HOME}/env"
 
-for file in $SHARED_ENV_DIR/*; do
+for file in "${SHARED_ENV_DIR}/"*; do
   # Colors are only needed in interactive shells.
-  test "$file" = $SHARED_ENV_DIR/colors && continue
+  test "${file}" = "${SHARED_ENV_DIR}/colors" && continue
   # Secrets should not be exposed to every single shell.
-  test "$file" = $SHARED_ENV_DIR/secrets && continue
-  source $file
+  test "${file}" = "${SHARED_ENV_DIR}/secrets" && continue
+  source "${file}"
 done
 unset file

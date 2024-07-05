@@ -6,7 +6,7 @@ setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_TO_HOME
 
 function d() {
-  if [[ -n $1 ]]; then
+  if [[ -n "$1" ]]; then
     dirs "$@"
   else
     dirs -v | head -n 10

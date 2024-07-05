@@ -1,23 +1,26 @@
+typeset -U path PATH
+
 # TODO: It might be that `PATH` should be set in `.zshrc` on Linux.
 if [ -d "/opt/homebrew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="/usr/local/go/bin:$PATH"
-export PATH="$(brew --prefix python)/libexec/bin:$PATH"
-export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
+path=("${HOME}/.local/bin" "${path[@]}")
+path=("/usr/local/go/bin" "${path[@]}")
+path=("$(brew --prefix python)/libexec/bin" "${path[@]}")
+path=("/Applications/Alacritty.app/Contents/MacOS" "${path[@]}")
 
 if [ ! -z "${GOBIN+x}" ]; then
-  export PATH="$GOBIN:$PATH"
+  path=("${GOBIN}" "${path[@]}")
 fi
+
+source "${HOME}/.cargo/env"
 
 export NVM_DIR="${HOME}/.nvm"
 [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
 
-# The Google Cloud environment variable file modifies `PATH`.
-if [ ! -z "${GCLOUD_BIN+x}" ]; then
-  export PATH="$GCLOUD_BIN:$PATH"
+if [ -f "${GCLOUD_DIR}/path.zsh.inc" ]; then
+  source "${GCLOUD_DIR}/path.zsh.inc"
 fi
 
 export PYTHONPATH="$(brew --prefix)/lib/python$(python3 --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
@@ -28,8 +31,8 @@ export VISUAL="nvim"
 export CC="clang"
 export CXX="clang++"
 
-if [ -f "$XDG_CONFIG_HOME/env/secrets" ]; then
-  source $XDG_CONFIG_HOME/env/secrets
+if [ -f "${XDG_CONFIG_HOME}/env/secrets" ]; then
+  source "${XDG_CONFIG_HOME}/env/secrets"
 fi
 
 # vi: ft=zsh
