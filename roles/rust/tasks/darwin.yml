@@ -1,7 +1,7 @@
 ---
 - name: Check if Cargo is installed
   ansible.builtin.command:
-    cmd: cargo --version
+    cmd: "{{ ansible_user_dir }}/.cargo/bin/cargo --version"
   register: cargo_exists
   changed_when: false
   ignore_errors: true
@@ -9,20 +9,20 @@
 - name: Install Rust
   when: cargo_exists is failed
   notify:
-    - Clean up the temporary Rustup directory
+    - rust_clean_tmp
   block:
     - name: Create a temporary directory for the Rustup script
       ansible.builtin.tempfile:
         state: directory
-      register: tmp_rust
+      register: rust_tmp
 
     - name: Set the temporary Rustup directory fact
       ansible.builtin.set_fact:
-        tmp_rust_dir: "{{ tmp_rust.path }}"
+        rust_tmp_dir: "{{ rust_tmp.path }}"
 
     - name: Set the downloaded Rustup script fact
       ansible.builtin.set_fact:
-        rustup: "{{ tmp_rust_dir }}/rustup-init.sh"
+        rustup: "{{ rust_tmp_dir }}/rustup-init.sh"
 
     - name: Ensure clean Rustup script download destination
       ansible.builtin.file:
@@ -36,7 +36,7 @@
         mode: "0755"
         force: true
       notify:
-        - Clean up the downloaded Rustup script
+        - rust_clean_download
 
     - name: Install Rust and Cargo
       ansible.builtin.command:
