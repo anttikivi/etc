@@ -116,7 +116,7 @@ fi
 
 (
   # Add the Cargo directory to the path as it's needed to install some Homebrew formulae in the playbook.
-  PATH="${HOME}/.cargo/bin:${PATH}"
+  export PATH="${HOME}/.cargo/bin:${PATH}"
 
   if [ -f "${VAULT_SECRET_FILE}" ]; then
     printf "   %b %bDecrypting the %bAnsible%b%b vault...%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
