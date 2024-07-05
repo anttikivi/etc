@@ -98,7 +98,7 @@
           source {{ nvm_dir }}/nvm.sh
           nvm install 20
       args:
-        creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_20_version }}"
+        creates: "{{ nvm_dir }}/versions/{{ latest_node_20_version }}"
       when: node_20_sh.rc != 0
       changed_when: node_20_sh.rc != 0
 
@@ -110,9 +110,9 @@
           nvm install --reinstall-packages-from={{ current_node_20_version }} {{ latest_node_20_version }}
           nvm uninstall {{ current_node_20_version }}
       args:
-        creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_20_version }}"
+        creates: "{{ nvm_dir }}/versions/{{ latest_node_20_version }}"
         removes:
-          "{{ ansible_user_dir }}/.nvm/versions/{{ current_node_20_version }}"
+          "{{ nvm_dir }}/versions/{{ current_node_20_version }}"
       when:
         node_20_sh.rc == 0 and latest_node_20_version not in current_node_20_version
       changed_when:
@@ -163,7 +163,7 @@
           source {{ nvm_dir }}/nvm.sh
           nvm install 18
       args:
-        creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_18_version }}"
+        creates: "{{ nvm_dir }}/versions/{{ latest_node_18_version }}"
       when: node_18_sh.rc != 0
       changed_when: node_18_sh.rc != 0
 
@@ -175,9 +175,9 @@
           nvm install --reinstall-packages-from={{ current_node_18_version }} {{ latest_node_18_version }}
           nvm uninstall {{ current_node_18_version }}
       args:
-        creates: "{{ ansible_user_dir }}/.nvm/versions/{{ latest_node_18_version }}"
+        creates: "{{ nvm_dir }}/versions/{{ latest_node_18_version }}"
         removes:
-          "{{ ansible_user_dir }}/.nvm/versions/{{ current_node_18_version }}"
+          "{{ nvm_dir }}/versions/{{ current_node_18_version }}"
       when:
         node_18_sh.rc == 0 and latest_node_18_version not in current_node_18_version
       changed_when:

@@ -4,17 +4,20 @@ if [ -d "/opt/homebrew" ]; then
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
 
 if [ ! -z "${GOBIN+x}" ]; then
   export PATH="$GOBIN:$PATH"
 fi
 
+export NVM_DIR="${HOME}/.nvm"
+[ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
+
 # The Google Cloud environment variable file modifies `PATH`.
-if [ -f "$XDG_CONFIG_HOME/env/gcloud" ]; then
-  source $XDG_CONFIG_HOME/env/gcloud
+if [ ! -z "${GCLOUD_BIN+x}" ]; then
+  export PATH="$GCLOUD_BIN:$PATH"
 fi
 
 export PYTHONPATH="$(brew --prefix)/lib/python$(python3 --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
@@ -24,5 +27,9 @@ export VISUAL="nvim"
 
 export CC="clang"
 export CXX="clang++"
+
+if [ -f "$XDG_CONFIG_HOME/env/secrets" ]; then
+  source $XDG_CONFIG_HOME/env/secrets
+fi
 
 # vi: ft=zsh
