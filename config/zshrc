@@ -18,8 +18,11 @@ export MANPAGER='nvim +Man!'
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
-export PATH="$GOPATH/bin:$PATH"
 export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+
+if [ ! -z "${GOBIN+x}" ]; then
+  export PATH="$GOBIN:$PATH"
+fi
 
 if [ -f "$XDG_CONFIG_HOME/env/gcloud" ]; then
   source $XDG_CONFIG_HOME/env/gcloud

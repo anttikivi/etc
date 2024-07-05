@@ -127,4 +127,10 @@
       become: true
       notify:
         - go_clean_extracted
+
+- name: Copy the Go environment variables
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ env_dir }}/go"
+    mode: "0600"
 # vi: ft=yaml.ansible

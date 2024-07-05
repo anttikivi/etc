@@ -8,13 +8,11 @@ export ZDOTDIR="$HOME"
 export SHARED_ENV_DIR="$XDG_CONFIG_HOME/env"
 
 for file in $XDG_CONFIG_HOME/env/*; do
+  # The Google Cloud file modifies path and, thus, it is sourced in `.zshrc`.
   test "$file" = $XDG_CONFIG_HOME/env/gcloud && continue
   source $file
 done
 unset file
-
-export GOPATH="$HOME/.local/go"
-export GOBIN="$GOPATH/bin"
 
 export NVM_DIR="$HOME/.nvm"
 
