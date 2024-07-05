@@ -1,25 +1,21 @@
 ---
-- name: Set the nvm directory fact
-  ansible.builtin.set_fact:
-    nvm_dir: "{{ ansible_user_dir }}/.nvm"
-
 - name: Ensure that the nvm directory exists
   ansible.builtin.file:
-    path: "{{ nvm_dir }}"
+    path: "{{ node_nvm_dir }}"
     state: directory
     mode: "0755"
 
 - name: Copy the configuration for default global packages
   ansible.builtin.copy:
     src: default-packages
-    dest: "{{ nvm_dir }}/default-packages"
+    dest: "{{ node_nvm_dir }}/default-packages"
     mode: "0644"
     force: true
 
 - name: Get the nvm version
   ansible.builtin.shell:
     cmd: |
-      source {{ nvm_dir }}/nvm.sh
+      source {{ node_nvm_dir }}/nvm.sh
       nvm --version --no-colors
   register: current_nvm_version_sh
   changed_when: false
@@ -46,147 +42,23 @@
     set -o pipefail
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ latest_nvm_version }}/install.sh | bash
   environment:
-    NVM_DIR: "{{ nvm_dir }}"
+    NVM_DIR: "{{ node_nvm_dir }}"
     PROFILE: /dev/null
   args:
-    creates: "{{ nvm_dir }}/nvm.sh"
+    creates: "{{ node_nvm_dir }}/nvm.sh"
   when: latest_nvm_version not in current_nvm_version
   changed_when: latest_nvm_version not in current_nvm_version
 
-- name: Install Node.js 20
-  block:
-    - name: Check if Node.js 20 is installed
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm which 20
-      register: node_20_sh
-      changed_when: false
-      failed_when: false
-
-    - name: Get installed Node.js 20 version
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm version 20
-      register: node_20_version_sh
-      when: node_20_sh.rc == 0
-      changed_when: false
-      failed_when: false
-
-    - name: Set the current Node.js 20 version fact
-      ansible.builtin.set_fact:
-        current_node_20_version: "v{{ node_20_version_sh.stdout | default('') }}"
-
-    - name: Query the latest available Node.js 20 version
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm version-remote 20
-      register: latest_node_20_version_sh
-      changed_when: false
-
-    - name: Set the latest available Node.js 20 version fact
-      ansible.builtin.set_fact:
-        latest_node_20_version:
-          "v{{ latest_node_20_version_sh.stdout | default('') }}"
-
-    # Do a clean installation of Node.js 20.
-    - name: Install Node.js 20
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm install 20
-      args:
-        creates: "{{ nvm_dir }}/versions/{{ latest_node_20_version }}"
-      when: node_20_sh.rc != 0
-      changed_when: node_20_sh.rc != 0
-
-    # If Node.js 20 is already installed, update it if necessary.
-    - name: Update Node.js 20
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm install --reinstall-packages-from={{ current_node_20_version }} {{ latest_node_20_version }}
-          nvm uninstall {{ current_node_20_version }}
-      args:
-        creates: "{{ nvm_dir }}/versions/{{ latest_node_20_version }}"
-        removes:
-          "{{ nvm_dir }}/versions/{{ current_node_20_version }}"
-      when:
-        node_20_sh.rc == 0 and latest_node_20_version not in current_node_20_version
-      changed_when:
-        node_20_sh.rc == 0 and latest_node_20_version not in current_node_20_version
-
-- name: Install Node.js 18
-  block:
-    - name: Check if Node.js 18 is installed
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm which 18
-      register: node_18_sh
-      changed_when: false
-      failed_when: false
-
-    - name: Get installed Node.js 18 version
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm version 18
-      register: node_18_version_sh
-      when: node_18_sh.rc == 0
-      changed_when: false
-      failed_when: false
-
-    - name: Set the current Node.js 18 version fact
-      ansible.builtin.set_fact:
-        current_node_18_version: "v{{ node_18_version_sh.stdout | default('') }}"
-
-    - name: Query the latest available Node.js 18 version
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm version-remote 18
-      register: latest_node_18_version_sh
-      changed_when: false
-
-    - name: Set the latest available Node.js 18 version fact
-      ansible.builtin.set_fact:
-        latest_node_18_version:
-          "v{{ latest_node_18_version_sh.stdout | default('') }}"
-
-    # Do a clean installation of Node.js 18.
-    - name: Install Node.js 18
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm install 18
-      args:
-        creates: "{{ nvm_dir }}/versions/{{ latest_node_18_version }}"
-      when: node_18_sh.rc != 0
-      changed_when: node_18_sh.rc != 0
-
-    # If Node.js 18 is already installed, update it if necessary.
-    - name: Update Node.js 18
-      ansible.builtin.shell:
-        cmd: |
-          source {{ nvm_dir }}/nvm.sh
-          nvm install --reinstall-packages-from={{ current_node_18_version }} {{ latest_node_18_version }}
-          nvm uninstall {{ current_node_18_version }}
-      args:
-        creates: "{{ nvm_dir }}/versions/{{ latest_node_18_version }}"
-        removes:
-          "{{ nvm_dir }}/versions/{{ current_node_18_version }}"
-      when:
-        node_18_sh.rc == 0 and latest_node_18_version not in current_node_18_version
-      changed_when:
-        node_18_sh.rc == 0 and latest_node_18_version not in current_node_18_version
+- name: Install Node.js versions
+  ansible.builtin.include_tasks: darwin_install_node.yml
+  loop: "{{ node_versions }}"
 
 - name: Set the default Node.js version
   ansible.builtin.shell:
     cmd: |
-      source {{ nvm_dir }}/nvm.sh
-      nvm alias default 20 --no-colors
+      source {{ node_nvm_dir }}/nvm.sh
+      nvm alias default {{ node_default_version }} --no-colors
   changed_when: true
+  environment:
+    NVM_DIR: "{{ node_nvm_dir }}"
 # vi: ft=yaml.ansible
