@@ -10,6 +10,7 @@ export SHARED_ENV_DIR="$XDG_CONFIG_HOME/env"
 for file in $XDG_CONFIG_HOME/env/*; do
   source $file
 done
+unset file
 
 export GOPATH="$HOME/.local/go"
 export GOBIN="$GOPATH/bin"
