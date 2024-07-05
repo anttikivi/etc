@@ -8,6 +8,8 @@ end
 
 ---@return nil
 function M.set_global_variables()
+  vim.g.netrw_list_hide = "^\\.DS_Store$"
+
   ---Whether true colors are supported by the current terminal.
   ---
   ---@type boolean
