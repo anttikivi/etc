@@ -43,8 +43,6 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
-source <(fzf --zsh)
-
 # The Zsh options for reference:
 # https://zsh.sourceforge.io/Doc/Release/Options.html
 for file in "${DOTFILES_DIR}/zsh/"*.zsh; do
