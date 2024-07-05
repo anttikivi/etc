@@ -43,6 +43,12 @@
         state: directory
         mode: "0755"
 
+    - name: Ensure that the local `opt` directory exists
+      ansible.builtin.file:
+        path: "{{ local_opt_dir }}"
+        state: directory
+        mode: "0755"
+
     - name: Ensure that the development directory exists
       ansible.builtin.file:
         path: "{{ dev_dir }}"
