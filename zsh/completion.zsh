@@ -1,0 +1,4 @@
+unsetopt MENU_COMPLETE
+setopt ALWAYS_TO_END
+setopt AUTO_MENU
+setopt COMPLETE_IN_WORD
