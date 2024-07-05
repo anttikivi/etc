@@ -3,7 +3,7 @@
 if [ $# -eq 1 ]; then
   selected=$1
 else
-  selected=$(find ~ ~/visiosto ~/personal ~/plugins ~/university -mindepth 1 -maxdepth 1 -type d ! -path "${HOME}/Music" ! -path "${HOME}/Sites" | fzf)
+  selected=$(find ~ ~/development -mindepth 1 -maxdepth 1 -type d ! -path "${HOME}/Music" ! -path "${HOME}/Sites" | fzf)
 fi
 
 if [ -z "${selected}" ]; then
