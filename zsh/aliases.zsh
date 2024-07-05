@@ -7,8 +7,6 @@ alias -g .....=../../../..
 alias -g ......=../../../../..
 alias _="sudo "
 
-alias d="dirs -v"
-
 # Directory stack
 for index in {1..9}; do
   alias "$index"="cd +${index} > /dev/null"

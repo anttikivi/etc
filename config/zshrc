@@ -7,9 +7,11 @@ zstyle ':prompt:pure:prompt:success' color white
 
 prompt pure
 
-setopt AUTO_CD
-setopt AUTO_PUSHD
-setopt CHASE_LINKS
+autoload -Uz compinit
+compinit
+
+autoload -Uz bashcompinit
+bashcompinit
 
 export MANPAGER='nvim +Man!'
 
