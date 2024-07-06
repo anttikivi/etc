@@ -55,6 +55,12 @@
         state: directory
         mode: "0755"
 
+    - name: Ensure that the Visiosto development directory exists
+      ansible.builtin.file:
+        path: "{{ visiosto_dev_dir }}"
+        state: directory
+        mode: "0755"
+
 - name: Set up git
   block:
     # NOTE: The global `.gitignore_global` is rarely updated, so copying it is
