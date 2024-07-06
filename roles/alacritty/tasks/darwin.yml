@@ -179,27 +179,6 @@
         dest: "{{ alacritty_colors_dir }}"
         mode: "644"
 
-- name: Get Kanagawa for Alacritty
-  when: color_scheme.name == "kanagawa"
-  block:
-    - name: Get the `lotus` variant of Kanagawa
-      ansible.builtin.get_url:
-        url: https://github.com/anttikivi/kanagawa-alacritty/raw/main/kanagawa-lotus.toml
-        dest: "{{ alacritty_colors_dir }}"
-        mode: "644"
-
-    - name: Modify the default colors in the `lotus` variant if Kanagawa
-      ansible.builtin.replace:
-        path: "{{ alacritty_colors_dir }}/kanagawa-lotus.toml"
-        regexp: "#f2ecbc"
-        replace: "{{ implemented_color_schemes.kanagawa.colors.lotus_white_3 }}"
-
-    - name: Get the `wave` variant of Kanagawa
-      ansible.builtin.get_url:
-        url: https://github.com/anttikivi/kanagawa-alacritty/raw/main/kanagawa-wave.toml
-        dest: "{{ alacritty_colors_dir }}"
-        mode: "644"
-
 - name: Get Rosé Pine for Alacritty
   when: color_scheme.name == "rose-pine"
   block:

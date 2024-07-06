@@ -45,18 +45,6 @@ implemented_color_schemes:
         - mocha
       light:
         - latte
-  kanagawa:
-    name: kanagawa
-    colors:
-      lotus_white_3: "#fdf7e4" # The background color
-      lotus_white_4: "#e2d6be"
-      lotus_white_5: "#e7dba0"
-    variants:
-      dark:
-        - wave
-        # - dragon
-      light:
-        - lotus
   rose_pine:
     name: rose-pine
     variants:

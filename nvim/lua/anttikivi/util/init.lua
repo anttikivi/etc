@@ -23,7 +23,7 @@ function M.set_global_variables()
   ---The name of the current color scheme. Set via environment variable to
   ---match with the terminal's color scheme.
   ---
-  ---@type "catppuccin" | "kanagawa" | "rose-pine" | "brunch"
+  ---@type "catppuccin" | "rose-pine" | "brunch"
   vim.g.color_scheme = vim.g.true_colors and os.getenv "COLOR_SCHEME"
     or "brunch"
 
