@@ -17,39 +17,39 @@
     cmd: |
       source {{ node_nvm_dir }}/nvm.sh
       nvm --version --no-colors
-  register: current_nvm_version_sh
+  register: nvm_current_version_sh
   changed_when: false
   failed_when: false
 
 - name: Set the current nvm version fact
   ansible.builtin.set_fact:
-    current_nvm_version: "v{{ current_nvm_version_sh.stdout | default('') }}"
+    nvm_current_version: "v{{ nvm_current_version_sh.stdout | default('') }}"
 
 - name: Query the latest nvm version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
       echo $(curl -LsS https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq -r '.tag_name')
-  register: latest_nvm_version_sh
+  register: nvm_latest_version_sh
   changed_when: false
 
 - name: Set the latest nvm version fact
   ansible.builtin.set_fact:
-    latest_nvm_version: "{{ latest_nvm_version_sh.stdout | default('') }}"
+    nvm_latest_version: "{{ nvm_latest_version_sh.stdout | default('') }}"
 
 - name: Install nvm
   ansible.builtin.shell: |
     set -o pipefail
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ latest_nvm_version }}/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_latest_version }}/install.sh | bash
   environment:
     NVM_DIR: "{{ node_nvm_dir }}"
     PROFILE: /dev/null
   args:
     creates: "{{ node_nvm_dir }}/nvm.sh"
-  when: latest_nvm_version not in current_nvm_version
-  changed_when: latest_nvm_version not in current_nvm_version
+  when: nvm_latest_version not in nvm_current_version
+  changed_when: nvm_latest_version not in nvm_current_version
 
-- name: Install Node.js versions
+- name: Install Node.js
   ansible.builtin.include_tasks: darwin_install_node.yml
   loop: "{{ node_versions }}"
 

@@ -20,19 +20,19 @@
 
 - name: Set the fact for the current version of Node.js {{ item }}
   ansible.builtin.set_fact:
-    current_node_version: "v{{ node_version_sh.stdout | default('') }}"
+    node_current_version: "v{{ node_version_sh.stdout | default('') }}"
 
 - name: Query the latest available version of Node.js {{ item }}
   ansible.builtin.shell:
     cmd: |
       source {{ node_nvm_dir }}/nvm.sh
       nvm version-remote {{ item }}
-  register: latest_node_version_sh
+  register: node_latest_version_sh
   changed_when: false
 
 - name: Set the fact for the latest available version of Node.js {{ item }}
   ansible.builtin.set_fact:
-    latest_node_version: "v{{ latest_node_version_sh.stdout | default('') }}"
+    node_latest_version: "v{{ node_latest_version_sh.stdout | default('') }}"
 
 - name: Install Node.js {{ item }}
   ansible.builtin.shell:
@@ -40,7 +40,7 @@
       source {{ node_nvm_dir }}/nvm.sh
       nvm install {{ item }}
   args:
-    creates: "{{ node_nvm_dir }}/versions/{{ latest_node_version }}"
+    creates: "{{ node_nvm_dir }}/versions/{{ node_latest_version }}"
   when: node_sh.rc != 0
   changed_when: node_sh.rc != 0
 
@@ -48,11 +48,12 @@
   ansible.builtin.shell:
     cmd: |
       source {{ node_nvm_dir }}/nvm.sh
-      nvm install --reinstall-packages-from={{ current_node_version }} {{ latest_node_version }}
-      nvm uninstall {{ current_node_version }}
+      nvm install --reinstall-packages-from={{ node_current_version }} {{ node_latest_version }}
+      nvm uninstall {{ node_current_version }}
   args:
-    creates: "{{ node_nvm_dir }}/versions/{{ latest_node_version }}"
-    removes: "{{ node_nvm_dir }}/versions/{{ current_node_version }}"
-  when: node_sh.rc == 0 and latest_node_version not in current_node_version
-  changed_when: node_sh.rc == 0 and latest_node_version not in current_node_version
+    creates: "{{ node_nvm_dir }}/versions/{{ node_latest_version }}"
+    removes: "{{ node_nvm_dir }}/versions/{{ node_current_version }}"
+  when: node_sh.rc == 0 and node_latest_version not in node_current_version
+  changed_when:
+    node_sh.rc == 0 and node_latest_version not in node_current_version
 # vi: ft=yaml.ansible
