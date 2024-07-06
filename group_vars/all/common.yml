@@ -27,6 +27,7 @@ local_state_dir: "{{ local_dir }}/state"
 local_opt_dir: "{{ local_dir }}/opt"
 xdg_data_home: "{{ local_data_dir }}"
 xdg_state_home: "{{ local_state_dir }}"
+tmp_dir: "{{ ansible_user_dir }}/tmp"
 zsh_dir: "{{ ansible_user_dir }}/.zsh"
 
 dev_dir: "{{ ansible_user_dir }}/development"
