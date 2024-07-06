@@ -18,73 +18,73 @@
     cmd: |
       set -o pipefail
       echo "{{ go_version }}" | head -c $(echo "{{ go_version }}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")
-  register: required_go_minor_sh
+  register: go_required_minor_sh
   changed_when: false
   failed_when: false
 
 - name: Set the required Go minor version fact
   ansible.builtin.set_fact:
-    required_go_minor_version: "{{ required_go_minor_sh.stdout | default('') }}"
+    go_required_minor_version: "{{ go_required_minor_sh.stdout | default('') }}"
 
 - name: Debug the required Go minor version fact
   ansible.builtin.debug:
-    var: required_go_minor_version
+    var: go_required_minor_version
 
 - name: Resolve the wanted Go version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | .version' | grep "{{ required_go_minor_version | replace('.', '\\.') }}" | sort -V | tail -1
-  register: wanted_go_version_sh
+      curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | .version' | grep "{{ go_required_minor_version | replace('.', '\\.') }}" | sort -V | tail -1
+  register: go_wanted_version_sh
   changed_when: false
-  failed_when: wanted_go_version_sh.rc != 0
+  failed_when: go_wanted_version_sh.rc != 0
 
 - name: Set the wanted Go version fact
   ansible.builtin.set_fact:
-    wanted_go_version: "{{ wanted_go_version_sh.stdout | default('') }}"
+    go_wanted_version: "{{ go_wanted_version_sh.stdout | default('') }}"
 
 - name: Debug the wanted Go version fact
   ansible.builtin.debug:
-    var: wanted_go_version
+    var: go_wanted_version
 
 - name: Get the Go version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
       {{ go_install_dir }}/bin/go version | sed "s/go version //" | sed "s: {{ goos }}/{{ goarch }}::"
-  register: current_go_version_sh
+  register: go_current_version_sh
   changed_when: false
-  failed_when: current_go_version_sh.rc != 0
+  failed_when: go_current_version_sh.rc != 0
 
 - name: Set the current Go version fact
   ansible.builtin.set_fact:
-    current_go_version: "{{ current_go_version_sh.stdout | default('') }}"
+    go_current_version: "{{ go_current_version_sh.stdout | default('') }}"
 
 - name: Debug the current Go version fact
   ansible.builtin.debug:
-    var: current_go_version
+    var: go_current_version
 
 - name: Install Go
-  when: wanted_go_version != current_go_version
+  when: go_wanted_version != go_current_version
   notify:
     - go_clean_tmp
   block:
     - name: Set the Go filename fact
       ansible.builtin.set_fact:
-        go_filename: "{{ wanted_go_version }}.{{ goos }}-{{ goarch }}"
+        go_filename: "{{ go_wanted_version }}.{{ goos }}-{{ goarch }}"
 
     - name: Create a temporary directory for the Go archive
       ansible.builtin.tempfile:
         state: directory
-      register: tmp_go
+      register: go_tmp
 
     - name: Set the temporary Go directory fact
       ansible.builtin.set_fact:
-        tmp_go_dir: "{{ tmp_go.path }}"
+        go_tmp_dir: "{{ go_tmp.path }}"
 
     - name: Set the downloaded Go archive fact
       ansible.builtin.set_fact:
-        go_archive: "{{ tmp_go_dir }}/{{ go_filename }}.tar.gz"
+        go_archive: "{{ go_tmp_dir }}/{{ go_filename }}.tar.gz"
 
     - name: Ensure clean Go archive download destination
       ansible.builtin.file:
@@ -102,13 +102,13 @@
 
     - name: Ensure clean Go extraction destination
       ansible.builtin.file:
-        path: "{{ tmp_go_dir }}/go"
+        path: "{{ go_tmp_dir }}/go"
         state: absent
 
     - name: Extract the Go archive
       ansible.builtin.unarchive:
         src: "{{ go_archive }}"
-        dest: "{{ tmp_go_dir }}"
+        dest: "{{ go_tmp_dir }}"
 
     - name: Remove existing Go installation
       ansible.builtin.file:
@@ -119,7 +119,7 @@
     - name: Install Go
       ansible.builtin.copy:
         remote_src: true
-        src: "{{ tmp_go_dir }}/go"
+        src: "{{ go_tmp_dir }}/go"
         dest: /usr/local
         owner: "{{ host_user }}"
         mode: "0755"
