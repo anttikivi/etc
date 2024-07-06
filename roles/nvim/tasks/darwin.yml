@@ -8,70 +8,70 @@
     cmd: |
       set -o pipefail
       echo "{{ nvim_version }}" | head -c $(echo "{{ nvim_version }}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")
-  register: required_nvim_minor_sh
+  register: nvim_required_minor_sh
   changed_when: false
   failed_when: false
 
 - name: Set the required Neovim minor version fact
   ansible.builtin.set_fact:
-    required_nvim_minor_version:
-      "{{ required_nvim_minor_sh.stdout | default('') }}"
+    nvim_required_minor_version:
+      "{{ nvim_required_minor_sh.stdout | default('') }}"
 
 - name: Debug the required Neovim minor version fact
   ansible.builtin.debug:
-    var: required_nvim_minor_version
+    var: nvim_required_minor_version
 
 - name: Resolve the wanted Neovim version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      curl -LsS https://api.github.com/repos/neovim/neovim/releases?per_page=30 | jq -r '.[] | .tag_name' | grep "{{ required_nvim_minor_version | replace('.', '\\.') }}" | sort -V | tail -1
-  register: wanted_nvim_version_sh
+      curl -LsS https://api.github.com/repos/neovim/neovim/releases?per_page=30 | jq -r '.[] | .tag_name' | grep "{{ nvim_required_minor_version | replace('.', '\\.') }}" | sort -V | tail -1
+  register: nvim_wanted_version_sh
   changed_when: false
-  failed_when: wanted_nvim_version_sh.rc != 0
+  failed_when: nvim_wanted_version_sh.rc != 0
 
 - name: Set the wanted Neovim version fact
   ansible.builtin.set_fact:
-    wanted_nvim_version: "{{ wanted_nvim_version_sh.stdout | default('') }}"
+    nvim_wanted_version: "{{ nvim_wanted_version_sh.stdout | default('') }}"
 
 - name: Debug the wanted Neovim version fact
   ansible.builtin.debug:
-    var: wanted_nvim_version
+    var: nvim_wanted_version
 
 - name: Get the Neovim version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
       nvim --version | head --lines 1 | cut -c 6-
-  register: current_nvim_version_sh
+  register: nvim_current_version_sh
   changed_when: false
   failed_when: false
 
 - name: Set the current Neovim version fact
   ansible.builtin.set_fact:
-    current_nvim_version: "{{ current_nvim_version_sh.stdout | default('') }}"
+    nvim_current_version: "{{ nvim_current_version_sh.stdout | default('') }}"
 
 - name: Debug the current Neovim version
   ansible.builtin.debug:
-    var: current_nvim_version
+    var: nvim_current_version
 
 - name: Install Neovim
-  when: wanted_nvim_version != current_nvim_version
+  when: nvim_wanted_version != nvim_current_version
   notify:
     - nvim_clean_tmp
   block:
     - name: Create a temporary directory for the Neovim archive
       ansible.builtin.tempfile:
         state: directory
-      register: tmp_nvim
+      register: nvim_tmp
 
     - name: Set the temporary Neovim directory fact
       ansible.builtin.set_fact:
-        tmp_nvim_dir: "{{ tmp_nvim.path }}"
+        nvim_tmp_dir: "{{ nvim_tmp.path }}"
 
     - name: Set the downloaded Neovim archive fact
       ansible.builtin.set_fact:
-        nvim_archive: "{{ tmp_nvim_dir }}/{{ nvim_archive_filename }}"
+        nvim_archive: "{{ nvim_tmp_dir }}/{{ nvim_archive_filename }}"
 
     - name: Ensure clean Neovim archive download destination
       ansible.builtin.file:
@@ -82,7 +82,7 @@
       ansible.builtin.shell:
         cmd: |
           set -o pipefail
-          curl -LsS https://api.github.com/repos/neovim/neovim/releases/tags/{{ wanted_nvim_version }} | jq -r '.assets.[] | select(.name | endswith("{{ nvim_archive_filename }}")) | .browser_download_url'
+          curl -LsS https://api.github.com/repos/neovim/neovim/releases/tags/{{ nvim_wanted_version }} | jq -r '.assets.[] | select(.name | endswith("{{ nvim_archive_filename }}")) | .browser_download_url'
       register: nvim_url_sh
       changed_when: false
       failed_when: nvim_url_sh.rc != 0
@@ -126,11 +126,11 @@
     - name: Extract and install Neovim
       ansible.builtin.unarchive:
         src: "{{ nvim_archive }}"
-        dest: "{{ tmp_nvim_dir }}"
+        dest: "{{ nvim_tmp_dir }}"
 
     - name: Set the Neovim extracted directory fact
       ansible.builtin.set_fact:
-        nvim_extract_dir: "{{ tmp_nvim_dir }}/{{ nvim_archive_name }}"
+        nvim_extract_dir: "{{ nvim_tmp_dir }}/{{ nvim_archive_name }}"
 
     - name: Copy the Neovim files to the correct destination
       block:
@@ -151,10 +151,12 @@
             mode: "0755"
         - name: Copy the Neovim `icons` directory
           ansible.builtin.copy:
-            src: "{{ nvim_extract_dir }}/share/icons/hicolor/128x128/apps/nvim.png"
+            src:
+              "{{ nvim_extract_dir }}/share/icons/hicolor/128x128/apps/nvim.png"
             dest: "{{ local_data_dir }}/icons/hicolor/128x128/apps/nvim.png"
             mode: "preserve"
-        - name: Ensure that the destination directory for Neovim `man` page exists
+        - name:
+            Ensure that the destination directory for Neovim `man` page exists
           ansible.builtin.file:
             path: "{{ local_data_dir }}/man/man1/"
             state: directory
@@ -171,7 +173,9 @@
             mode: "0755"
         - name: Move the Neovim runtime data directory
           ansible.builtin.command:
-            cmd: "mv {{ nvim_extract_dir }}/share/nvim/runtime {{ local_data_dir }}/nvim/runtime"
+            cmd:
+              "mv {{ nvim_extract_dir }}/share/nvim/runtime {{ local_data_dir
+              }}/nvim/runtime"
             creates: "{{ local_data_dir }}/nvim/runtime"
             removes: "{{ nvim_extract_dir }}/share/nvim/runtime"
 
