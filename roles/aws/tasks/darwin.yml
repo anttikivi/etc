@@ -16,11 +16,11 @@
     - name: Create a temporary directory for the AWS CLI package
       ansible.builtin.tempfile:
         state: directory
-      register: tmp_aws
+      register: aws_tmp
 
     - name: Set the temporary AWS CLI directory fact
       ansible.builtin.set_fact:
-        aws_tmp_dir: "{{ tmp_aws.path }}"
+        aws_tmp_dir: "{{ aws_tmp.path }}"
 
     - name: Set the downloaded AWS CLI package fact
       ansible.builtin.set_fact:
@@ -53,11 +53,16 @@
         force: true
 
     - name: Install the AWS CLI
-      ansible.builtin.shell:
+      ansible.builtin.command:
         cmd:
           "installer -pkg {{ aws_package }} -target CurrentUserHomeDirectory
           -applyChoiceChangesXML {{ local_data_dir }}/aws_choices.xml"
+        creates:
+          - "{{ aws_dir }}/aws"
+          - "{{ aws_dir }}/aws_completer"
       changed_when: true
+      register: aws_install_sh
+      failed_when: aws_install_sh.rc != 0
 
     - name: Remove old link to the `aws` executable
       ansible.builtin.file:
