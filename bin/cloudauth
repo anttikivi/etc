@@ -6,7 +6,7 @@ login_aws() {
 }
 
 login_gcloud() {
-  gcloud auth application-default login
+  gcloud auth application-default login --disable-quota-project
   exit 0
 }
 
