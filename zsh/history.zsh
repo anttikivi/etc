@@ -8,3 +8,5 @@ setopt SHARE_HISTORY
 HISTFILE="${HOME}/.zsh_history"
 HISTSIZE=8192
 SAVEHIST=8192
+
+export LESSHISTFILE="${XDG_STATE_HOME}/less/history"
