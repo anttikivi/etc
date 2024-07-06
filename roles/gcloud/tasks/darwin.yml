@@ -21,7 +21,8 @@
     - name: Set the downloaded Google Cloud CLI archive fact
       ansible.builtin.set_fact:
         gcloud_archive:
-          "{{ gcloud_tmp_dir }}/google-cloud-cli-{{ gcloud_version }}-darwin-arm.tar.gz"
+          "{{ gcloud_tmp_dir }}/google-cloud-cli-{{ gcloud_version
+          }}-darwin-arm.tar.gz"
 
     - name: Ensure clean Google Cloud CLI archive download destination
       ansible.builtin.file:
@@ -31,7 +32,8 @@
     - name: Download the Google Cloud CLI archive
       ansible.builtin.get_url:
         url:
-          "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-{{ gcloud_version }}-darwin-arm.tar.gz"
+          "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-{{
+          gcloud_version }}-darwin-arm.tar.gz"
         dest: "{{ gcloud_archive }}"
         mode: "0644"
         force: true
