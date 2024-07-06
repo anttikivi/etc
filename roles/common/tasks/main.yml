@@ -2,6 +2,9 @@
 - name: Include the SSH variables
   ansible.builtin.include_vars: ssh.yml
 
+- name: Include the secret variables
+  ansible.builtin.include_vars: secret.yml
+
 - name: Run Darwin tasks
   when: ansible_os_family == 'Darwin'
   block:
@@ -13,4 +16,7 @@
 
     - name: Run the tasks
       ansible.builtin.import_tasks: darwin.yml
+
+    - name: Run the secret tasks
+      ansible.builtin.import_tasks: darwin_secret.yml
 # vi: ft=yaml.ansible
