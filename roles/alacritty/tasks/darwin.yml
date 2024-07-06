@@ -119,8 +119,9 @@
         mode: "755"
 
     - name: Set up Alacritty's manual page
-      ansible.builtin.command:
+      ansible.builtin.shell:
         cmd: |
+          set -o pipefail
           scdoc < extra/man/alacritty.1.scd | gzip -c | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
           scdoc < extra/man/alacritty-msg.1.scd | gzip -c | sudo tee /usr/local/share/man/man1/alacritty-msg.1.gz > /dev/null
           scdoc < extra/man/alacritty.5.scd | gzip -c | sudo tee /usr/local/share/man/man5/alacritty.5.gz > /dev/null
