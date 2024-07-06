@@ -38,9 +38,10 @@
     nvm_latest_version: "{{ nvm_latest_version_sh.stdout | default('') }}"
 
 - name: Install nvm
-  ansible.builtin.shell: |
-    set -o pipefail
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_latest_version }}/install.sh | bash
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_latest_version }}/install.sh | bash
   environment:
     NVM_DIR: "{{ node_nvm_dir }}"
     PROFILE: /dev/null
