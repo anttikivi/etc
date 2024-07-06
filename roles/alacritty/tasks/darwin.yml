@@ -8,36 +8,36 @@
     cmd: |
       set -o pipefail
       echo "{{ alacritty_version }}" | head -c $(echo "{{ alacritty_version }}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")
-  register: required_alacritty_minor_sh
+  register: alacritty_required_minor_sh
   changed_when: false
   failed_when: false
 
 - name: Set the required Alacritty minor version fact
   ansible.builtin.set_fact:
-    required_alacritty_minor_version:
-      "{{ required_alacritty_minor_sh.stdout | default('') }}"
+    alacritty_required_minor_version:
+      "{{ alacritty_required_minor_sh.stdout | default('') }}"
 
 - name: Debug the required Alacritty minor version fact
   ansible.builtin.debug:
-    var: required_alacritty_minor_version
+    var: alacritty_required_minor_version
 
 - name: Resolve the wanted Alacritty version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
-      curl -LsS https://api.github.com/repos/alacritty/alacritty/releases?per_page=30 | jq -r '.[] | .tag_name' | grep "{{ required_alacritty_minor_version | replace('.', '\\.') }}" | grep -v "\\-rc" | sort -V | tail -1
-  register: wanted_alacritty_version_sh
+      curl -LsS https://api.github.com/repos/alacritty/alacritty/releases?per_page=30 | jq -r '.[] | .tag_name' | grep "{{ alacritty_required_minor_version | replace('.', '\\.') }}" | grep -v "\\-rc" | sort -V | tail -1
+  register: alacritty_wanted_version_sh
   changed_when: false
-  failed_when: wanted_alacritty_version_sh.rc != 0
+  failed_when: alacritty_wanted_version_sh.rc != 0
 
 - name: Set the wanted Alacritty version fact
   ansible.builtin.set_fact:
-    wanted_alacritty_version:
-      "{{ wanted_alacritty_version_sh.stdout | default('') }}"
+    alacritty_wanted_version:
+      "{{ alacritty_wanted_version_sh.stdout | default('') }}"
 
 - name: Debug the wanted Alacritty version fact
   ansible.builtin.debug:
-    var: wanted_alacritty_version
+    var: alacritty_wanted_version
 
 - name: Get the Alacritty version
   ansible.builtin.shell:
@@ -45,21 +45,21 @@
       set -o pipefail
       # TODO: The lengths shouldn't be hard-coded.
       alacritty --version | head --lines 1 | cut -c 11-16
-  register: current_alacritty_version_sh
+  register: alacritty_current_version_sh
   changed_when: false
   failed_when: false
 
 - name: Set the current Alacritty version fact
   ansible.builtin.set_fact:
-    current_alacritty_version:
-      "v{{ current_alacritty_version_sh.stdout | default('') }}"
+    alacritty_current_version:
+      "v{{ alacritty_current_version_sh.stdout | default('') }}"
 
 - name: Debug the current Alacritty version
   ansible.builtin.debug:
-    var: current_alacritty_version
+    var: alacritty_current_version
 
 - name: Install Alacritty
-  when: wanted_alacritty_version != current_alacritty_version
+  when: alacritty_wanted_version != alacritty_current_version
   notify:
     - alacritty_clean_tmp
   block:
@@ -71,22 +71,22 @@
     - name: Create a temporary directory for Alacritty
       ansible.builtin.tempfile:
         state: directory
-      register: tmp_alacritty
+      register: alacritty_tmp
 
     - name: Set the temporary Alacritty directory fact
       ansible.builtin.set_fact:
-        tmp_alacritty_dir: "{{ tmp_alacritty.path }}"
+        alacritty_tmp_dir: "{{ alacritty_tmp.path }}"
 
     - name: Set the cloned Alacritty directory fact
       ansible.builtin.set_fact:
-        alacritty_dir: "{{ tmp_alacritty_dir }}/alacritty"
+        alacritty_dir: "{{ alacritty_tmp_dir }}/alacritty"
 
     - name: Clone Alacritty
       ansible.builtin.git:
         dest: "{{ alacritty_dir }}"
         repo: https://github.com/alacritty/alacritty.git
         depth: 1
-        version: "{{ wanted_alacritty_version }}"
+        version: "{{ alacritty_wanted_version }}"
 
     - name: Build Alacritty
       community.general.make:

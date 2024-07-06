@@ -1,7 +1,7 @@
 ---
 - name: Clean up the temporary Alacritty directory
   ansible.builtin.file:
-    path: "{{ tmp_alacritty_dir }}"
+    path: "{{ alacritty_tmp_dir }}"
     state: absent
   listen: alacritty_clean_tmp
 # vi: ft=yaml.ansible
