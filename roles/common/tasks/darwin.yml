@@ -362,12 +362,12 @@
     force: true
 
 - name: Install fonts
-  block:
-    - name: Install JetBrains Mono font
-      community.general.homebrew_cask:
-        name:
-          - font-jetbrains-mono-nerd-font
-        state: present
+  community.general.homebrew_cask:
+    name:
+      - font-hack-nerd-font
+      - font-jetbrains-mono-nerd-font
+      - font-meslo-lg-nerd-font
+    state: present
 
 - name: Set up the color schemes
   block:
