@@ -17,7 +17,7 @@ resize_increments = false
 # option_as_alt = "None"
 
 [scrolling]
-history = 1000 # Max value is 100000
+history = 8192 # Max value is 100000
 multiplier = 3
 
 [font]
