@@ -49,3 +49,5 @@ for file in "${DOTFILES_DIR}/zsh/"*.zsh; do
   source "${file}"
 done
 unset file
+
+source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

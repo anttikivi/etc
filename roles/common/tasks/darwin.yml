@@ -259,6 +259,11 @@
         state: link
         force: true
 
+    - name: Install `zsh-syntax-highlighting`
+      community.general.homebrew:
+        name: zsh-syntax-highlighting
+        state: present
+
 - name: Set up Tmux
   block:
     - name: Install Tmux and its dependencies
