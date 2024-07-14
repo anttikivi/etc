@@ -1,5 +1,6 @@
 ---
 common_install_aerospace: true
+common_enable_zsh_syntax_highlighting: false
 common_use_bash: true
 common_use_zsh: true
 common_zfunctions_dir: "{{ ansible_user_dir }}/.zfunctions"
