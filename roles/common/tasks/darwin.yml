@@ -61,6 +61,12 @@
         state: directory
         mode: "0755"
 
+    - name: Ensure that the learning directory exists
+      ansible.builtin.file:
+        path: "{{ learning_dev_dir }}"
+        state: directory
+        mode: "0755"
+
     - name: Ensure that the Visiosto development directory exists
       ansible.builtin.file:
         path: "{{ visiosto_dev_dir }}"

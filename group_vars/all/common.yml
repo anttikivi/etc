@@ -33,6 +33,7 @@ zsh_dir: "{{ ansible_user_dir }}/.zsh"
 dev_dir: "{{ ansible_user_dir }}/development"
 dotfiles_dir: "{{ dev_dir }}/dotfiles"
 plugins_dir: "{{ dev_dir }}/plugins"
+learning_dev_dir: "{{ dev_dir }}/learning"
 visiosto_dev_dir: "{{ dev_dir }}/visiosto"
 
 implemented_color_schemes:
