@@ -27,14 +27,18 @@ local_state_dir: "{{ local_dir }}/state"
 local_opt_dir: "{{ local_dir }}/opt"
 xdg_data_home: "{{ local_data_dir }}"
 xdg_state_home: "{{ local_state_dir }}"
-tmp_dir: "{{ ansible_user_dir }}/tmp"
-zsh_dir: "{{ ansible_user_dir }}/.zsh"
 
 dev_dir: "{{ ansible_user_dir }}/development"
-dotfiles_dir: "{{ dev_dir }}/dotfiles"
 plugins_dir: "{{ dev_dir }}/plugins"
 learning_dev_dir: "{{ dev_dir }}/learning"
 visiosto_dev_dir: "{{ dev_dir }}/visiosto"
+
+etc_dir: "{{ ansible_user_dir }}/etc"
+dotfiles_dir: "{{ etc_dir }}/dotfiles"
+
+tmp_dir: "{{ ansible_user_dir }}/tmp"
+
+zsh_dir: "{{ ansible_user_dir }}/.zsh"
 
 implemented_color_schemes:
   catppuccin:
