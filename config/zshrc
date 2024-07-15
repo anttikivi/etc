@@ -50,6 +50,8 @@ for file in "${DOTFILES_DIR}/zsh/"*.zsh; do
 done
 unset file
 
+source "/Applications/WezTerm.app/Contents/Resources/wezterm.sh"
+
 if [ "${COMMON_ENABLE_ZSH_SYNTAX_HIGHLIGHTING}" = true ]; then
   source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
