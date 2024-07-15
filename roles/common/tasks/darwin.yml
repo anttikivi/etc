@@ -385,4 +385,18 @@
         - name: Set the dark-notify path fact
           ansible.builtin.set_fact:
             dark_notify_path: "{{ which_dark_notify.stdout }}"
+
+- name: Set up WezTerm
+  block:
+    - name: Link the WezTerm configuration
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/config/wezterm.lua"
+        dest: "{{ ansible_user_dir }}/.wezterm.lua"
+        state: link
+        force: true
+
+    - name: Install WezTerm
+      community.general.homebrew_cask:
+        name: wezterm
+        state: present
 # vi: ft=yaml.ansible
