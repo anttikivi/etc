@@ -1,5 +1,4 @@
 local wezterm = require "wezterm"
-local config = wezterm.config_builder()
 
 local function get_appearance()
   if wezterm.gui then
@@ -16,6 +15,8 @@ local function scheme_for_appearance(appearance)
   end
 end
 
-config.color_scheme = scheme_for_appearance(get_appearance())
-
-return config
+return {
+  color_scheme = scheme_for_appearance(get_appearance()),
+  send_composed_key_when_left_alt_is_pressed = true,
+  send_composed_key_when_right_alt_is_pressed = true,
+}
