@@ -186,7 +186,7 @@
 
 - name: Stat Brunch
   ansible.builtin.stat:
-    path: "{{ plugins_dir }}/brunch.nvim"
+    path: "{{ plugins_dev_dir }}/brunch.nvim"
   register: brunch
 
 - name: Register Brunch state fact
@@ -200,7 +200,7 @@
 - name: Clone anttikivi/brunch.nvim
   ansible.builtin.git:
     repo: git@github.com:anttikivi/brunch.nvim.git
-    dest: "{{ plugins_dir }}/brunch.nvim"
+    dest: "{{ plugins_dev_dir }}/brunch.nvim"
     version: main
     accept_newhostkey: true
   when: not brunch_installed

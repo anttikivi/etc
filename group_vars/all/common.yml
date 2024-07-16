@@ -27,7 +27,7 @@ xdg_data_home: "{{ local_data_dir }}"
 xdg_state_home: "{{ local_state_dir }}"
 
 dev_dir: "{{ ansible_user_dir }}/development"
-plugins_dir: "{{ dev_dir }}/plugins"
+plugins_dev_dir: "{{ dev_dir }}/plugins"
 learning_dev_dir: "{{ dev_dir }}/learning"
 visiosto_dev_dir: "{{ dev_dir }}/visiosto"
 
