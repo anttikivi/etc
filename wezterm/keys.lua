@@ -5,6 +5,9 @@ return {
   send_composed_key_when_left_alt_is_pressed = true,
   send_composed_key_when_right_alt_is_pressed = true,
 
+  disable_default_key_bindings = true,
+
+  -- TODO: Check the keys and remove the unnecessary keybindings.
   keys = {
     { key = "Tab", mods = "CTRL", action = act.ActivateTabRelative(1) },
     { key = "Tab", mods = "SHIFT|CTRL", action = act.ActivateTabRelative(-1) },
