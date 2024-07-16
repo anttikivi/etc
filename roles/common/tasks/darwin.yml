@@ -390,8 +390,8 @@
   block:
     - name: Link the WezTerm configuration
       ansible.builtin.file:
-        src: "{{ dotfiles_dir }}/config/wezterm.lua"
-        dest: "{{ ansible_user_dir }}/.wezterm.lua"
+        src: "{{ dotfiles_dir }}/wezterm"
+        dest: "{{ config_dir }}/wezterm"
         state: link
         force: true
 

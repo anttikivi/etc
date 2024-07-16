@@ -203,7 +203,7 @@
 - name: Link the Neovim configuration
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/nvim"
-    dest: "{{ ansible_user_dir }}/.config/nvim"
+    dest: "{{ config_dir }}/nvim"
     state: link
     force: true
 # vi: ft=yaml.ansible
