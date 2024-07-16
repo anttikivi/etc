@@ -8,7 +8,6 @@ fi
 path=("${HOME}/.local/bin" "${path[@]}")
 path=("/usr/local/go/bin" "${path[@]}")
 path=("$(brew --prefix python)/libexec/bin" "${path[@]}")
-path=("/Applications/Alacritty.app/Contents/MacOS" "${path[@]}")
 path=("/Applications/WezTerm.app/Contents/MacOS" "${path[@]}")
 
 if [ ! -z "${GOBIN+x}" ]; then

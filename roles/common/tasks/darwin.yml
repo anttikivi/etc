@@ -167,7 +167,6 @@
           - gnu-tar
           - jq
           - ripgrep
-          - scdoc
           - tree
         state: present
 
