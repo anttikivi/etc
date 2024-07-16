@@ -3,7 +3,7 @@ fpath+=("${HOME}/.zfunctions")
 autoload -U promptinit
 promptinit
 
-zstyle ':prompt:purus:prompt:success' color white
+zstyle ':prompt:purus:prompt:success' color green
 
 prompt purus
 
