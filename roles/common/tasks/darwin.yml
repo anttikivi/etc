@@ -345,14 +345,6 @@
     state: link
     force: true
 
-- name: Install fonts
-  community.general.homebrew_cask:
-    name:
-      - font-hack-nerd-font
-      - font-jetbrains-mono-nerd-font
-      - font-meslo-lg-nerd-font
-    state: present
-
 - name: Set up WezTerm
   block:
     - name:
