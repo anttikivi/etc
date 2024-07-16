@@ -15,10 +15,6 @@ bashcompinit
 
 export MANPAGER='nvim +Man!'
 
-if [ -f "${XDG_CONFIG_HOME}/env/colors" ]; then
-  source "${XDG_CONFIG_HOME}/env/colors"
-fi
-
 autoload -U add-zsh-hook
 
 load-nvmrc() {

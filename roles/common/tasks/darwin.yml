@@ -353,41 +353,10 @@
       - font-meslo-lg-nerd-font
     state: present
 
-- name: Set up the color schemes
-  block:
-    - name: Copy the color scheme environment variables
-      ansible.builtin.template:
-        src: env_colors.j2
-        dest: "{{ env_dir }}/colors"
-        mode: "0600"
-
-    - name: Install dark-notify
-      block:
-        - name: Tap the repository for dark-notify
-          community.general.homebrew_tap:
-            name: cormacrelf/tap
-            state: present
-
-        - name: Install dark-notify
-          community.general.homebrew:
-            name:
-              - cormacrelf/tap/dark-notify
-            state: present
-
-        - name: Get the path of dark-notify
-          ansible.builtin.command:
-            cmd: which dark-notify
-          register: which_dark_notify
-          changed_when: true
-          failed_when: which_dark_notify.rc != 0
-
-        - name: Set the dark-notify path fact
-          ansible.builtin.set_fact:
-            dark_notify_path: "{{ which_dark_notify.stdout }}"
-
 - name: Set up WezTerm
   block:
-    - name: Ensure that the environment directory for WezTerm exists
+    - name:
+        Ensure that the environment directory for WezTerm configuration exists
       ansible.builtin.file:
         path: "{{ common_wezterm_env_dir }}"
         state: directory

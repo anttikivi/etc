@@ -1,7 +1,8 @@
 .DS_Store
 node_modules/
 
-# Ansible-managed WezTerm configuration files
+# Ansible-managed configuration files
+nvim/lua/anttikivi/util/env/
 wezterm/env/
 
 # Local .terraform directories
