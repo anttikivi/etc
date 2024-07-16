@@ -1,4 +1,0 @@
----
-nvim_archive_name: nvim-macos-arm64
-nvim_archive_filename: "{{ nvim_archive_name }}.tar.gz"
-# vi: ft=yaml.ansible

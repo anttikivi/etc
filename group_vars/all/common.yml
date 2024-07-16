@@ -6,7 +6,6 @@ default_roles:
   - go
   - lua
   - node
-  - nvim
   - php
   - python
   - rust
