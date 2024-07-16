@@ -5,4 +5,6 @@ common_use_bash: true
 common_use_zsh: true
 common_zfunctions_dir: "{{ ansible_user_dir }}/.zfunctions"
 common_purus_dir: "{{ dev_dir }}/purus"
+common_wezterm_config_dir: "{{ dotfiles_dir }}/wezterm"
+common_wezterm_env_dir: "{{ common_wezterm_config_dir }}/env"
 # vi: ft=yaml.ansible
