@@ -122,9 +122,9 @@ return {
           filetypes_include = {},
         },
         terraformls = {},
-        tsserver = {
-          enable = false,
-        },
+        -- tsserver = {
+        --   enable = false,
+        -- },
         vimls = {},
         vtsls = {
           filetypes = {
