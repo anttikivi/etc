@@ -103,6 +103,10 @@ vim.keymap.set(
   { expr = true, silent = true }
 )
 
+-- Better jumping half a page
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
 -- Better indenting
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
