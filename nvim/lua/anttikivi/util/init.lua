@@ -109,7 +109,7 @@ end
 ---@param pkg string
 ---@param path? string
 ---@param opts? { warn?: boolean }
-function M.get_package_path(pkg, path, opts)
+function M.get_pkg_path(pkg, path, opts)
   pcall(require, "mason") -- make sure Mason is loaded. Will fail when generating docs
   local root = vim.env.MASON or (vim.fn.stdpath "data" .. "/mason")
   opts = opts or {}
