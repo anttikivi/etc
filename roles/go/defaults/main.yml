@@ -1,6 +1,6 @@
 ---
 go_gopath: "{{ local_opt_dir }}/go"
-go_hugo_version: v0.128.0
+go_hugo_version: v0.129.0
 go_install_dir: /usr/local/go
 go_version: go1.22.2
 go_modules:
