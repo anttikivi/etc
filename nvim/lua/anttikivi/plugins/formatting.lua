@@ -12,6 +12,7 @@ return {
         go = { "goimports", "gofumpt" },
         gohtmltmpl = { "prettier" },
         html = { "prettier" },
+        htmlhugo = { "prettier" },
         javascript = { "prettier" },
         javascriptreact = { "prettier" },
         json = { "prettier" },
