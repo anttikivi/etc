@@ -119,7 +119,7 @@ return {
         stylelint_lsp = {},
         tailwindcss = {
           filetypes_exclude = { "markdown" },
-          filetypes_include = {},
+          filetypes_include = { "htmlhugo" },
         },
         terraformls = {},
         -- tsserver = {
