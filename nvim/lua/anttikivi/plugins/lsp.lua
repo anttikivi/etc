@@ -1,4 +1,5 @@
 local util = require "anttikivi.util"
+local mason_util = require "anttikivi.util.mason"
 
 return {
   {
@@ -24,10 +25,10 @@ return {
         severity_sort = true,
         signs = {
           text = {
-            [vim.diagnostic.severity.ERROR] = util.icons.diagnostics.Error,
-            [vim.diagnostic.severity.WARN] = util.icons.diagnostics.Warn,
-            [vim.diagnostic.severity.HINT] = util.icons.diagnostics.Hint,
-            [vim.diagnostic.severity.INFO] = util.icons.diagnostics.Info,
+            [vim.diagnostic.severity.ERROR] = vim.g.icons.diagnostics.Error,
+            [vim.diagnostic.severity.WARN] = vim.g.icons.diagnostics.Warn,
+            [vim.diagnostic.severity.HINT] = vim.g.icons.diagnostics.Hint,
+            [vim.diagnostic.severity.INFO] = vim.g.icons.diagnostics.Info,
           },
         },
       },
@@ -236,7 +237,7 @@ return {
                 globalPlugins = {
                   {
                     name = "@astrojs/ts-plugin",
-                    location = util.get_pkg_path(
+                    location = mason_util.get_pkg_path(
                       "astro-language-server",
                       "/node_modules/@astrojs/ts-plugin"
                     ),

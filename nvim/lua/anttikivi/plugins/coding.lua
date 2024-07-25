@@ -86,7 +86,7 @@ return {
       }, vim.g.icons_enabled and {
         formatting = {
           format = function(_, item)
-            local icons = require("anttikivi.util").icons.kinds
+            local icons = vim.g.icons.kinds
             if icons[item.kind] then
               item.kind = icons[item.kind] .. item.kind
             end

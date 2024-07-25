@@ -1,5 +1,3 @@
-local icons = require("anttikivi.util").icons
-
 return {
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -46,9 +44,9 @@ return {
               end,
             }, vim.g.icons_enabled and {
               symbols = {
-                added = icons.git.added,
-                modified = icons.git.modified,
-                removed = icons.git.removed,
+                added = vim.g.icons.git.added,
+                modified = vim.g.icons.git.modified,
+                removed = vim.g.icons.git.removed,
               },
             } or {}),
             vim.tbl_extend(
@@ -57,10 +55,10 @@ return {
               vim.g.icons_enabled
                   and {
                     symbols = {
-                      error = icons.diagnostics.Error,
-                      warn = icons.diagnostics.Warn,
-                      info = icons.diagnostics.Info,
-                      hint = icons.diagnostics.Hint,
+                      error = vim.g.icons.diagnostics.Error,
+                      warn = vim.g.icons.diagnostics.Warn,
+                      info = vim.g.icons.diagnostics.Info,
+                      hint = vim.g.icons.diagnostics.Hint,
                     },
                   }
                 or {}
