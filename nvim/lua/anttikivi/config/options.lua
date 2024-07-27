@@ -22,6 +22,7 @@ vim.opt.list = true -- Show some invisible characters
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.opt.mouse = "a" -- Enable mouse mode
 vim.opt.number = true -- Show line numbers
+vim.opt.pumheight = 15 -- Maximum number of entries in a popup
 vim.opt.relativenumber = true -- Relative line numbers
 vim.opt.scrolloff = 10 -- Lines of context
 vim.opt.shiftwidth = 2 -- Size of an indent
