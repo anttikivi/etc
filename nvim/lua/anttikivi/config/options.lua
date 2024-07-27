@@ -4,6 +4,14 @@ vim.opt.colorcolumn = "80" -- Highlight column 80
 vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
 vim.opt.cursorline = true -- Enable highlighting of the current line
 vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.fillchars = {
+  foldopen = "",
+  foldclose = "",
+  fold = " ",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
+}
 vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
 vim.opt.formatoptions = "jcroqlnt" -- Set default format options
 vim.opt.guicursor = "" -- Don't use the thin cursor
