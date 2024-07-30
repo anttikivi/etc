@@ -133,6 +133,18 @@
         scope: global
         value: "{{ ansible_user_dir }}/.gitignore_global"
 
+    - name: Set gpg.format to Git configuration
+      community.general.git_config:
+        name: gpg.format
+        scope: global
+        value: ssh
+
+    - name: Set gpg.ssh.program to Git configuration
+      community.general.git_config:
+        name: gpg.ssh.program
+        scope: global
+        value: "{{ git_sign_program }}"
+
 - name: Clone the `dotfiles` repository
   block:
     - name: Stat dotfiles development directory
