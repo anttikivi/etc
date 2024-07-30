@@ -49,6 +49,12 @@
         state: directory
         mode: "0755"
 
+    - name: Ensure that the SSH directory exists
+      ansible.builtin.file:
+        path: "{{ common_ssh_dir }}"
+        state: directory
+        mode: "0755"
+
     - name: Ensure that the temporary directory exists
       ansible.builtin.file:
         path: "{{ tmp_dir }}"
@@ -84,6 +90,12 @@
         path: "{{ etc_dir }}"
         state: directory
         mode: "0755"
+
+- name: Copy SSH configuration
+  ansible.builtin.template:
+    src: ssh_config.j2
+    dest: "{{ common_ssh_dir }}/config"
+    mode: "0644"
 
 - name: Set up git
   block:

@@ -69,18 +69,11 @@ git_signingkey:
   AAAAC3NzaC1lZDI1NTE5AAAAILjvQuHORSaPmrzGaG6LX0nCqOvL4Mc4TkIRCeV4aAbc"
 git_sign_program: /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 
+ssh_identity_agent:
+  "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
 aws_login_session: "{{ vault_aws_login_session }}"
 cloudflare_api_token: "{{ vault_cloudflare_api_token }}"
 gandi_personal_access_token: "{{ vault_gandi_personal_access_token }}"
 gsap_npm_token: "{{ vault_gsap_npm_token }}"
-
-ssh_keys:
-  id_rsa: "{{ vault_id_rsa }}"
-  id_rsa.pub: "{{ vault_id_rsa_pub }}"
-  id_ed25519: "{{ vault_id_ed25519 }}"
-  id_ed25519.pub: "{{ vault_id_ed25519_pub }}"
-
-gpg_keys:
-  signing: "{{ vault_gpg_signing }}"
-  signing_pub: "{{ vault_gpg_signing_pub }}"
 # vi: ft=yaml.ansible
