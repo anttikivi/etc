@@ -176,6 +176,12 @@
           - tree
         state: present
 
+    - name: Install 1Password CLI
+      community.general.homebrew:
+        name:
+          - 1password-cli
+        state: present
+
     - name: Install AeroSpace
       when: common_install_aerospace | bool
       block:
