@@ -377,18 +377,4 @@
       community.general.homebrew_cask:
         name: wezterm
         state: present
-
-- name: Install CodeCrafters CLI
-  when: common_install_codecrafters | bool
-  block:
-    - name: Tap the repository for CodeCrafters
-      community.general.homebrew_tap:
-        name: codecrafters-io/tap
-        state: present
-
-    - name: Install CodeCrafters CLI
-      community.general.homebrew:
-        name:
-          - codecrafters-io/tap/codecrafters
-        state: present
 # vi: ft=yaml.ansible
