@@ -1,7 +1,16 @@
-variable "project" {}
+variable "project" {
+  type = string
+}
 
-variable "region" {}
+variable "region" {
+  type = string
+}
 
-variable "zone" {}
+variable "zone" {
+  type = string
+}
 
-variable "os_login_public_key" {}
+variable "os_login_public_key" {
+  type      = string
+  sensitive = true
+}
