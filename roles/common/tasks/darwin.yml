@@ -353,6 +353,13 @@
         state: link
         force: true
 
+    - name: Link the file permissions utility script
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/bin/mode"
+        dest: "{{ local_bin_dir }}/mode"
+        state: link
+        force: true
+
     - name: Link the password generation script
       ansible.builtin.file:
         src: "{{ dotfiles_dir }}/bin/pwgen"
