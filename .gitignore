@@ -5,6 +5,11 @@ node_modules/
 nvim/lua/anttikivi/util/env/
 wezterm/env/
 
+# Environment variables
+.env
+.env.*
+!.env.example
+
 # Local .terraform directories
 **/.terraform/*
 
