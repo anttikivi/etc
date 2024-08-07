@@ -210,6 +210,7 @@ return {
             },
           },
         },
+        templ = {},
         terraformls = {},
         -- tsserver = {
         --   enable = false,

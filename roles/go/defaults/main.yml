@@ -6,4 +6,6 @@ go_version: go1.22.2
 go_modules:
   - module: mvdan.cc/sh/v3/cmd/shfmt@latest
     cmd: shfmt
+  - module: github.com/a-h/templ/cmd/templ@latest
+    cmd: templ
 # vi: ft=yaml.ansible
