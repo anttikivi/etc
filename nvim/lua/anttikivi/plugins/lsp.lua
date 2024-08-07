@@ -61,6 +61,7 @@ return {
             clangdFileStatus = true,
           },
         },
+        cmake = {},
         cssls = {
           settings = {
             css = {
