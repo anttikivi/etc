@@ -1,0 +1,19 @@
+---
+- name: Clean up the downloaded Zig archive
+  ansible.builtin.file:
+    path: "{{ zig_archive }}"
+    state: absent
+  listen: zig_clean_download
+
+- name: Clean up the extracted Zig directory
+  ansible.builtin.file:
+    path: "{{ zig_tmp_dir }}/zig"
+    state: absent
+  listen: zig_clean_extracted
+
+- name: Clean up the temporary Zig directory
+  ansible.builtin.file:
+    path: "{{ zig_tmp_dir }}"
+    state: absent
+  listen: zig_clean_tmp
+# vi: ft=yaml.ansible
