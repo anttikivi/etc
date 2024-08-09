@@ -7,7 +7,7 @@
 
 - name: Clean up the extracted Zig directory
   ansible.builtin.file:
-    path: "{{ zig_tmp_dir }}/zig"
+    path: "{{ zig_extract_dir }}"
     state: absent
   listen: zig_clean_extracted
 
