@@ -1,6 +1,6 @@
 ---
-# stable | nightly
 zig_bin: "{{ local_bin_dir }}/zig"
+# stable | nightly
 zig_channel: stable
 zig_download_page: https://ziglang.org/download/index.json
 zig_install_dir: "{{ local_dir }}"
