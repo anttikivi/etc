@@ -1,0 +1,25 @@
+---
+- name: Ensure that the environment directory for WezTerm configuration exists
+  ansible.builtin.file:
+    path: "{{ common_wezterm_env_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy the color file for WezTerm
+  ansible.builtin.template:
+    src: colors.lua.j2
+    dest: "{{ common_wezterm_env_dir }}/colors.lua"
+    mode: "0600"
+
+- name: Link the WezTerm configuration
+  ansible.builtin.file:
+    src: "{{ common_wezterm_config_dir }}"
+    dest: "{{ config_dir }}/wezterm"
+    state: link
+    force: true
+
+- name: Install WezTerm
+  community.general.homebrew_cask:
+    name: wezterm
+    state: present
+# vi: ft=yaml.ansible
