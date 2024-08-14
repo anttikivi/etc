@@ -1,6 +1,10 @@
 .DS_Store
 node_modules/
 
+# Files created by kitty
+kitty/*.conf.bak
+kitty/current-theme.conf
+
 # Ansible-managed configuration files
 nvim/lua/anttikivi/util/env/
 wezterm/env/

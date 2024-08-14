@@ -10,6 +10,13 @@
     kitty_creates_dir: /Applications/kitty.app
     kitty_watch_script: "{{ local_bin_dir }}/kitty_watch_colors"
 
+- name: Link the kitty configuration
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/kitty"
+    dest: "{{ kitty_config_dir }}"
+    state: link
+    force: true
+
 - name: Debug the required kitty version
   ansible.builtin.debug:
     var: common_kitty_version
