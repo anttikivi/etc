@@ -103,4 +103,7 @@ return {
   {
     "phelipetls/vim-hugo",
   },
+  {
+    "fladson/vim-kitty",
+  },
 }
