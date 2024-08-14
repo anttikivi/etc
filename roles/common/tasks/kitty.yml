@@ -2,7 +2,13 @@
 - name: Set the kitty installation directory fact
   ansible.builtin.set_fact:
     kitty_bin_dir: /Applications/kitty.app/Contents/MacOS
+    kitty_color_script: "{{ local_bin_dir }}/kitty_change_colors"
+    kitty_color_service_label: fi.anttikivi.kittycolors
+    kitty_color_service_stdout: "{{ local_dir }}/var/log/kitty_colors.log"
+    kitty_color_service_stderr: "{{ local_dir }}/var/log/kitty_colors.err"
+    kitty_config_dir: "{{ xdg_config_home }}/kitty"
     kitty_creates_dir: /Applications/kitty.app
+    kitty_watch_script: "{{ local_bin_dir }}/kitty_watch_colors"
 
 - name: Debug the required kitty version
   ansible.builtin.debug:
@@ -73,4 +79,32 @@
       set -o pipefail
       curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
     creates: "{{ kitty_creates_dir }}"
+
+- name: Copy the script for changing kitty's color scheme
+  ansible.builtin.template:
+    src: kitty_change_colors.j2
+    dest: "{{ kitty_color_script }}"
+    mode: "755"
+
+- name: Copy the script for watching the system color scheme for kitty
+  ansible.builtin.template:
+    src: kitty_watch_colors.j2
+    dest: "{{ kitty_watch_script }}"
+    mode: "755"
+
+- name: Copy the service for watching for the color scheme changes for kitty
+  ansible.builtin.template:
+    src: kittycolors.plist.j2
+    dest:
+      "{{ ansible_user_dir }}/Library/LaunchAgents/{{ kitty_color_service_label
+      }}.plist"
+    mode: "644"
+
+- name: Reload the service for watching color scheme changes for kitty
+  ansible.builtin.shell:
+    cmd: |
+      launchctl unload -w "{{ ansible_user_dir }}/Library/LaunchAgents/{{ kitty_color_service_label }}.plist"
+      launchctl load -w "{{ ansible_user_dir }}/Library/LaunchAgents/{{ kitty_color_service_label }}.plist"
+  changed_when: true
+  # when: kitty_colors_launchd_list.rc == 0
 # vi: ft=yaml.ansible
