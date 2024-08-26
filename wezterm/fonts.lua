@@ -10,7 +10,7 @@ return {
   -- font_size: 13,
   -- line_height: 1.2,
   font_size = 13,
-  line_height = 1.1,
+  line_height = 1.2,
   freetype_load_flags = "NO_HINTING",
   freetype_load_target = "Light",
   freetype_render_target = "HorizontalLcd",
