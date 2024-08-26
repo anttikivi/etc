@@ -3,6 +3,8 @@ start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
+accordion-padding = 0
+
 [mode.main.binding]
 # alt-enter = 'exec-and-forget open -n /System/Applications/Utilities/Terminal.app'
 alt-enter = 'exec-and-forget open -n /Applications/kitty.app'
