@@ -11,7 +11,7 @@ return {
   },
   {
     "nvim-lualine/lualine.nvim",
-    enabled = true,
+    enabled = false,
     opts = function()
       return {
         options = vim.g.icons_enabled and {
