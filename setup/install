@@ -73,6 +73,56 @@ darwin() {
   fi
 }
 
+debian() {
+  printf "%b %bChecking whether %bAnsible%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
+
+  if ! type ansible >/dev/null; then
+    printf "%b %bInstalling %bAnsible%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+
+    sudo apt update
+    sudo apt install wget gpg
+
+    printf "%b Checking the Debian version...\n" "${CHAR_ARROW}"
+    debian_version="$(cat /etc/*-release | grep ^VERSION_ID | head -n1 | cut -d '=' -f2)"
+    printf "%b Running on %b%s%b\n" "${CHAR_CHECK_MARK}" "${ESC_UNDERLINE}" "${debian_version}" "${ESC_RESET}"
+
+    UBUNTU_CODENAME="jammy"
+
+    if [ "${debian_version}" = "11" ]; then
+      UBUNTU_CODENAME="focal"
+    elif [ "${debian_version}" = "11" ]; then
+      UBUNTU_CODENAME="bionic"
+    fi
+
+    wget -O- "https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=get&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367" | sudo gpg --dearmour -o /usr/share/keyrings/ansible-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/ansible-archive-keyring.gpg] http://ppa.launchpad.net/ansible/ansible/ubuntu ${UBUNTU_CODENAME} main" | sudo tee /etc/apt/sources.list.d/ansible.list
+
+    sudo apt update
+    sudo apt install ansible
+
+    printf "%b %b%bAnsible%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+  else
+    printf "%b %b%bAnsible%b%b is already installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
+  fi
+}
+
+ubuntu() {
+  printf "%b %bChecking whether %bAnsible%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
+
+  if ! type ansible >/dev/null; then
+    printf "%b %bInstalling %bAnsible%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+
+    sudo apt update
+    sudo apt install software-properties-common
+    sudo add-apt-repository --yes --update ppa:ansible/ansible
+    sudo apt install ansible
+
+    printf "%b %b%bAnsible%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+  else
+    printf "%b %b%bAnsible%b%b is already installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
+  fi
+}
+
 not_supported() {
   printf "%b %b%bThis operating system is not supported!%b\n" "${CHAR_X_MARK}" "${ESC_BOLD}" "${ESC_RED}" "${ESC_RESET}"
   exit 1
@@ -84,6 +134,18 @@ os_name="$(uname)"
 printf "%b Running on %b%s%b\n" "${CHAR_CHECK_MARK}" "${ESC_UNDERLINE}" "${os_name}" "${ESC_RESET}"
 if [ "${os_name}" = "Darwin" ]; then
   darwin
+elif [ "${os_name}" = "Linux" ]; then
+  printf "%b Checking the Linux distribution...\n" "${CHAR_ARROW}"
+  distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
+  printf "%b Running on %b%s%b\n" "${CHAR_CHECK_MARK}" "${ESC_UNDERLINE}" "${distro}" "${ESC_RESET}"
+
+  if [ "${distro}" = "debian" ]; then
+    debian
+  elif [ "${distro}" = "ubuntu" ]; then
+    ubuntu
+  else
+    not_supported
+  fi
 else
   not_supported
 fi
