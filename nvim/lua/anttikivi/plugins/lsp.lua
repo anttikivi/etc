@@ -12,7 +12,7 @@ return {
     },
     opts = {
       diagnostics = {
-        -- underline = true,
+        underline = vim.g.true_colors,
         -- update_in_insert = false,
         -- virtual_text = {
         --   spacing = 4,
