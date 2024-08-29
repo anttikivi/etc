@@ -173,6 +173,8 @@ fi
 old_pwd="$(pwd)"
 cd "${dotfiles_dir}"
 
+printf "%b %bUsing %b%s%b%b as the dotfiles directory%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${dotfiles_dir}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
+
 # For the moment, I install the Ansible Galaxy requirements only during the
 # first run.
 if [ "${use_tmp_dir}" = true ]; then
