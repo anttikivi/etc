@@ -11,68 +11,49 @@ The repository uses [Ansible](https://www.ansible.com) for automation.
 ### Prerequisites
 
 The script and the Ansible playbook are structured to automatically detect and
-run the set-up for correct operating system. However, only Darwin (macOS) is
-currently supported.
+run the set-up for correct operating system.
 
-Besides your computer, you only need to have a shell for running the `install`
+Besides your computer, you only need to have a shell for running the `setup`
 script.
 
 ### Installing
 
-The repository includes a shell script at [`setup/install`](setup/install) that
-initializes the environment, install all of the requirements and runs the
-Ansible playbook. The script should be
+The repository includes a shell script at [`setup`](setup) that initializes the
+environment, install all of the requirements and runs the Ansible playbook. The
+script should be
 [POSIX-compliant](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html).
 
-    /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/anttikivi/dotfiles/main/setup/install)"
+    /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/anttikivi/dotfiles/main/setup)"
 
 If you don’t have `curl` or you wish to download the script separately before
 running it, that’s also possible.
 
-    curl -OL https://raw.githubusercontent.com/anttikivi/dotfiles/main/setup/install
-    chmod +x install
-    ./install
+    curl -OL https://raw.githubusercontent.com/anttikivi/dotfiles/main/setup
+    chmod +x setup
+    ./setup
 
 > Don’t mind the `curl` command here, you can download the script however you
 > like.
 
-For subsequent runs, you can either run the `setup/install` script again or run
-the Ansible playbook.
+For subsequent runs, you can either run the `setup` script again or run the
+Ansible playbook. Please note that the script automatically sets the correct
+options for the Ansible playbook run and if you choose to run it manually, you
+need to make sure that you include the options you want or need.
 
-    cd ~/dotfiles
+    cd ~/etc/dotfiles
     ansible-playbook local.yml -K
 
 Even though the script clones a temporary copy of this repository for the
 duration of the script run, the Ansible playbook also clones this repository
-using SSH to `~/dotfiles`. While the playbook mostly copies all of the
+using SSH to `~/etc/dotfiles`. While the playbook mostly copies all of the
 configuration to their correct locations on your machine, some of the files are
-added as symbolic link that point to this repository at `~/dotfiles`, namely
+added as symbolic link that point to this repository at `~/etc/dotfiles`, namely
 [Neovim](https://neovim.io) configuration. This is done because Neovim
 configuration files are usually actively developed and require debugging when
 changes are made and using symbolic links makes this easier. This also lets me
 to keep up-to-date version of the
 [`lazy.nvim`](https://github.com/folke/lazy.nvim) lockfile within the
-repository. The [Oh My Zsh](https://ohmyz.sh) customization directory
-environment variable, `$ZSH_CUSTOM` in `.zshrc`, is also pointed to the
-repository, namely to `$HOME/dotfiles/zsh`.
-
-Below is a breakdown of the different steps the script takes for each supported
-operating system.
-
-#### Darwin
-
-First of all, the script mostly assumes that you’re running on macOS if you’re
-using a Darwin operating system.
-
-The script does the following steps:
-
-1. Install [Homebrew](https://brew.sh) if it’s not installed.
-2. Install [Python](https://www.python.org) if it’s not installed.
-3. Install [Ansible](https://www.ansible.com) if it’s not installed.
-4. Clone a temporary copy of this repository for use during the playbook run.
-   The temporary clone is removed by the script after a successful playbook run.
-5. Install [Ansible Galaxy](https://galaxy.ansible.com/) dependencies.
-6. Run the Ansible playbook.
+repository.
 
 ## Development
 
