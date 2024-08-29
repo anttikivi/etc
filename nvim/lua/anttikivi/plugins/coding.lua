@@ -1,11 +1,5 @@
 return {
-  {
-    "Exafunction/codeium.vim",
-    enabled = false,
-    event = "BufEnter",
-  },
   { "numToStr/Comment.nvim", opts = {} },
-  { "github/copilot.vim", enabled = false },
   {
     "folke/lazydev.nvim",
     ft = "lua",
