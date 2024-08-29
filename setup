@@ -27,7 +27,6 @@ readonly VAULT_SECRET_FILE="${HOME}/.vault_pass"
 readonly ETC_DIR="${HOME}/etc"
 readonly TMP_DIR="${HOME}/tmp"
 readonly TMP_DOTFILES_DIR="${TMP_DIR}/dotfiles"
-readonly TMP_PLAYBOOK_FILE="${TMP_DOTFILES_DIR}/local.yml"
 
 brew_install() {
   printf "%b %bChecking whether %b%s%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "$1" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
@@ -196,12 +195,14 @@ fi
     export PATH="${HOME}/.cargo/bin:${PATH}"
   fi
 
+  playbook_file="${dotfiles_dir}/local.yml"
+
   if [ -f "${VAULT_SECRET_FILE}" ]; then
     printf "   %b %bDecrypting the %bAnsible%b%b vault...%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
-    ansible-playbook "${TMP_PLAYBOOK_FILE}" --ask-become-pass --vault-password-file "${VAULT_SECRET_FILE}" "$@"
+    ansible-playbook "${playbook_file}" --ask-become-pass --vault-password-file "${VAULT_SECRET_FILE}" "$@"
   else
     printf "   %b %bNo Ansible Vault secret file found...%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_YELLOW}" "${ESC_RESET}"
-    ansible-playbook "${TMP_PLAYBOOK_FILE}" --ask-become-pass "$@"
+    ansible-playbook "${playbook_file}" --ask-become-pass "$@"
   fi
 )
 
