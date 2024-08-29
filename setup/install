@@ -24,9 +24,10 @@ readonly CHAR_RIGHT_ANGLE="${ESC_BOLD}${ESC_GREEN}\xE2\x88\x9F${ESC_RESET}"
 readonly CHAR_X_MARK="${ESC_BOLD}${ESC_RED}\xE2\x9C\x96${ESC_RESET}"
 
 readonly VAULT_SECRET_FILE="${HOME}/.vault_pass"
+readonly ETC_DIR="${HOME}/etc"
 readonly TMP_DIR="${HOME}/tmp"
-readonly DOTFILES_DIR="${TMP_DIR}/dotfiles"
-readonly PLAYBOOK="${DOTFILES_DIR}/local.yml"
+readonly TMP_DOTFILES_DIR="${TMP_DIR}/dotfiles"
+readonly TMP_PLAYBOOK_FILE="${TMP_DOTFILES_DIR}/local.yml"
 
 brew_install() {
   printf "%b %bChecking whether %b%s%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "$1" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
@@ -155,37 +156,52 @@ if ! [ -d "${TMP_DIR}" ]; then
   mkdir "${TMP_DIR}"
 fi
 
-if ! [ -d "${DOTFILES_DIR}" ]; then
-  printf "%bCloning the dotfiles repository from %bgithub.com/anttikivi/dotfiles%b%b...%b\n" "${ESC_CYAN}" "${ESC_UNDERLINE}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
-  { git clone --quiet "https://github.com/anttikivi/dotfiles.git" "${DOTFILES_DIR}" >/dev/null; } 2>&1
-else
-  printf "%bUpdating the dotfiles repository from %bgithub.com/anttikivi/dotfiles%b%b...%b\n" "${ESC_CYAN}" "${ESC_UNDERLINE}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
-  git -C "${DOTFILES_DIR}" pull --quiet >/dev/null
+dotfiles_dir="${ETC_DIR}/dotfiles"
+use_tmp_dir=false
+
+if ! [ -d "${dotfiles_dir}" ]; then
+  use_tmp_dir=true
+  if ! [ -d "${TMP_DOTFILES_DIR}" ]; then
+    printf "%bCloning the dotfiles repository from %bgithub.com/anttikivi/dotfiles%b%b...%b\n" "${ESC_CYAN}" "${ESC_UNDERLINE}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+    { git clone --quiet "https://github.com/anttikivi/dotfiles.git" "${TMP_DOTFILES_DIR}" >/dev/null; } 2>&1
+  else
+    printf "%bUpdating the dotfiles repository from %bgithub.com/anttikivi/dotfiles%b%b...%b\n" "${ESC_CYAN}" "${ESC_UNDERLINE}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+    git -C "${TMP_DOTFILES_DIR}" pull --quiet >/dev/null
+  fi
+  dotfiles_dir="${TMP_DOTFILES_DIR}"
 fi
 
 old_pwd="$(pwd)"
-cd "${DOTFILES_DIR}"
+cd "${dotfiles_dir}"
 
-printf "%b %bUpdating Ansible %bGalaxy%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
-{ ansible-galaxy install -r requirements.yml >/dev/null; } 2>&1
-printf "%b %bAnsible %bGalaxy%b%b updated!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+# For the moment, I install the Ansible Galaxy requirements only during the
+# first run.
+if [ "${use_tmp_dir}" = true ]; then
+  printf "%b %bUpdating Ansible %bGalaxy%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
+  { ansible-galaxy install -r requirements.yml >/dev/null; } 2>&1
+  printf "%b %bAnsible %bGalaxy%b%b updated!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+fi
 
 printf "%b %bRunning the %bAnsible%b%b playbook...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
 
+# TODO: Should the arguments be reserved for customizing this script?
 if [ $# -ne 0 ]; then
   printf "   %b %bUsing the following user-supplied additional arguments: %b%s%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_DIM}" "${ESC_BOLD}" "$*" "${ESC_RESET}"
 fi
 
 (
-  # Add the Cargo directory to the path as it's needed to install some Homebrew formulae in the playbook.
-  export PATH="${HOME}/.cargo/bin:${PATH}"
+  # The modifications to `PATH` should only be made during the first run.
+  if [ "${use_tmp_dir}" = true ]; then
+    # Add the Cargo directory to the path as it's needed to install some Homebrew formulae in the playbook.
+    export PATH="${HOME}/.cargo/bin:${PATH}"
+  fi
 
   if [ -f "${VAULT_SECRET_FILE}" ]; then
     printf "   %b %bDecrypting the %bAnsible%b%b vault...%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
-    ansible-playbook "${PLAYBOOK}" --ask-become-pass --vault-password-file "${VAULT_SECRET_FILE}" "$@"
+    ansible-playbook "${TMP_PLAYBOOK_FILE}" --ask-become-pass --vault-password-file "${VAULT_SECRET_FILE}" "$@"
   else
     printf "   %b %bNo Ansible Vault secret file found...%b\n" "${CHAR_RIGHT_ANGLE}" "${ESC_YELLOW}" "${ESC_RESET}"
-    ansible-playbook "${PLAYBOOK}" --ask-become-pass "$@"
+    ansible-playbook "${TMP_PLAYBOOK_FILE}" --ask-become-pass "$@"
   fi
 )
 
@@ -193,6 +209,8 @@ printf "%b %bAnsible playbook run!%b\n" "${CHAR_CHECK_MARK}" "${ESC_GREEN}" "${E
 
 cd "${old_pwd}"
 
-rm -rf "${DOTFILES_DIR}"
+if [ "${use_tmp_dir}" = true ]; then
+  rm -rf "${TMP_DOTFILES_DIR}"
+fi
 
 printf "%b%bFinished the environment setup!%b\n" "${ESC_BOLD}" "${ESC_MAGENTA}" "${ESC_RESET}"
