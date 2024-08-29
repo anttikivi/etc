@@ -3,7 +3,6 @@ common_enable_zsh_syntax_highlighting: false
 common_install_aerospace: true
 common_install_codecrafters: true
 common_install_kitty: true
-common_install_wezterm: true
 common_kitty_version: v0.35.2
 common_nvim_version: v0.10.0
 common_nvim_config_dir: "{{ dotfiles_dir }}/nvim"
@@ -12,6 +11,4 @@ common_use_bash: true
 common_use_zsh: true
 common_zfunctions_dir: "{{ ansible_user_dir }}/.zfunctions"
 common_purus_dir: "{{ plugins_dev_dir }}/purus"
-common_wezterm_config_dir: "{{ dotfiles_dir }}/wezterm"
-common_wezterm_env_dir: "{{ common_wezterm_config_dir }}/env"
 # vi: ft=yaml.ansible

@@ -26,8 +26,4 @@
 - name: Set up kitty
   when: common_install_kitty | bool
   ansible.builtin.import_tasks: kitty.yml
-
-- name: Set up WezTerm
-  when: common_install_wezterm | bool
-  ansible.builtin.import_tasks: wezterm.yml
 # vi: ft=yaml.ansible

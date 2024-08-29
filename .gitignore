@@ -7,7 +7,6 @@ kitty/current-theme.conf
 
 # Ansible-managed configuration files
 nvim/lua/anttikivi/util/env/
-wezterm/env/
 
 # Environment variables
 .env
