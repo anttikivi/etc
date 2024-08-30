@@ -1,10 +1,4 @@
 ---
-- name: Load the variables
-  ansible.builtin.include_vars: "{{ item.value }}"
-  when: ansible_os_family == item.key
-  with_items:
-    - { key: "Darwin", value: "vars/darwin.yml" }
-
 - name: Include the SSH variables
   ansible.builtin.include_vars: ssh.yml
 
@@ -19,11 +13,4 @@
 
     - name: Run the secret tasks
       ansible.builtin.import_tasks: darwin_secret.yml
-
-    - name: Run the Neovim tasks
-      ansible.builtin.import_tasks: darwin_nvim.yml
-
-- name: Set up kitty
-  when: common_install_kitty | bool
-  ansible.builtin.import_tasks: kitty.yml
 # vi: ft=yaml.ansible

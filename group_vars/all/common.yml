@@ -4,8 +4,10 @@ default_roles:
   - clang
   - gcloud
   - go
+  - kitty
   - lua
   - node
+  - nvim
   - php
   - python
   - rust

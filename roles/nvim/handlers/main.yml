@@ -1,13 +1,13 @@
 ---
 - name: Clean up the downloaded Neovim archive
   ansible.builtin.file:
-    path: "{{ common_nvim_archive }}"
+    path: "{{ nvim_archive }}"
     state: absent
-  listen: common_nvim_clean_download
+  listen: nvim_clean_download
 
 - name: Clean up the temporary Neovim directory
   ansible.builtin.file:
-    path: "{{ common_nvim_tmp_dir }}"
+    path: "{{ nvim_tmp_dir }}"
     state: absent
-  listen: common_nvim_clean_tmp
+  listen: nvim_clean_tmp
 # vi: ft=yaml.ansible

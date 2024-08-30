@@ -2,11 +2,6 @@
 common_enable_zsh_syntax_highlighting: false
 common_install_aerospace: true
 common_install_codecrafters: true
-common_install_kitty: true
-common_kitty_version: v0.35.2
-common_nvim_version: v0.10.0
-common_nvim_config_dir: "{{ dotfiles_dir }}/nvim"
-common_nvim_env_dir: "{{ common_nvim_config_dir }}/lua/anttikivi/util/env"
 common_use_bash: true
 common_use_zsh: true
 common_zfunctions_dir: "{{ ansible_user_dir }}/.zfunctions"
