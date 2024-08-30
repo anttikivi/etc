@@ -151,22 +151,27 @@
       ansible.builtin.set_fact:
         nvim_extract_dir: "{{ nvim_tmp_dir }}/{{ nvim_archive_name }}"
 
-    - name: Copy the Neovim files to the correct destination
-      block:
-        - name: Copy the Neovim binary
-          ansible.builtin.copy:
-            src: "{{ nvim_extract_dir }}/bin/nvim"
-            dest: "{{ local_bin_dir }}/nvim"
-            mode: "preserve"
-        - name: Copy the Neovim library directory
-          ansible.builtin.copy:
-            src: "{{ nvim_extract_dir }}/lib/nvim"
-            dest: "{{ local_lib_dir }}"
-            mode: "preserve"
-        - name: Move the Neovim data directory
-          ansible.builtin.shell:
-            cmd: "mv {{ nvim_extract_dir }}/share/.[!.]* {{ local_data_dir }}"
-          changed_when: true
+    - name: Copy the Neovim files
+      ansible.builtin.synchronize:
+        src: "{{ nvim_extract_dir }}/"
+        dest: "{{ local_dir }}/"
+
+    # - name: Copy the Neovim files to the correct destination
+    #   block:
+    #     - name: Copy the Neovim binary
+    #       ansible.builtin.copy:
+    #         src: "{{ nvim_extract_dir }}/bin/nvim"
+    #         dest: "{{ local_bin_dir }}/nvim"
+    #         mode: "preserve"
+    #     - name: Copy the Neovim library directory
+    #       ansible.builtin.copy:
+    #         src: "{{ nvim_extract_dir }}/lib/nvim"
+    #         dest: "{{ local_lib_dir }}"
+    #         mode: "preserve"
+    #     - name: Copy the Neovim data directory
+    #       ansible.builtin.synchronize:
+    #         src: "{{ nvim_extract_dir }}/share/"
+    #         dest: "{{ local_data_dir }}/"
 
 - name: Stat Brunch
   ansible.builtin.stat:
@@ -188,31 +193,6 @@
     version: main
     accept_newhostkey: true
   when: not brunch_installed
-
-- name: Install dark-notify
-  when: macos
-  block:
-    - name: Tap the repository for dark-notify
-      community.general.homebrew_tap:
-        name: cormacrelf/tap
-        state: present
-
-    - name: Install dark-notify
-      community.general.homebrew:
-        name:
-          - cormacrelf/tap/dark-notify
-        state: present
-
-    - name: Get the path of dark-notify
-      ansible.builtin.command:
-        cmd: which dark-notify
-      register: which_dark_notify
-      changed_when: true
-      failed_when: which_dark_notify.rc != 0
-
-    - name: Set the dark-notify path fact
-      ansible.builtin.set_fact:
-        dark_notify_path: "{{ which_dark_notify.stdout }}"
 
 - name: Ensure that the environment directory for Neovim configuration exists
   ansible.builtin.file:
