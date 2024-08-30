@@ -16,6 +16,20 @@
       tags:
         - always
 
+    - name: Set the Linux fact
+      ansible.builtin.set_fact:
+        darwin: "{{ (ansible_os_family == 'Darwin') | bool }}"
+        debian: "{{ (ansible_os_family == 'Debian') | bool }}"
+        linux: "{{ debian | bool }}"
+      tags:
+        - always
+
+    - name: Set the operating system distribution facts
+      ansible.builtin.set_fact:
+        macos: "{{ darwin and (ansible_distribution == 'MacOSX') | bool }}"
+      tags:
+        - always
+
   tasks:
     - name: Run the `common` role
       ansible.builtin.include_role:
