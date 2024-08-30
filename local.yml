@@ -9,6 +9,13 @@
       tags:
         - always
 
+    - name: Set the operating system family facts
+      ansible.builtin.set_fact:
+        darwin: "{{ (ansible_os_family == 'Darwin') | bool }}"
+        debian: "{{ (ansible_os_family == 'Debian') | bool }}"
+      tags:
+        - always
+
   tasks:
     - name: Run the `common` role
       ansible.builtin.include_role:
