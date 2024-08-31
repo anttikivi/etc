@@ -1,4 +1,6 @@
 ---
+# TODO: Should I find a way to use the booleans set at the start of the
+# playbook?
 - name: Load the operating system-dependant variables
   ansible.builtin.include_vars: "{{ item.value }}"
   when: ansible_distribution == item.key or ansible_os_family == item.key
@@ -155,23 +157,6 @@
       ansible.builtin.synchronize:
         src: "{{ nvim_extract_dir }}/"
         dest: "{{ local_dir }}/"
-
-    # - name: Copy the Neovim files to the correct destination
-    #   block:
-    #     - name: Copy the Neovim binary
-    #       ansible.builtin.copy:
-    #         src: "{{ nvim_extract_dir }}/bin/nvim"
-    #         dest: "{{ local_bin_dir }}/nvim"
-    #         mode: "preserve"
-    #     - name: Copy the Neovim library directory
-    #       ansible.builtin.copy:
-    #         src: "{{ nvim_extract_dir }}/lib/nvim"
-    #         dest: "{{ local_lib_dir }}"
-    #         mode: "preserve"
-    #     - name: Copy the Neovim data directory
-    #       ansible.builtin.synchronize:
-    #         src: "{{ nvim_extract_dir }}/share/"
-    #         dest: "{{ local_data_dir }}/"
 
 - name: Stat Brunch
   ansible.builtin.stat:
