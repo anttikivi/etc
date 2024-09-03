@@ -91,6 +91,12 @@
         state: directory
         mode: "0755"
 
+    - name: Ensure that the `university` directory exists
+      ansible.builtin.file:
+        path: "{{ uni_dir }}"
+        state: directory
+        mode: "0755"
+
 - name: Copy SSH configuration
   ansible.builtin.template:
     src: ssh_config.j2

@@ -39,6 +39,8 @@ dotfiles_dir: "{{ etc_dir }}/dotfiles"
 
 tmp_dir: "{{ ansible_user_dir }}/tmp"
 
+uni_dir: "{{ ansible_user_dir }}/university"
+
 zsh_dir: "{{ ansible_user_dir }}/.zsh"
 
 implemented_color_schemes:
