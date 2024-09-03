@@ -1,6 +1,0 @@
----
-- name: Install Ansible Lint
-  community.general.homebrew:
-    name: ansible-lint
-    state: present
-# vi: ft=yaml.ansible

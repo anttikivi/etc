@@ -1,5 +1,7 @@
 ---
-- name: Run Darwin tasks
-  ansible.builtin.import_tasks: darwin.yml
-  when: ansible_os_family == 'Darwin'
+- name: Install Ansible Lint using Homebrew
+  community.general.homebrew:
+    name: ansible-lint
+    state: present
+  when: macos
 # vi: ft=yaml.ansible
