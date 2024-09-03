@@ -1,7 +1,7 @@
 ---
-- name: Install Ansible Lint using Homebrew
-  community.general.homebrew:
-    name: ansible-lint
+- name: Install Ansible Development Tools
+  ansible.builtin.pip:
+    break_system_packages: true
+    name: ansible-dev-tools
     state: present
-  when: macos
 # vi: ft=yaml.ansible
