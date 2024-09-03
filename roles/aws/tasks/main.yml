@@ -9,4 +9,17 @@
     name: aws-cli
     state: present
   when: not macos
+
+- name: Ensure the AWS configuration directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.aws"
+    state: directory
+    mode: "0755"
+
+- name: Copy the AWS configuration
+  ansible.builtin.copy:
+    src: config
+    dest: "{{ ansible_user_dir }}/.aws/config"
+    mode: "0644"
+    force: true
 # vi: ft=yaml.ansible
