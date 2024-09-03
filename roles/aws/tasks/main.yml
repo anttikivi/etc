@@ -1,5 +1,12 @@
 ---
-- name: Run Darwin tasks
-  ansible.builtin.import_tasks: darwin.yml
-  when: ansible_os_family == 'Darwin'
+- name: Run the AWS CLI installation on macOS
+  ansible.builtin.import_tasks: macos.yml
+  when: macos
+
+- name: Install AWS CLI on systems other than macOS
+  community.general.snap:
+    classic: true
+    name: aws-cli
+    state: present
+  when: not macos
 # vi: ft=yaml.ansible
