@@ -3,7 +3,7 @@
 if [ $# -eq 1 ]; then
   selected=$1
 else
-  selected="$(find /Users ~ ~/development ~/development/learning ~/development/visiosto ~/etc -mindepth 1 -maxdepth 1 -type d ! -path "/Users/Shared" ! -path "${HOME}/Music" ! -path "${HOME}/Public" ! -path "${HOME}/Sites" | fzf --tmux)"
+  selected="$(find /Users ~ ~/development ~/development/learning ~/development/visiosto ~/etc ~/university -mindepth 1 -maxdepth 1 -type d ! -path "/Users/Shared" ! -path "${HOME}/Music" ! -path "${HOME}/Public" ! -path "${HOME}/Sites" | fzf --tmux)"
 fi
 
 if [ -z "${selected}" ]; then
