@@ -13,4 +13,7 @@ max_line_length = off
 indent_style = tab
 indent_size = 4
 
+[*.py]
+indent_size = 4
+
 # vi: ft=editorconfig
