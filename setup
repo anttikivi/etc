@@ -53,8 +53,9 @@ darwin() {
   fi
 
   brew_install pipx
+  pipx ensurepath
 
-  # printf "%b %b%bPython%b%b paths set!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+  printf "%b %b%bpipx%b%b paths set!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
 
   printf "%b %bChecking whether %bAnsible%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
 
