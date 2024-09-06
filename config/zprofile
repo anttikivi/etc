@@ -23,7 +23,7 @@ if [ -f "${GCLOUD_DIR}/path.zsh.inc" ]; then
   source "${GCLOUD_DIR}/path.zsh.inc"
 fi
 
-export PYTHONPATH="$(brew --prefix)/lib/python$(python3 --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
+export PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
 
 export EDITOR="nvim"
 export VISUAL="nvim"
