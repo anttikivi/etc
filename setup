@@ -52,21 +52,15 @@ darwin() {
     printf "%b %b%bHomebrew%b%b is already installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
   fi
 
-  brew_install python
+  brew_install pipx
 
-  PATH="$(brew --prefix python)/libexec/bin:${PATH}"
-  export PATH
-
-  PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
-  export PYTHONPATH
-
-  printf "%b %b%bPython%b%b paths set!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+  # printf "%b %b%bPython%b%b paths set!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
 
   printf "%b %bChecking whether %bAnsible%b%b is installed...%b\n" "${CHAR_CLIPBOARD}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
 
   if ! brew list | grep ansible >/dev/null; then
     printf "%b %bInstalling %bAnsible%b%b...%b\n" "${CHAR_ARROW}" "${ESC_CYAN}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_CYAN}" "${ESC_RESET}"
-    brew_install ansible
+    pipx install --include-deps ansible
     printf "%b %b%bAnsible%b%b installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
   else
     printf "%b %b%bAnsible%b%b is already installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
