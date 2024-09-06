@@ -1,7 +1,6 @@
 ---
-- name: Install Ansible Development Tools
-  ansible.builtin.pip:
-    break_system_packages: true
-    name: ansible-dev-tools
-    state: present
+- name: Install Ansible Lint
+  community.general.pipx:
+    name: ansible-lint
+    state: install
 # vi: ft=yaml.ansible
