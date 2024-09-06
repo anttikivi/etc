@@ -9,6 +9,11 @@
       tags:
         - always
 
+    - name: Find the required executables
+      ansible.builtin.import_tasks: pre_tasks/executables.yml
+      tags:
+        - always
+
     - name: Set the operating system family facts
       ansible.builtin.set_fact:
         darwin: "{{ (ansible_os_family == 'Darwin') | bool }}"
