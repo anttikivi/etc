@@ -54,7 +54,7 @@ darwin() {
 
   brew_install pipx
 
-  PATH="~/.local/bin:${PATH}"
+  PATH="${HOME}/.local/bin:${PATH}"
   export PATH
 
   printf "%b %b%bpipx%b%b paths set!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
