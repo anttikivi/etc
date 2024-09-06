@@ -87,6 +87,9 @@ return {
             provideFormatter = false,
           },
         },
+        intelephense = {
+          enabled = vim.g.php_lsp == "intelephense",
+        },
         jsonls = {
           settings = {
             json = {
@@ -116,7 +119,9 @@ return {
           },
         },
         marksman = {},
-        phpactor = {},
+        phpactor = {
+          enabled = vim.g.php_lsp == "phpactor",
+        },
         r_language_server = {},
         stylelint_lsp = {},
         tailwindcss = {

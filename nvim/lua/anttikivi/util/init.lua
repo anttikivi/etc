@@ -12,6 +12,11 @@ end
 function M.set_global_variables()
   vim.g.netrw_list_hide = "^\\.DS_Store$"
 
+  ---Which PHP language server to use.
+  ---
+  ---@type "intelephense" | "phpactor"
+  vim.g.php_lsp = "phpactor"
+
   ---Whether true colors are supported by the current terminal.
   ---
   ---@type boolean
