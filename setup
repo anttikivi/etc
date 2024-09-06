@@ -52,6 +52,16 @@ darwin() {
     printf "%b %b%bHomebrew%b%b is already installed!%b\n" "${CHAR_CHECK_MARK}" "${ESC_DIM}" "${ESC_BOLD}" "${ESC_RESET}" "${ESC_DIM}" "${ESC_RESET}"
   fi
 
+  brew_install python
+
+  PATH="$(brew --prefix python)/libexec/bin:${PATH}"
+  export PATH
+
+  PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
+  export PYTHONPATH
+
+  printf "%b %b%bPython%b%b paths set!%b\n" "${CHAR_CHECK_MARK}" "${ESC_BOLD}" "${ESC_GREEN}" "${ESC_RESET}" "${ESC_GREEN}" "${ESC_RESET}"
+
   brew_install pipx
 
   PATH="${HOME}/.local/bin:${PATH}"
