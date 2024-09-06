@@ -3,7 +3,7 @@
   ansible.builtin.command:
     cmd: which pipx
   register: which_pipx
-  changed_when: always
+  changed_when: false
   failed_when: which_pipx.rc != 0
 
 - name: Register the `pipx` executable
