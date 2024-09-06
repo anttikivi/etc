@@ -13,9 +13,11 @@ compinit
 autoload -U +X bashcompinit
 bashcompinit
 
+autoload -U add-zsh-hook
+
 export MANPAGER='nvim +Man!'
 
-autoload -U add-zsh-hook
+eval "$(register-python-argcomplete pipx)"
 
 load-nvmrc() {
   local nvmrc_path
