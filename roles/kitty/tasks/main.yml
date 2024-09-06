@@ -64,11 +64,17 @@
   ansible.builtin.debug:
     var: kitty_wanted_version
 
+- name: Stat kitty
+  ansible.builtin.stat:
+    path: "{{ kitty_bin_dir }}/kitty"
+  register: kitty_stat
+
 - name: Get the kitty version
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
       {{ kitty_bin_dir }}/kitty --version | cut -c $(($({{ kitty_bin_dir }}/kitty --version | grep -ob "\ " | head -1 | grep -oE "[0-9]+") + 2))-$({{ kitty_bin_dir }}/kitty --version | grep -ob "\ " | head -2 | tail -1 | grep -oE "[0-9]+")
+  when: kitty_stat.stat.exists
   register: kitty_current_version_sh
   changed_when: false
   failed_when: kitty_current_version_sh.rc != 0
