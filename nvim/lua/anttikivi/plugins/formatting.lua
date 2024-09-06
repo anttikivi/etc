@@ -20,6 +20,7 @@ return {
         lua = { "stylua" },
         markdown = { "prettier" },
         ["markdown.mdx"] = { "prettier" },
+        php = { "php_cs_fixer" },
         python = { "black" },
         sh = { "shfmt" },
         terraform = { "terraform_fmt" },

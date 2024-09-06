@@ -377,6 +377,8 @@ return {
         "luacheck",
         "markdownlint",
         "marksman",
+        "phpcs",
+        "php-cs-fixer",
         "selene",
         "shfmt",
         "stylua",
