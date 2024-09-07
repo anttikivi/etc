@@ -1,7 +1,0 @@
----
-- name: Install Clang tools
-  community.general.homebrew:
-    name:
-      - clang-format
-    state: present
-# vi: ft=yaml.ansible
