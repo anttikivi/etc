@@ -1,7 +1,0 @@
----
-- name: Install shell scripting tools
-  community.general.homebrew:
-    name:
-      - shellcheck
-    state: present
-# vi: ft=yaml.ansible

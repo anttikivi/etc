@@ -1,9 +1,0 @@
----
-- name: Run Darwin tasks
-  ansible.builtin.import_tasks: darwin.yml
-  when: ansible_os_family == 'Darwin' and zig_channel == 'stable'
-
-- name: Run the nightly Darwin tasks
-  ansible.builtin.import_tasks: darwin_nightly.yml
-  when: ansible_os_family == 'Darwin' and zig_channel == 'nightly'
-# vi: ft=yaml.ansible

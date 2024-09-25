@@ -1,6 +1,0 @@
----
-- name: Install pipx
-  community.general.homebrew:
-    name: pipx
-    state: present
-# vi: ft=yaml.ansible

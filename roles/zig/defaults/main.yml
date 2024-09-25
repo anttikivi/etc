@@ -1,9 +1,0 @@
----
-zig_bin: "{{ local_bin_dir }}/zig"
-# stable | nightly
-zig_channel: stable
-zig_download_page: https://ziglang.org/download/index.json
-zig_install_dir: "{{ local_dir }}"
-zig_lib_dir: "{{ local_lib_dir }}/zig"
-zig_version: 0.13.0
-# vi: ft=yaml.ansible

@@ -1,8 +1,0 @@
----
-node_default_version: 20
-node_nvm_dir: "{{ ansible_user_dir }}/.nvm"
-node_versions:
-  - 18
-  - 20
-  - 22
-# vi: ft=yaml.ansible
