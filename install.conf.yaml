@@ -23,3 +23,6 @@
     ~/.zsh:
     ~/.zshenv:
     ~/.zshrc:
+
+- shell:
+    - [./scripts/install_utils.sh, Installing common utilities]
