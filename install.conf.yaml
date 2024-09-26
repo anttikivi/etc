@@ -17,6 +17,8 @@
       glob: true
       path: bin/*
     ~/.tmux.conf:
+    ~/.zfunctions/async: purus/async.zsh
+    ~/.zfunctions/prompt_purus_setup: purus/purus.zsh
     ~/.zprofile:
     ~/.zsh:
     ~/.zshenv:
