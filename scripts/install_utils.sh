@@ -13,7 +13,7 @@ if [ "${os_name}" = "Darwin" ]; then
   echo "Running on Darwin"
 
   brew update
-  brew install fzf jq ripgrep
+  brew install fzf jq ripgrep tmux reattach-to-user-namespace cormacrelf/tap/dark-notify
   brew install --cask nikitabobko/tap/aerospace
 elif [ "${os_name}" = "Linux" ]; then
   echo "Checking the Linux distribution..."
