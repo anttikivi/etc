@@ -4,3 +4,9 @@
       relink: true
 
 - clean: ["~", "~/.config"]
+
+- link:
+    ~/.zprofile:
+    ~/.zsh:
+    ~/.zshenv:
+    ~/.zshrc:
