@@ -1,0 +1,14 @@
+[user]
+	name = Antti Kivi
+	email = antti@anttikivi.fi
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILjvQuHORSaPmrzGaG6LX0nCqOvL4Mc4TkIRCeV4aAbc
+[commit]
+	gpgsign = True
+[tag]
+	gpgsign = True
+[core]
+	excludesfile = /Users/anttikivi/.gitignore_global
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign

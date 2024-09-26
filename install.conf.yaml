@@ -11,6 +11,7 @@
     ~/.aerospace.toml:
     ~/.config/nvim: nvim
     ~/.editorconfig:
+    ~/.gitconfig:
     ~/.gitignore_global:
     ~/.local/bin/:
       glob: true
