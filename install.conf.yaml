@@ -2,6 +2,8 @@
     link:
       create: true
       relink: true
+    create:
+      mode: 0755
 
 - clean: ["~", "~/.config"]
 
