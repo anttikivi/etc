@@ -10,6 +10,7 @@
 - link:
     ~/.aerospace.toml:
     ~/.config/nvim: nvim
+    ~/.tmux.conf:
     ~/.zprofile:
     ~/.zsh:
     ~/.zshenv:
