@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+password() {
+  local len="${1:-"32"}"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    export LC_CTYPE=C
+  fi
+  tr -dc "A-Za-z0-9!@#$%^&*()_+{}|:<>?[]\;,./~" </dev/urandom | head -c "${len}" && echo
+}
+
+usage() {
+  echo "Usage: $0 [-l <integer>] [-h]" 1>&2
+  exit 1
+}
+
+while getopts ":l:h:" opt; do
+  case "${opt}" in
+    l)
+      length="${OPTARG}"
+      ;;
+    h)
+      usage
+      ;;
+    *)
+      usage
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [ -z "$length" ]; then
+  password
+else
+  password "${length}"
+fi

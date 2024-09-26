@@ -11,6 +11,9 @@
     ~/.aerospace.toml:
     ~/.config/nvim: nvim
     ~/.editorconfig:
+    ~/.local/bin/:
+      glob: true
+      path: bin/*
     ~/.tmux.conf:
     ~/.zprofile:
     ~/.zsh:
