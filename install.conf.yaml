@@ -6,6 +6,7 @@
 - clean: ["~", "~/.config"]
 
 - link:
+    ~/.config/nvim: nvim
     ~/.zprofile:
     ~/.zsh:
     ~/.zshenv:
