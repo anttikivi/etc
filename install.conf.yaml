@@ -26,3 +26,4 @@
 
 - shell:
     - [./scripts/install_utils.sh, Installing common utilities]
+    - [./scripts/install_kitty.sh, Installing kitty]
