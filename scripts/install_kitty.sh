@@ -17,3 +17,28 @@ if ! command -v kitty >/dev/null 2>&1; then
 elif [ "$(echo "${wanted_version}" | cut -c 2-)" != "${current_version}" ]; then
   install_kitty "${wanted_version}"
 fi
+
+readonly CONFIG_DIR="${HOME}/.config/kitty"
+readonly CONFIG_FILE="${CONFIG_DIR}/kitty.conf"
+
+if [ ! -d "${CONFIG_DIR}" ]; then
+  mkdir -p "${CONFIG_DIR}"
+fi
+
+if [ -e "${CONFIG_FILE}" ]; then
+  rm "${CONFIG_FILE}"
+fi
+
+cp ./templates/kitty.conf "${CONFIG_FILE}"
+
+os_name="$(uname)"
+
+if [ "${os_name}" = "Darwin" ]; then
+  echo "Creating the Darwin-specific kitty binary links"
+  ln -sf /Applications/kitty.app/Contents/MacOS/kitty /Applications/kitty.app/Contents/MacOS/kitten ~/.local/bin/
+
+  echo "Starting the Darwin-specific kitty daemon"
+  # TODO: Don't use this legacy syntax for `launchd`.
+  launchctl unload -w ~/Library/LaunchAgents/fi.anttikivi.kittycolors.plist
+  launchctl load -w ~/Library/LaunchAgents/fi.anttikivi.kittycolors.plist
+fi
