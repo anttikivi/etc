@@ -11,7 +11,7 @@ export SHARED_ENV_DIR="${XDG_CONFIG_HOME}/env"
 
 for file in "${SHARED_ENV_DIR}/"*; do
   # Secrets should not be exposed to every single shell.
-  test "${file}" = "${SHARED_ENV_DIR}/secrets" && continue
+  test "${file}" = "${SHARED_ENV_DIR}/secrets.sh" && continue
   source "${file}"
 done
 unset file

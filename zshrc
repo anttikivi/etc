@@ -47,7 +47,3 @@ for file in ~/.zsh/*.zsh; do
   source "${file}"
 done
 unset file
-
-if [ "${COMMON_ENABLE_ZSH_SYNTAX_HIGHLIGHTING}" = true ]; then
-  source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-fi

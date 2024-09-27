@@ -11,6 +11,9 @@
     ~/.aerospace.toml:
       if: '[ "$(uname)" = "Darwin" ]'
       path: aerospace.toml
+    ~/.config/env:
+      glob: true
+      path: env/*
     ~/.config/kitty/user.conf: kitty.conf
     ~/.config/nvim: nvim
     ~/.editorconfig:

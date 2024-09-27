@@ -30,8 +30,8 @@ export VISUAL="nvim"
 export CC="clang"
 export CXX="clang++"
 
-if [ -f "${XDG_CONFIG_HOME}/env/secrets" ]; then
-  source "${XDG_CONFIG_HOME}/env/secrets"
+if [ -f "${XDG_CONFIG_HOME}/env/secrets.sh" ]; then
+  source "${XDG_CONFIG_HOME}/env/secrets.sh"
 fi
 
 # vi: ft=zsh
