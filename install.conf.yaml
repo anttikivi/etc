@@ -9,6 +9,7 @@
 
 - link:
     ~/.aerospace.toml:
+    ~/.config/kitty/user.conf: kitty.conf
     ~/.config/nvim: nvim
     ~/.editorconfig:
     ~/.gitconfig:
@@ -25,5 +26,7 @@
     ~/.zshrc:
 
 - shell:
+    - [git submodule sync --recursive, Syncing submodules]
+    - [git submodule update --init --recursive, Updating submodules]
     - [./scripts/install_utils.sh, Installing common utilities]
     - [./scripts/install_kitty.sh, Installing kitty]
