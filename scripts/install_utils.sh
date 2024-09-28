@@ -25,6 +25,16 @@ if [ "${os_name}" = "Darwin" ]; then
   echo "Installing tools"
 
   pipx install ansible-lint
+
+  if ! command -v aws >/dev/null 2>&1; then
+    tmp_dir="$(mktemp -d "aws_cli")"
+    pkg_file="${tmp_dir}/AWSCLIV2.pkg"
+    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
+    installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ./templates/aws_cli_choices.xml
+    ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
+    ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
+    rm -r "${tmp_dir}"
+  fi
 elif [ "${os_name}" = "Linux" ]; then
   echo "Checking the Linux distribution..."
   distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
