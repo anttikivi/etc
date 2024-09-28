@@ -3,7 +3,7 @@
 set -e
 
 not_supported() {
-  echo "This operating system is not supported: $*" >&2
+  echo "This system is not supported: $*" >&2
   exit 1
 }
 
@@ -12,9 +12,19 @@ os_name="$(uname)"
 if [ "${os_name}" = "Darwin" ]; then
   echo "Running on Darwin"
 
+  echo "Installing general utilities"
+
   brew update
-  brew install fzf jq ripgrep tmux reattach-to-user-namespace cormacrelf/tap/dark-notify
+  brew install fzf jq ripgrep tmux reattach-to-user-namespace
+
+  echo "Installing user interface utilities"
+
+  brew install cormacrelf/tap/dark-notify
   brew install --cask nikitabobko/tap/aerospace
+
+  echo "Installing tools"
+
+  pipx install ansible-lint
 elif [ "${os_name}" = "Linux" ]; then
   echo "Checking the Linux distribution..."
   distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
