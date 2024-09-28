@@ -24,7 +24,7 @@ if [ "${os_name}" = "Darwin" ]; then
 
   echo "Installing tools"
 
-  pipx install ansible-lint
+  pipx install ansible-lint clang-format
 
   if ! command -v aws >/dev/null 2>&1; then
     tmp_dir="$(mktemp -d "aws_cli")"
