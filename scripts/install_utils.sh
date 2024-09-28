@@ -34,6 +34,14 @@ if [ "${os_name}" = "Darwin" ]; then
     ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
     ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
     rm -r "${tmp_dir}"
+
+    aws_config="${HOME}/.aws/config"
+
+    if [ -f "${aws_config}" ]; then
+      rm "${aws_config}"
+    fi
+
+    ansible-vault view ./templates/aws_config >"${aws_config}"
   fi
 elif [ "${os_name}" = "Linux" ]; then
   echo "Checking the Linux distribution..."
