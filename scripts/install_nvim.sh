@@ -45,7 +45,7 @@ install_nvim() {
 
   download_url="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" "https://api.github.com/repos/neovim/neovim/releases/tags/${wanted_version}" | jq -r ".assets.[] | select(.name | endswith('${archive_filename}')) | .browser_download_url")"
   tmp_dir="$(mktemp -d "nvim")"
-  curl -lsS "${download_url}" | tar -xzf - -C "${tmp_dir}"
+  curl -LsS "${download_url}" | tar -xzf - -C "${tmp_dir}"
   rsync -a "${tmp_dir}/${archive_name}/" "${HOME}/.local/"
   rm -r "${tmp_dir}"
 }
