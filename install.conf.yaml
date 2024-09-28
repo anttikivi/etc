@@ -36,6 +36,10 @@
       if: '[ "$(uname)" = "Darwin" ]'
       path: fi.anttikivi.kittycolors.plist
 
+- create:
+    - ~/development
+    - ~/development/plugins
+
 - shell:
     - [git submodule sync --recursive, Syncing submodules]
     - [git submodule update --init --recursive, Updating submodules]

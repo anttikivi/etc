@@ -55,3 +55,12 @@ if ! command -v nvim >/dev/null 2>&1; then
 elif [ "${wanted_version}" != "${current_version}" ]; then
   install_nvim
 fi
+
+echo "Installing brunch.nvim"
+
+brunch_dir="${HOME}/development/plugins/brunch.nvim"
+brunch_repo="git@github.com:anttikivi/brunch.nvim.git"
+
+if [ ! -d "${brunch_dir}" ]; then
+  git clone "${brunch_repo}" "${brunch_dir}"
+fi
