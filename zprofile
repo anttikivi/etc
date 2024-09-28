@@ -18,8 +18,8 @@ source "${HOME}/.cargo/env"
 export NVM_DIR="${HOME}/.nvm"
 [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
 
-if [ -f "${GCLOUD_DIR}/path.zsh.inc" ]; then
-  source "${GCLOUD_DIR}/path.zsh.inc"
+if [ -f "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc" ]; then
+  source "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc"
 fi
 
 export PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
