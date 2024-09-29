@@ -6,12 +6,8 @@ if [ -d "/opt/homebrew" ]; then
 fi
 
 path=("${HOME}/.local/bin" "${path[@]}")
-path=("/usr/local/go/bin" "${path[@]}")
 path=("$(brew --prefix python)/libexec/bin" "${path[@]}")
-
-if [ ! -z "${GOBIN+x}" ]; then
-  path=("${GOBIN}" "${path[@]}")
-fi
+path=("${GOBIN}" "${path[@]}")
 
 source "${HOME}/.cargo/env"
 
