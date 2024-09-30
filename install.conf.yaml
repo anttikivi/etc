@@ -45,3 +45,4 @@
     - [./scripts/install_kitty.sh, Installing kitty]
     - [./scripts/install_nvim.sh, Installing Neovim]
     - [./scripts/install_go.sh, Installing Go]
+    - [./scripts/install_rust.sh, Installing Rust]
