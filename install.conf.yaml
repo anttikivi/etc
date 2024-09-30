@@ -41,8 +41,3 @@
 - shell:
     - [git submodule sync --recursive, Syncing submodules]
     - [git submodule update --init --recursive, Updating submodules]
-    - [./scripts/install_utils.sh, Installing common utilities]
-    - [./scripts/install_kitty.sh, Installing kitty]
-    - [./scripts/install_nvim.sh, Installing Neovim]
-    - [./scripts/install_go.sh, Installing Go]
-    - [./scripts/install_rust.sh, Installing Rust]
