@@ -20,9 +20,9 @@ alias ll="ls -lAhF"
 alias lls="ls -lAhFtr"
 alias lc="ls -CF"
 
-alias cp="cp -i"
-alias mv="mv -i"
-alias rm="rm -i"
+# alias cp="cp -i"
+# alias mv="mv -i"
+# alias rm="rm -i"
 alias md="mkdir -p"
 alias rd="rmdir"
 
