@@ -23,6 +23,9 @@
     ~/.local/bin/kitty_change_colors.sh:
       if: '[ "$(uname)" = "Darwin" ]'
       path: kitty_change_colors.sh
+    ~/.local/bin/kitty_watch_colors.sh:
+      if: '[ "$(uname)" = "Darwin" ]'
+      path: kitty_watch_colors.sh
     ~/.tmux.conf:
     ~/.zfunctions/async: purus/async.zsh
     ~/.zfunctions/prompt_purus_setup: purus/purus.zsh
@@ -30,9 +33,6 @@
     ~/.zsh:
     ~/.zshenv:
     ~/.zshrc:
-    ~/Library/LaunchAgents/fi.anttikivi.kittycolors.plist:
-      if: '[ "$(uname)" = "Darwin" ]'
-      path: fi.anttikivi.kittycolors.plist
 
 - create:
     ~/.ssh:

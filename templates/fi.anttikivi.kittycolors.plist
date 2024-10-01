@@ -6,9 +6,7 @@
     <string>fi.anttikivi.kittycolors</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/opt/homebrew/bin/dark-notify</string>
-      <string>-c</string>
-      <string>~/.local/bin/kitty_change_colors.sh</string>
+      <string>{HOME}/.local/bin/kitty_watch_colors.sh</string>
     </array>
     <key>RunAtLoad</key>
     <true />
@@ -18,8 +16,8 @@
       <false/>
     </dict>
     <key>StandardErrorPath</key>
-    <string>~/.local/var/log/kitty_colors.err</string>
+    <string>{HOME}/.local/var/log/kitty_colors.err</string>
     <key>StandardOutPath</key>
-    <string>~/.local/var/log/kitty_colors.log</string>
+    <string>{HOME}/.local/var/log/kitty_colors.log</string>
   </dict>
 </plist>
