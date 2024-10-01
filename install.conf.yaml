@@ -35,6 +35,8 @@
     ~/.zshrc:
 
 - create:
+    ~/.aws:
+      mode: 0700
     ~/.ssh:
       mode: 0700
     ~/development:
@@ -43,15 +45,11 @@
 - shell:
     - [git submodule sync --recursive, Syncing submodules]
     - [git submodule update --init --recursive, Updating submodules]
+    - [./scripts/create_aws_config.sh, Updating the AWS configuration]
     - [./scripts/create_ssh_config.sh, Updating the SSH configuration]
 
-- clean: [~/.ssh]
+- clean: [~/.aws, ~/.ssh]
 
 - link:
-    ~/.ssh/config:
-
-- shell:
-    - [
-        'if [ "$(uname)" = "Darwin" ] && chmod -h 0600 ~/.ssh/config',
-        Ensuring correct SSH configuration permissions on macOS,
-      ]
+    ~/.aws/config: ./aws/config
+    ~/.ssh/config: ./ssh/config

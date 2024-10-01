@@ -7,8 +7,8 @@ if [ ! -d ./ssh ]; then
 fi
 chmod 0700 ./ssh
 if [ -f ./ssh/config ]; then
-  rm ./ssh/coonfig
+  rm ./ssh/config
 fi
 touch ./ssh/config
-chmod 0600 ./ssh_config
-ansible-vault view ./templates/ssh_config >./ssh/config
+chmod 0600 ./ssh/config
+ansible-vault view ./ssh_config >./ssh/config
