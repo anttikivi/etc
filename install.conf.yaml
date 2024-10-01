@@ -20,9 +20,9 @@
     ~/.local/bin/:
       glob: true
       path: bin/*
-    ~/.local/bin/kitty_watch_colors.sh:
+    ~/.local/bin/kitty_change_colors.sh:
       if: '[ "$(uname)" = "Darwin" ]'
-      path: kitty_watch_colors.sh
+      path: kitty_change_colors.sh
     ~/.tmux.conf:
     ~/.zfunctions/async: purus/async.zsh
     ~/.zfunctions/prompt_purus_setup: purus/purus.zsh
