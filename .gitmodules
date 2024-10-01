@@ -1,0 +1,7 @@
+[submodule "dotbot"]
+	path = dotbot
+	url = https://github.com/anishathalye/dotbot
+	ignore = dirty
+[submodule "purus"]
+	path = purus
+	url = git@github.com:anttikivi/purus.git

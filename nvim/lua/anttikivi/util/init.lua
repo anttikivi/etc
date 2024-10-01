@@ -1,5 +1,3 @@
-local env_colors = require "anttikivi.util.env.colors"
-
 local M = {}
 
 ---@param name string
@@ -26,14 +24,15 @@ function M.set_global_variables()
   ---match with the terminal's color scheme.
   ---
   ---@type "catppuccin" | "rose-pine" | "brunch"
-  vim.g.color_scheme = vim.g.true_colors and env_colors.color_scheme or "brunch"
+  vim.g.color_scheme = vim.g.true_colors and os.getenv "COLOR_SCHEME"
+    or "brunch"
 
   ---The name of the dark variant for the current color scheme. Set via
   ---environment variable to match with the terminal's color scheme.
   ---
   ---@type string
   vim.g.color_scheme_dark_variant = vim.g.true_colors
-      and env_colors.dark_variant
+      and os.getenv "COLOR_SCHEME_DARK_VARIANT"
     or "saturday"
 
   ---The name of the light variant for the current color scheme. Set via
@@ -41,7 +40,7 @@ function M.set_global_variables()
   ---
   ---@type string
   vim.g.color_scheme_light_variant = vim.g.true_colors
-      and env_colors.light_variant
+      and os.getenv "COLOR_SCHEME_LIGHT_VARIANT"
     or "sunday"
 
   ---Whether icons are enabled.

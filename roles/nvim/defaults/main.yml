@@ -1,5 +1,0 @@
----
-nvim_version: v0.10.0
-nvim_config_dir: "{{ dotfiles_dir }}/nvim"
-nvim_env_dir: "{{ nvim_config_dir }}/lua/anttikivi/util/env"
-# vi: ft=yaml.ansible

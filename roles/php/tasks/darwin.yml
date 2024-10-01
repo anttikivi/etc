@@ -1,7 +1,0 @@
----
-- name: Install PHP and Composer
-  community.general.homebrew:
-    name:
-      - php
-      - composer
-# vi: ft=yaml.ansible

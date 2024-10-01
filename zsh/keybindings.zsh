@@ -1,4 +1,4 @@
-bindkey -v
+# bindkey -v
 # Close enough to ^C.
 bindkey "^V" vi-cmd-mode
 

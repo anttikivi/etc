@@ -1,7 +1,0 @@
----
-# TODO: Add support for Debian installation.
-
-- name: Run the Google Cloud installation on Darwin
-  ansible.builtin.import_tasks: darwin.yml
-  when: ansible_os_family == 'Darwin'
-# vi: ft=yaml.ansible

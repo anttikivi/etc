@@ -1,7 +1,0 @@
----
-- name: Install Ansible Lint
-  community.general.pipx:
-    executable: "{{ pipx }}"
-    name: ansible-lint
-    state: install
-# vi: ft=yaml.ansible

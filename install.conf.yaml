@@ -1,0 +1,57 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+    create:
+      mode: 0755
+
+- clean: ["~", "~/.config"]
+
+- link:
+    ~/.aerospace.toml:
+      if: '[ "$(uname)" = "Darwin" ]'
+      path: aerospace.toml
+    ~/.config/env/colors.sh: colors.sh
+    ~/.config/kitty/user.conf: kitty.conf
+    ~/.config/nvim: nvim
+    ~/.editorconfig:
+    ~/.gitconfig:
+    ~/.gitignore_global:
+    ~/.local/bin/:
+      glob: true
+      path: bin/*
+    ~/.local/bin/kitty_change_colors.sh:
+      if: '[ "$(uname)" = "Darwin" ]'
+      path: kitty_change_colors.sh
+    ~/.tmux.conf:
+    ~/.zfunctions/async: purus/async.zsh
+    ~/.zfunctions/prompt_purus_setup: purus/purus.zsh
+    ~/.zprofile:
+    ~/.zsh:
+    ~/.zshenv:
+    ~/.zshrc:
+    ~/Library/LaunchAgents/fi.anttikivi.kittycolors.plist:
+      if: '[ "$(uname)" = "Darwin" ]'
+      path: fi.anttikivi.kittycolors.plist
+
+- create:
+    ~/.ssh:
+      mode: 0700
+    ~/development:
+    ~/development/plugins:
+
+- shell:
+    - [git submodule sync --recursive, Syncing submodules]
+    - [git submodule update --init --recursive, Updating submodules]
+    - [./scripts/create_ssh_config.sh, Updating the SSH configuration]
+
+- clean: [~/.ssh]
+
+- link:
+    ~/.ssh/config:
+
+- shell:
+    - [
+        'if [ "$(uname)" = "Darwin" ] && chmod -h 0600 ~/.ssh/config',
+        Ensuring correct SSH configuration permissions on macOS,
+      ]
