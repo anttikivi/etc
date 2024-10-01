@@ -2,6 +2,11 @@
 
 set -e
 
+readonly ESC="\033"
+readonly ESC_RESET="${ESC}[0m"
+readonly ESC_GREEN="${ESC}[32m"
+readonly ESC_BLUE="${ESC}[34m"
+
 CONFIG="install.conf.yaml"
 DOTBOT_DIR="dotbot"
 
@@ -14,4 +19,10 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
+printf "\n"
+
+echo -e "${ESC_BLUE}Starting the kitty tasks${ESC_RESET}"
+
 ./scripts/install_kitty.sh
+
+echo -e "${ESC_GREEN}==> Kitty tasks run${ESC_RESET}"
