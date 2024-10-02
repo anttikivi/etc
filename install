@@ -7,6 +7,10 @@ readonly ESC_RESET="${ESC}[0m"
 readonly ESC_GREEN="${ESC}[32m"
 readonly ESC_BLUE="${ESC}[34m"
 
+if [ "${DOTFILES_UPDATE}" = 1 ]; then
+  echo "Updates are set to true"
+fi
+
 CONFIG="install.conf.yaml"
 DOTBOT_DIR="dotbot"
 
