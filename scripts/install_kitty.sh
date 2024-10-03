@@ -2,10 +2,7 @@
 
 set -e
 
-readonly ESC="\033"
-readonly ESC_RESET="${ESC}[0m"
-readonly ESC_YELLOW="${ESC}[33m"
-
+. ./scripts/colors.sh
 . ./scripts/versions.sh
 
 required_minor_version="$(echo "${KITTY_VERSION}" | head -c "$(echo "${KITTY_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
@@ -23,7 +20,7 @@ elif [ "$(echo "${wanted_version}" | cut -c 2-)" != "${current_version}" ]; then
   if [ "${DOTFILES_UPDATE}" = 1 ]; then
     install_kitty
   else
-    printf "%bkitty update available! Current version: %s, available version: %s%b" "${ESC_YELLOW}" "${current_version}" "${wanted_version}" "${ESC_RESET}"
+    printf "%bkitty update available! Current version: %s, available version: %s%b" "${DOTFILES_ESC_YELLOW}" "${current_version}" "${wanted_version}" "${DOTFILES_ESC_RESET}"
   fi
 fi
 

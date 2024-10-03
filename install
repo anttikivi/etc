@@ -2,10 +2,7 @@
 
 set -e
 
-readonly ESC="\033"
-readonly ESC_RESET="${ESC}[0m"
-readonly ESC_GREEN="${ESC}[32m"
-readonly ESC_BLUE="${ESC}[34m"
+source ./scripts/colors.sh
 
 if [ "${DOTFILES_UPDATE}" = 1 ]; then
   echo "Updates are set to true"
@@ -25,8 +22,8 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 
 printf "\n"
 
-echo -e "${ESC_BLUE}Starting the kitty tasks${ESC_RESET}"
+echo -e "${DOTFILES_ESC_BLUE}Starting the kitty tasks${DOTFILES_ESC_RESET}"
 
-./scripts/install_kitty.sh
+"${BASEDIR}/scripts/install_kitty.sh"
 
-echo -e "${ESC_GREEN}==> Kitty tasks run${ESC_RESET}"
+echo -e "${DOTFILES_ESC_GREEN}==> Kitty tasks run${DOTFILES_ESC_RESET}"
