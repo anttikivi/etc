@@ -27,6 +27,8 @@ if [ "${os_name}" = "Darwin" ]; then
   brew install clang-format
 
   if ! command -v aws >/dev/null 2>&1; then
+    # TODO: Don't use the temporary directory as it doesn't seem to be working
+    # as I though.
     tmp_dir="$(mktemp -d "aws_cli")"
     pkg_file="${tmp_dir}/AWSCLIV2.pkg"
     curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
