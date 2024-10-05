@@ -2,7 +2,7 @@
 
 set -e
 
-. ~/.config/env/colors.sh
+. ~/.config/env/color_scheme.sh
 
 color_scheme="${KITTY_LIGHT_COLOR_SCHEME}"
 
