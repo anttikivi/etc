@@ -33,27 +33,27 @@ archive_filename="${archive_name}.tar.gz"
 
 install_nvim() {
   echo "Removing the old Neovim installation"
-  if [ "${os_name}" = "Darwin" ]; then
-    rm ~/.local/bin/nvim
-    rm -r ~/.local/lib/nvim
-    rm ~/.local/share/icons/hicolor/128x128/apps/nvim.png
-    rm ~/.local/share/man/man1/nvim.1
-    rm -r ~/.local/share/nvim
-  else
-    not_supported "${os_name}"
-  fi
-
-  download_url="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" "https://api.github.com/repos/neovim/neovim/releases/tags/${wanted_version}" | jq -r ".assets.[] | select(.name | endswith('${archive_filename}')) | .browser_download_url")"
-  tmp_dir="$(mktemp -d "nvim")"
-  curl -LsS "${download_url}" | tar -xzf - -C "${tmp_dir}"
-  rsync -a "${tmp_dir}/${archive_name}/" "${HOME}/.local/"
-  rm -r "${tmp_dir}"
+  nvim_dir="${HOME}/.local/opt/nvim"
+  rm -rf "${nvim_dir}"
+  echo "Installing Neovim ${wanted_version}"
+  download_url="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" "https://api.github.com/repos/neovim/neovim/releases/tags/${wanted_version}" | jq --arg "archive_filename" "${archive_filename}" -r '.assets.[] | select(.name | endswith($archive_filename)) | .browser_download_url')"
+  curl -LsS "${download_url}" | tar -xzf - -C "${HOME}/.local/opt"
+  mkdir "${nvim_dir}"
+  rsync -a "${HOME}/.local/opt/${archive_name}/" "${HOME}/.local/opt/nvim/"
+  rm -rf "${HOME}/.local/opt/${archive_name}"
 }
 
 if ! command -v nvim >/dev/null 2>&1; then
   install_nvim
 elif [ "${wanted_version}" != "${current_version}" ]; then
   install_nvim
+  if [ "${DOTFILES_UPDATE}" = 1 ]; then
+    install_nvim
+  else
+    printf "%bNeovim update available! Current version: %s, available version: %s%b" "${DOTFILES_ESC_YELLOW}" "${current_version}" "${wanted_version}" "${DOTFILES_ESC_RESET}"
+  fi
+else
+  echo "Not installing Neovim"
 fi
 
 echo "Installing brunch.nvim"
