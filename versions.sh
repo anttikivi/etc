@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export GO_VERSION="1.22.7"
 export KITTY_VERSION="0.36.3"

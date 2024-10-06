@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 readonly ESC="\033"
 export DOTFILES_ESC_RESET="${ESC}[0m"
