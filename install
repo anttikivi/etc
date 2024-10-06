@@ -2,7 +2,7 @@
 
 set -e
 
-source ./scripts/colors.sh
+source ./utils/colors.sh
 
 if [ "${DOTFILES_UPDATE}" = 1 ]; then
   echo -e "${DOTFILES_ESC_YELLOW}Installing updates if they are available${DOTFILES_ESC_RESET}"
@@ -23,10 +23,10 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 
 printf "\n"
 echo -e "${DOTFILES_ESC_BLUE}Starting the kitty tasks${DOTFILES_ESC_RESET}"
-"${BASEDIR}/scripts/run_kitty_tasks.sh"
+"${BASEDIR}/scripts/kitty.sh"
 echo -e "${DOTFILES_ESC_GREEN}==> kitty tasks run${DOTFILES_ESC_RESET}"
 
 printf "\n"
 echo -e "${DOTFILES_ESC_BLUE}Starting the Neovim tasks${DOTFILES_ESC_RESET}"
-"${BASEDIR}/scripts/run_nvim_tasks.sh"
+"${BASEDIR}/scripts/nvim.sh"
 echo -e "${DOTFILES_ESC_GREEN}==> Neovim tasks run${DOTFILES_ESC_RESET}"
