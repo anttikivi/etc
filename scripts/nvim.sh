@@ -7,7 +7,7 @@ not_supported() {
   exit 1
 }
 
-. ./scripts/versions.sh
+. ./versions.sh
 
 required_minor_version="$(echo "${NVIM_VERSION}" | head -c "$(echo "${NVIM_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
 wanted_version="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" 'https://api.github.com/repos/neovim/neovim/releases?per_page=30' | jq -r '.[] | .tag_name' | grep "${required_minor_version}" | sort -V | tail -1)"
