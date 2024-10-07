@@ -41,6 +41,7 @@
       mode: 0700
     ~/development:
     ~/development/plugins:
+    ~/tmp:
 
 - shell:
     - [git submodule sync --recursive, Syncing submodules]

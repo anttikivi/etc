@@ -27,21 +27,19 @@ if [ "${os_name}" = "Darwin" ]; then
   brew install clang-format
 
   if ! command -v aws >/dev/null 2>&1; then
-    # TODO: Don't use the temporary directory as it doesn't seem to be working
-    # as I though.
-    tmp_dir="$(mktemp -d "aws_cli")"
+    tmp_dir="${HOME}/tmp/awscli"
     pkg_file="${tmp_dir}/AWSCLIV2.pkg"
     curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
     installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ./templates/aws_cli_choices.xml
     ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
     ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
-    rm -r "${tmp_dir}"
+    rm -rf "${tmp_dir}"
   fi
 
   if ! command -v gcloud >/dev/null 2>&1; then
     gcloud_dir="${HOME}/.local/opt/google-cloud-sdk"
     if [ -d "${gcloud_dir}" ]; then
-      rm -r "${gcloud_dir}"
+      rm -rf "${gcloud_dir}"
     fi
     curl -LsS "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-darwin-arm.tar.gz" | tar -xzf - -C "$(dirname "${gcloud_dir}")"
   fi
@@ -65,12 +63,3 @@ echo "Running the platform-independent utility installations"
 
 echo "Running the platform-independent tool installations"
 pipx install ansible-lint
-
-echo "Updating the AWS configuration"
-aws_config="${HOME}/.aws/config"
-
-if [ -f "${aws_config}" ]; then
-  rm "${aws_config}"
-fi
-
-ansible-vault view ./templates/aws_config >"${aws_config}"

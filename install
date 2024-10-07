@@ -36,11 +36,16 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
 printf "\n"
+echo -e "${ESC_BLUE}Starting the installation of the general utilities${ESC_RESET}"
+"${BASEDIR}/installs/utils.sh"
+echo -e "${ESC_GREEN}==> General utility tasks run${ESC_RESET}"
+
+printf "\n"
 echo -e "${ESC_BLUE}Starting the kitty tasks${ESC_RESET}"
-"${BASEDIR}/scripts/kitty.sh"
+"${BASEDIR}/installs/kitty.sh"
 echo -e "${ESC_GREEN}==> kitty tasks run${ESC_RESET}"
 
 printf "\n"
 echo -e "${ESC_BLUE}Starting the Neovim tasks${ESC_RESET}"
-"${BASEDIR}/scripts/nvim.sh"
+"${BASEDIR}/installs/nvim.sh"
 echo -e "${ESC_GREEN}==> Neovim tasks run${ESC_RESET}"
