@@ -4,13 +4,13 @@ set -e
 
 source ./utils/colors.sh
 
-DOTFILES_ONLINE=0
+HAS_CONNECTION=false
 
 if ping -q -c1 8.8.8.8 &>/dev/null; then
-  DOTFILES_ONLINE=1
+  HAS_CONNECTION=true
 fi
 
-export DOTFILES_ONLINE
+export HAS_CONNECTION
 
 if [ "${DOTFILES_UPDATE}" = 1 ]; then
   echo -e "${DOTFILES_ESC_YELLOW}Installing updates if they are available${DOTFILES_ESC_RESET}"
