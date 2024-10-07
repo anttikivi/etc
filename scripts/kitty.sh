@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
-source ./utils/colors.sh
-source ./versions.sh
+. ./utils/colors.sh
+. ./versions.sh
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${KITTY_VERSION}" | head -c "$(echo "${KITTY_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
@@ -28,18 +28,14 @@ fi
 
 readonly config_dir="${HOME}/.config/kitty"
 readonly config_file="${config_dir}/kitty.conf"
-readonly config_expr="include user.conf"
+readonly config_line="include user.conf"
 
 if [ ! -d "${config_dir}" ]; then
   mkdir -p "${config_dir}"
 fi
 
-if [ ! -e "${config_file}" ]; then
-  touch "${config_file}"
-fi
-
-if ! grep -xF "${config_expr}" "${config_file}" >/dev/null 2>&1; then
-  echo "${config_expr}" >>"${config_file}"
+if ! grep -xF "${config_line}" "${config_file}" >/dev/null 2>&1; then
+  echo "${config_line}" >>"${config_file}"
 fi
 
 os_name="$(uname)"
