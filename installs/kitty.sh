@@ -18,7 +18,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
   if ! command -v kitty >/dev/null 2>&1; then
     install_kitty
   elif [ "$(echo "${wanted_ver}" | cut -c 2-)" != "${current_ver}" ]; then
-    if [ "${DOTFILES_UPDATE}" = 1 ]; then
+    if [ "${DO_UPDATES}" = "true" ]; then
       install_kitty
     else
       printf "%bkitty update available! Current version: %s, available version: %s%b" "${DOTFILES_ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${DOTFILES_ESC_RESET}"

@@ -12,8 +12,14 @@ fi
 
 export HAS_CONNECTION
 
-if [ "${DOTFILES_UPDATE}" = 1 ]; then
-  echo -e "${DOTFILES_ESC_YELLOW}Installing updates if they are available${DOTFILES_ESC_RESET}"
+if [ "${HAS_CONNECTION}" = "true" ]; then
+  echo -e "${ESC_BLUE}The script can use an Internet connection${ESC_RESET}"
+else
+  echo -e "${ESC_YELLOW}Running the script without an Internet connection${ESC_RESET}"
+fi
+
+if [ "${DO_UPDATES}" = "true" ] && [ "${HAS_CONNECTION}" = "true" ]; then
+  echo -e "${ESC_YELLOW}Installing updates if they are available${ESC_RESET}"
   printf "\n"
 fi
 
@@ -30,11 +36,11 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
 printf "\n"
-echo -e "${DOTFILES_ESC_BLUE}Starting the kitty tasks${DOTFILES_ESC_RESET}"
+echo -e "${ESC_BLUE}Starting the kitty tasks${ESC_RESET}"
 "${BASEDIR}/scripts/kitty.sh"
-echo -e "${DOTFILES_ESC_GREEN}==> kitty tasks run${DOTFILES_ESC_RESET}"
+echo -e "${ESC_GREEN}==> kitty tasks run${ESC_RESET}"
 
 printf "\n"
-echo -e "${DOTFILES_ESC_BLUE}Starting the Neovim tasks${DOTFILES_ESC_RESET}"
+echo -e "${ESC_BLUE}Starting the Neovim tasks${ESC_RESET}"
 "${BASEDIR}/scripts/nvim.sh"
-echo -e "${DOTFILES_ESC_GREEN}==> Neovim tasks run${DOTFILES_ESC_RESET}"
+echo -e "${ESC_GREEN}==> Neovim tasks run${ESC_RESET}"

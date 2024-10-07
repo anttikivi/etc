@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 readonly ESC="\033"
-export DOTFILES_ESC_RESET="${ESC}[0m"
-export DOTFILES_ESC_GREEN="${ESC}[32m"
-export DOTFILES_ESC_YELLOW="${ESC}[33m"
-export DOTFILES_ESC_BLUE="${ESC}[34m"
+export ESC_RESET="${ESC}[0m"
+export ESC_GREEN="${ESC}[32m"
+export ESC_YELLOW="${ESC}[33m"
+export ESC_BLUE="${ESC}[34m"

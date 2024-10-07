@@ -47,7 +47,7 @@ if ! command -v nvim >/dev/null 2>&1; then
   install_nvim
 elif [ "${wanted_version}" != "${current_version}" ]; then
   install_nvim
-  if [ "${DOTFILES_UPDATE}" = 1 ]; then
+  if [ "${DO_UPDATES}" = "true" ]; then
     install_nvim
   else
     printf "%bNeovim update available! Current version: %s, available version: %s%b" "${DOTFILES_ESC_YELLOW}" "${current_version}" "${wanted_version}" "${DOTFILES_ESC_RESET}"
