@@ -23,6 +23,76 @@ if [ "${DO_UPDATES}" = "true" ] && [ "${HAS_CONNECTION}" = "true" ]; then
   printf "\n"
 fi
 
+os_name="$(uname)"
+if [ "${os_name}" = "Darwin" ] && ! command -v brew >/dev/null 2>&1; then
+  if [ "${HAS_CONNECTION}" = "true" ]; then
+    echo "${ESC_BLUE}Installing Homebrew${ESC_RESET}"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  else
+    echo "Homebrew is not installed and there is not Internet connection, exiting..." >&2
+    exit 1
+  fi
+fi
+
+if [ "${os_name}" = "Darwin" ] && [ "${HAS_CONNECTION}" = "true" ] && [ "${DO_UPDATES}" = "true" ]; then
+  brew update
+  brew upgrade
+fi
+
+not_supported() {
+  echo "This system is not supported: $*" >&2
+  exit 1
+}
+
+if ! command -v python >/dev/null 2>&1; then
+  if [ "${HAS_CONNECTION}" = "true" ]; then
+    echo "${ESC_BLUE}Installing Python${ESC_RESET}"
+    if [ "${os_name}" = "Darwin" ]; then
+      brew install python
+      PATH="$(brew --prefix python)/libexec/bin:${PATH}"
+      export PATH
+      PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
+      export PYTHONPATH
+    elif [ "${os_name}" = "Linux" ]; then
+      distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
+      if [ "${distro}" = "debian" ]; then
+        not_supported "${os_name}" "${distro}"
+      elif [ "${distro}" = "ubuntu" ]; then
+        not_supported "${os_name}" "${distro}"
+      else
+        not_supported "${os_name}" "${distro}"
+      fi
+    fi
+  else
+    echo "Python is not installed and there is not Internet connection, exiting..." >&2
+    exit 1
+  fi
+fi
+
+if ! command -v pipx >/dev/null 2>&1; then
+  if [ "${HAS_CONNECTION}" = "true" ]; then
+    echo "${ESC_BLUE}Installing pipx${ESC_RESET}"
+    if [ "${os_name}" = "Darwin" ]; then
+      brew install pipx
+      PATH="${HOME}/.local/bin:${PATH}"
+      export PATH
+    elif [ "${os_name}" = "Linux" ]; then
+      distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
+      if [ "${distro}" = "debian" ]; then
+        not_supported "${os_name}" "${distro}"
+      elif [ "${distro}" = "ubuntu" ]; then
+        not_supported "${os_name}" "${distro}"
+      else
+        not_supported "${os_name}" "${distro}"
+      fi
+    fi
+  else
+    echo "pipx is not installed and there is not Internet connection, exiting..." >&2
+    exit 1
+  fi
+fi
+
 CONFIG="install.conf.yaml"
 DOTBOT_DIR="dotbot"
 
