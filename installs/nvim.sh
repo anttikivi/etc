@@ -38,10 +38,10 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
     rm -rf "${nvim_dir}"
     echo "Installing Neovim ${wanted_ver}"
     download_url="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" "https://api.github.com/repos/neovim/neovim/releases/tags/${wanted_ver}" | jq --arg "archive_filename" "${archive_filename}" -r '.assets.[] | select(.name | endswith($archive_filename)) | .browser_download_url')"
-    curl -LsS "${download_url}" | tar -xzf - -C "${HOME}/.local/opt"
+    curl -LsS "${download_url}" | tar -xzf - -C "${HOME}/tmp"
     mkdir "${nvim_dir}"
-    rsync -a "${HOME}/.local/opt/${archive_name}/" "${HOME}/.local/opt/nvim/"
-    rm -rf "${HOME}/.local/opt/${archive_name}"
+    rsync -a "${HOME}/tmp/${archive_name}/" "${nvim_dir}/"
+    rm -rf "${HOME}/tmp/${archive_name}"
   }
 
   if ! command -v nvim >/dev/null 2>&1; then
