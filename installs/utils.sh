@@ -25,14 +25,6 @@ if [ "${os_name}" = "Darwin" ]; then
   echo "Installing tools"
 
   brew install clang-format
-
-  if ! command -v gcloud >/dev/null 2>&1; then
-    gcloud_dir="${HOME}/.local/opt/google-cloud-sdk"
-    if [ -d "${gcloud_dir}" ]; then
-      rm -rf "${gcloud_dir}"
-    fi
-    curl -LsS "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-darwin-arm.tar.gz" | tar -xzf - -C "$(dirname "${gcloud_dir}")"
-  fi
 elif [ "${os_name}" = "Linux" ]; then
   echo "Checking the Linux distribution..."
   distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
