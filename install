@@ -106,8 +106,10 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
 for script in "${BASEDIR}"/installs/*.sh; do
+  cd "$(dirname "${script}")"
   printf "\n"
   echo -e "${ESC_BLUE}Running the '$(basename "${script}" | sed 's/\.sh//')' tasks${ESC_RESET}"
   "${script}"
   echo -e "${ESC_GREEN}==> $(basename "${script}" | sed 's/\.sh//') tasks run${ESC_RESET}"
+  cd -
 done

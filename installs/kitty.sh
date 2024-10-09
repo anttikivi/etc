@@ -2,8 +2,8 @@
 
 set -e
 
-. ./utils/colors.sh
-. ./versions.sh
+. ../utils/colors.sh
+. ../versions.sh
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${KITTY_VERSION}" | head -c "$(echo "${KITTY_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
@@ -21,7 +21,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
     if [ "${DO_UPDATES}" = "true" ]; then
       install_kitty
     else
-      printf "%bkitty update available! Current version: %s, available version: %s%b" "${DOTFILES_ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${DOTFILES_ESC_RESET}"
+      printf "%bkitty update available! Current version: %s, available version: %s%b" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
     fi
   fi
 fi
@@ -41,10 +41,10 @@ fi
 os_name="$(uname)"
 
 if [ "${os_name}" = "Darwin" ]; then
-  echo "Creating the Darwin-specific kitty binary links"
+  echo "Creating links to the kitty binaries"
   ln -sf /Applications/kitty.app/Contents/MacOS/kitty /Applications/kitty.app/Contents/MacOS/kitten ~/.local/bin/
 
-  echo "Creating and starting the Darwin-specific kitty daemon"
+  echo "Starting the daemon for kitty's colors"
   launch_agent="fi.anttikivi.kittycolors.plist"
 
   if [ -f "${HOME}/Library/LaunchAgents/${launch_agent}" ]; then
@@ -52,7 +52,7 @@ if [ "${os_name}" = "Darwin" ]; then
     launchctl unload -w ~/Library/LaunchAgents/"${launch_agent}"
     rm ~/Library/LaunchAgents/"${launch_agent}"
   fi
-  cp ./templates/"${launch_agent}" ~/Library/LaunchAgents/"${launch_agent}"
+  cp ../templates/"${launch_agent}" ~/Library/LaunchAgents/"${launch_agent}"
   sed -i '' "s:{HOME}:${HOME}:g" ~/Library/LaunchAgents/"${launch_agent}"
 
   # TODO: Don't use this legacy syntax for `launchd`.

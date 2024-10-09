@@ -7,7 +7,8 @@ not_supported() {
   exit 1
 }
 
-. ./versions.sh
+. ../utils/colors.sh
+. ../versions.sh
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${NVIM_VERSION}" | head -c "$(echo "${NVIM_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
@@ -51,7 +52,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
     if [ "${DO_UPDATES}" = "true" ]; then
       install_nvim
     else
-      printf "%bNeovim update available! Current version: %s, available version: %s%b" "${DOTFILES_ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${DOTFILES_ESC_RESET}"
+      printf "%bNeovim update available! Current version: %s, available version: %s%b" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
     fi
   else
     echo "Not installing Neovim"

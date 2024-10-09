@@ -15,7 +15,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
       tmp_dir="${HOME}/tmp/awscli"
       pkg_file="${tmp_dir}/AWSCLIV2.pkg"
       curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
-      installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ./templates/aws_cli_choices.xml
+      installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ../templates/aws_cli_choices.xml
       ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
       ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
       rm -rf "${tmp_dir}"
