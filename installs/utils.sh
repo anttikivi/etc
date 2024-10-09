@@ -26,16 +26,6 @@ if [ "${os_name}" = "Darwin" ]; then
 
   brew install clang-format
 
-  if ! command -v aws >/dev/null 2>&1; then
-    tmp_dir="${HOME}/tmp/awscli"
-    pkg_file="${tmp_dir}/AWSCLIV2.pkg"
-    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
-    installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ./templates/aws_cli_choices.xml
-    ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
-    ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
-    rm -rf "${tmp_dir}"
-  fi
-
   if ! command -v gcloud >/dev/null 2>&1; then
     gcloud_dir="${HOME}/.local/opt/google-cloud-sdk"
     if [ -d "${gcloud_dir}" ]; then
