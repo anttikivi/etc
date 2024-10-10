@@ -122,6 +122,7 @@ if [ "${os_name}" = "Darwin" ]; then
     "fzf"
     "jq"
     "opentofu"
+    "php"
     "reattach-to-user-namespace"
     "ripgrep"
     "tmux"
