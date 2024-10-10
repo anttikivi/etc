@@ -7,6 +7,7 @@ fi
 
 path=("${HOME}/.local/bin" "${path[@]}")
 path=("$(brew --prefix python)/libexec/bin" "${path[@]}")
+path=("/usr/local/go/bin" "${path[@]}")
 path=("${GOBIN}" "${path[@]}")
 path=("${HOME}/.local/opt/nvim/bin" "${path[@]}")
 

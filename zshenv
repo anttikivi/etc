@@ -7,7 +7,7 @@ export ZDOTDIR="${HOME}"
 
 export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 
-export GOPATH="${HOME}/.local/opt/go"
+export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
 
 SHARED_ENV_DIR="${XDG_CONFIG_HOME}/env"
