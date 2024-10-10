@@ -106,6 +106,7 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
 echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"
+pipx install --include-deps ansible
 if [ "${os_name}" = "Darwin" ]; then
   darwin_packages=(
     "clang-format"
