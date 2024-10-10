@@ -35,8 +35,9 @@ if [ "${os_name}" = "Darwin" ] && ! command -v brew >/dev/null 2>&1; then
   fi
 fi
 
-if [ "${os_name}" = "Darwin" ] && [ "${HAS_CONNECTION}" = "true" ] && [ "${DO_UPDATES}" = "true" ]; then
-  brew update
+brew update
+
+if [ "${os_name}" = "Darwin" ] && [ "${HAS_CONNECTION}" = "true" ] && [ "${DO_HOMEBREW_UPDATES}" = "true" ]; then
   brew upgrade
 fi
 
