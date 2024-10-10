@@ -26,7 +26,7 @@ fi
 os_name="$(uname)"
 if [ "${os_name}" = "Darwin" ] && ! command -v brew >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
-    echo "${ESC_BLUE}Installing Homebrew${ESC_RESET}"
+    echo -e "${ESC_BLUE}Installing Homebrew${ESC_RESET}"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/opt/homebrew/bin/brew shellenv)"
   else
@@ -47,7 +47,7 @@ not_supported() {
 
 if ! command -v python >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
-    echo "${ESC_BLUE}Installing Python${ESC_RESET}"
+    echo -e "${ESC_BLUE}Installing Python${ESC_RESET}"
     if [ "${os_name}" = "Darwin" ]; then
       brew install python
       PATH="$(brew --prefix python)/libexec/bin:${PATH}"
@@ -72,7 +72,7 @@ fi
 
 if ! command -v pipx >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
-    echo "${ESC_BLUE}Installing pipx${ESC_RESET}"
+    echo -e "${ESC_BLUE}Installing pipx${ESC_RESET}"
     if [ "${os_name}" = "Darwin" ]; then
       brew install pipx
       PATH="${HOME}/.local/bin:${PATH}"
