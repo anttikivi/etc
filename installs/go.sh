@@ -19,7 +19,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
   install_go() {
     echo "Removing old Go installation"
     go_dir="/usr/local/go"
-    rm -rf "${go_dir}"
+    sudo rm -rf "${go_dir}"
     echo "Downloading Go"
     archive_name="$(curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r --arg "wanted_version" "${wanted_ver}" --arg "os" "$(uname | tr '[:upper:]' '[:lower:]')" --arg "arch" "$(uname -m)" '.[] | select(.version == $wanted_version) | .files[] | select(.os == $os and .arch == $arch and .kind == "archive") | .filename')"
     tmp_file="${HOME}/tmp/${archive_name}"
