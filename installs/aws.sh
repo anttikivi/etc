@@ -13,9 +13,18 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
   if [ "${os_name}" = "Darwin" ]; then
     if ! command -v aws >/dev/null 2>&1 || [ "${DO_UPDATES}" = "true" ]; then
       tmp_dir="${HOME}/tmp/awscli"
+      if [ ! -d "${tmp_dir}" ]; then
+        mkdir "${tmp_dir}"
+      fi
       pkg_file="${tmp_dir}/AWSCLIV2.pkg"
       curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
       installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ../templates/aws_cli_choices.xml
+      if [ -e ~/.local/bin/aws ]; then
+        rm ~/.local/bin/aws
+      fi
+      if [ -e ~/.local/bin/aws_completer ]; then
+        rm ~/.local/bin/aws_completer
+      fi
       ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
       ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
       rm -rf "${tmp_dir}"
