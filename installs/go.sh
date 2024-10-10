@@ -18,21 +18,26 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
 
   install_go() {
     echo "Removing old Go installation"
-    rm -rf "${HOME}/.local/opt/go"
-
+    go_dir="/usr/local/go"
+    rm -rf "${go_dir}"
     echo "Downloading Go"
     archive_name="$(curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r --arg "wanted_version" "${wanted_ver}" --arg "os" "$(uname | tr '[:upper:]' '[:lower:]')" --arg "arch" "$(uname -m)" '.[] | select(.version == $wanted_version) | .files[] | select(.os == $os and .arch == $arch and .kind == "archive") | .filename')"
-    curl -LsS "https://go.dev/dl/${archive_name}" | tar -C "${HOME}/.local/opt" -xzf -
+    tmp_file="${HOME}/tmp/${archive_name}"
+    if [ -f "${tmp_file}" ]; then
+      rm "${tmp_file}"
+    fi
+    curl -LsS "https://go.dev/dl/${archive_name}" -o "${tmp_file}"
+    sudo tar -C "$(dirname "${go_dir}")" -xzf "${tmp_file}"
+    rm "${tmp_file}"
   }
 
   if ! command -v go >/dev/null 2>&1; then
     install_go
   elif [ "${wanted_ver}" != "${current_ver}" ]; then
-    install_go
     if [ "${DO_UPDATES}" = "true" ]; then
       install_go
     else
-      printf "%bGo update available! Current version: %s, available version: %s%b" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
+      printf "%bGo update available! Current version: %s, available version: %s%b\n" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
     fi
   else
     echo "Not installing Go"
