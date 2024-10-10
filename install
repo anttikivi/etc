@@ -106,6 +106,13 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
+if [ "$(basename "${SHELL}")" = "zsh" ]; then
+  echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"
+  # shellcheck disable=SC1091
+  source "${HOME}/.zshenv"
+  # source ~/.zprofile
+fi
+
 echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"
 pipx install --include-deps ansible
 if [ "${os_name}" = "Darwin" ]; then
