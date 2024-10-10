@@ -1,18 +1,20 @@
+#!/bin/sh
+
 # shellcheck disable=SC2034
-readonly CATPPUCCIN_NAME="catppuccin"
+CATPPUCCIN_NAME="catppuccin"
 
-readonly CATPPUCCIN_FRAPPE="frappe"
-readonly CATPPUCCIN_MACCHIATO="macchiato"
-readonly CATPPUCCIN_MOCHA="mocha"
-readonly CATPPUCCIN_LATTE="latte"
+CATPPUCCIN_FRAPPE="frappe"
+CATPPUCCIN_MACCHIATO="macchiato"
+CATPPUCCIN_MOCHA="mocha"
+CATPPUCCIN_LATTE="latte"
 
-readonly ROSE_PINE_NAME="rose-pine"
-readonly ROSE_PINE_MAIN="main"
-readonly ROSE_PINE_MOON="moon"
-readonly ROSE_PINE_DAWN="dawn"
-readonly KITTY_ROSE_PINE_NAME="Rosé Pine"
-readonly KITTY_ROSE_PINE_MOON="Moon"
-readonly KITTY_ROSE_PINE_DAWN="Dawn"
+ROSE_PINE_NAME="rose-pine"
+ROSE_PINE_MAIN="main"
+ROSE_PINE_MOON="moon"
+ROSE_PINE_DAWN="dawn"
+KITTY_ROSE_PINE_NAME="Rosé Pine"
+KITTY_ROSE_PINE_MOON="Moon"
+KITTY_ROSE_PINE_DAWN="Dawn"
 
 export COLOR_SCHEME="${ROSE_PINE_NAME}"
 export COLOR_SCHEME_DARK_VARIANT="${ROSE_PINE_MAIN}"
