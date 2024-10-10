@@ -105,6 +105,34 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
+echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"
+if [ "${os_name}" = "Darwin" ]; then
+  darwin_packages=(
+    "clang-format"
+    "cormacrelf/tap/dark-notify"
+    "fzf"
+    "jq"
+    "reattach-to-user-namespace"
+    "ripgrep"
+    "tmux"
+  )
+  brew install "${darwin_packages[@]}"
+  brew install --cask nikitabobko/tap/aerospace
+elif [ "${os_name}" = "Linux" ]; then
+  distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
+  if [ "${distro}" = "debian" ]; then
+    not_supported "${os_name}" "${distro}"
+  elif [ "${distro}" = "ubuntu" ]; then
+    not_supported "${os_name}" "${distro}"
+  else
+    not_supported "${os_name}" "${distro}"
+  fi
+else
+  not_supported "${os_name}"
+fi
+pipx install ansible-lint
+echo -e "${ESC_GREEN}==> Tools and utilities installed${ESC_RESET}"
+
 for script in "${BASEDIR}"/installs/*.sh; do
   cd "$(dirname "${script}")"
   printf "\n"
