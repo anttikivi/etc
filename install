@@ -116,6 +116,7 @@ if [ "${os_name}" = "Darwin" ]; then
     "reattach-to-user-namespace"
     "ripgrep"
     "tmux"
+    "wget"
   )
   brew install "${darwin_packages[@]}"
   brew install --cask nikitabobko/tap/aerospace
