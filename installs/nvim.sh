@@ -48,11 +48,10 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
   if ! command -v nvim >/dev/null 2>&1; then
     install_nvim
   elif [ "${wanted_ver}" != "${current_ver}" ]; then
-    install_nvim
     if [ "${DO_UPDATES}" = "true" ]; then
       install_nvim
     else
-      printf "%bNeovim update available! Current version: %s, available version: %s%b" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
+      printf "%bNeovim update available! Current version: %s, available version: %s%b\n" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
     fi
   else
     echo "Not installing Neovim"

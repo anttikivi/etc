@@ -21,7 +21,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
     if [ "${DO_UPDATES}" = "true" ]; then
       install_kitty
     else
-      printf "%bkitty update available! Current version: %s, available version: %s%b" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
+      printf "%bkitty update available! Current version: %s, available version: %s%b\n" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
     fi
   fi
 fi
