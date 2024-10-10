@@ -10,6 +10,12 @@ export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agen
 export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
 
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+export CC="clang"
+export CXX="clang++"
+
 SHARED_ENV_DIR="${XDG_CONFIG_HOME}/env"
 
 for file in "${SHARED_ENV_DIR}/"*; do

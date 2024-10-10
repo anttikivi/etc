@@ -13,7 +13,7 @@ path=("${HOME}/.local/opt/nvim/bin" "${path[@]}")
 
 source "${HOME}/.cargo/env"
 
-export NVM_DIR="${HOME}/.nvm"
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
 
 if [ -f "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc" ]; then
@@ -21,12 +21,6 @@ if [ -f "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc" ]; then
 fi
 
 export PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
-
-export EDITOR="nvim"
-export VISUAL="nvim"
-
-export CC="clang"
-export CXX="clang++"
 
 if [ -f "${XDG_CONFIG_HOME}/env/secrets.sh" ]; then
   source "${XDG_CONFIG_HOME}/env/secrets.sh"
