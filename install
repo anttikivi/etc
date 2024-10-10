@@ -113,6 +113,7 @@ if [ "${os_name}" = "Darwin" ]; then
     "cormacrelf/tap/dark-notify"
     "fzf"
     "jq"
+    "opentofu"
     "reattach-to-user-namespace"
     "ripgrep"
     "tmux"
