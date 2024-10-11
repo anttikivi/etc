@@ -21,9 +21,4 @@ if [ -f "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc" ]; then
 fi
 
 export PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
-
-if [ -f "${XDG_CONFIG_HOME}/env/secrets.sh" ]; then
-  source "${XDG_CONFIG_HOME}/env/secrets.sh"
-fi
-
 # vi: ft=zsh
