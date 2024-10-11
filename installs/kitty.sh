@@ -7,7 +7,10 @@ set -e
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${KITTY_VERSION}" | head -c "$(echo "${KITTY_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
-  wanted_ver="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/kovidgoyal/kitty/releases | jq -r '.[] | .tag_name' | grep "${minor_ver}" | sort -V | tail -1)"
+  wanted_ver="$(gh api -X 'GET' '/repos/kovidgoyal/kitty/releases' \
+    -H 'Accept: application/vnd.github+json' \
+    -H 'X-GitHub-Api-Version: 2022-11-28' \
+    | jq -r '.[] | .tag_name' | grep "${minor_ver}" | sort -V | tail -1)"
   current_ver="$(kitty --version | cut -c $(($(kitty --version | grep -ob "\ " | head -1 | grep -oE "[0-9]+") + 2))-"$(kitty --version | grep -ob "\ " | head -2 | tail -1 | grep -oE "[0-9]+")")"
 
   install_kitty() {

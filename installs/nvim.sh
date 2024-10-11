@@ -12,7 +12,7 @@ not_supported() {
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${NVIM_VERSION}" | head -c "$(echo "${NVIM_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
-  wanted_ver="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" 'https://api.github.com/repos/neovim/neovim/releases?per_page=30' | jq -r '.[] | .tag_name' | grep "${minor_ver}" | sort -V | tail -1)"
+  wanted_ver="$(gh api '/repos/neovim/neovim/releases?per_page=30' -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' | jq -r '.[] | .tag_name' | grep "${minor_ver}" | sort -V | tail -1)"
   current_ver="$(nvim --version | head --lines 1 | cut -c 6-)"
   os_name="$(uname)"
   archive_name=""
@@ -38,7 +38,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
     nvim_dir="${HOME}/.local/opt/nvim"
     rm -rf "${nvim_dir}"
     echo "Installing Neovim ${wanted_ver}"
-    download_url="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" "https://api.github.com/repos/neovim/neovim/releases/tags/${wanted_ver}" | jq --arg "archive_filename" "${archive_filename}" -r '.assets.[] | select(.name | endswith($archive_filename)) | .browser_download_url')"
+    download_url="$(gh api "/repos/neovim/neovim/releases/tags/${wanted_ver}" -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' | jq --arg "archive_filename" "${archive_filename}" -r '.assets.[] | select(.name | endswith($archive_filename)) | .browser_download_url')"
     curl -LsS "${download_url}" | tar -xzf - -C "${HOME}/tmp"
     mkdir "${nvim_dir}"
     rsync -a "${HOME}/tmp/${archive_name}/" "${nvim_dir}/"

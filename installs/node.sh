@@ -12,7 +12,7 @@ not_supported() {
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${NVM_VERSION}" | head -c "$(echo "${NVM_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
-  wanted_ver="$(curl -LsSH "X-GitHub-Api-Version: 2022-11-28" 'https://api.github.com/repos/nvm-sh/nvm/releases?per_page=100' | jq -r '.[] | .tag_name' | grep "${minor_ver}" | sort -V | tail -1 | cut -c 2-)"
+  wanted_ver="$(gh api -X 'GET' '/repos/nvm-sh/nvm/releases?per_page=100' -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' | jq -r '.[] | .tag_name' | grep "${minor_ver}" | sort -V | tail -1 | cut -c 2-)"
   current_ver=""
   if command -v nvm >/dev/null 2>&1; then
     current_ver="$(nvm --version)"

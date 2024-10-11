@@ -110,7 +110,7 @@ if [ "$(basename "${SHELL}")" = "zsh" ]; then
   echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"
   # shellcheck disable=SC1091
   source "${HOME}/.zshenv"
-  # source ~/.zprofile
+  # source "${HOME}/.zprofile"
 fi
 
 echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"
@@ -119,6 +119,7 @@ if [ "${os_name}" = "Darwin" ]; then
   darwin_packages=(
     "clang-format"
     "cormacrelf/tap/dark-notify"
+    "gh"
     "fzf"
     "jq"
     "lima"
