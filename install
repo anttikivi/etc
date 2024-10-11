@@ -125,6 +125,7 @@ if [ "${os_name}" = "Darwin" ]; then
     "php"
     "reattach-to-user-namespace"
     "ripgrep"
+    "shellcheck"
     "tmux"
     "wget"
   )
