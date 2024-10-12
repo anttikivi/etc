@@ -47,8 +47,14 @@
 - shell:
     - [git submodule sync --recursive, Syncing submodules]
     - [git submodule update --init --recursive, Updating submodules]
-    - [./utils/aws_config.sh, Updating the AWS configuration]
-    - [./utils/ssh_config.sh, Updating the SSH configuration]
+    - [
+        ./utils/update_encrypted_config aws,
+        Updating the local AWS configuration,
+      ]
+    - [
+        ./utils/update_encrypted_config ssh,
+        Updating the local SSH configuration,
+      ]
 
 - clean: [~/.aws, ~/.ssh]
 

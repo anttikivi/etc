@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+if [ ! -d "./$1" ]; then
+  mkdir "$1"
+fi
+chmod 0700 "./$1"
+if [ -f "./$1/config" ]; then
+  rm "./$1/config"
+fi
+ansible-vault view ./"$1"_config >"./$1/config"
+chmod 0600 "./$1/config"
