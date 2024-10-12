@@ -6,7 +6,7 @@
     <string>fi.anttikivi.kittycolors</string>
     <key>ProgramArguments</key>
     <array>
-      <string>{HOME}/.local/bin/kitty_watch_colors.sh</string>
+      <string>{HOME}/.local/bin/kitty_watch_colors</string>
     </array>
     <key>RunAtLoad</key>
     <true />
