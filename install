@@ -226,11 +226,11 @@ fi
 if ((QUIET < 2)); then echo -e "\n${ESC_GREEN}==> Tools and utilities installed${ESC_RESET}"; fi
 
 if ((QUIET < 1)); then echo -e "${ESC_BLUE}Running the tasks from scripts${ESC_RESET}"; fi
-for script in "${BASEDIR}"/installs/*.sh; do
+for script in "${BASEDIR}"/installs/*; do
   cd "$(dirname "${script}")"
-  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Running the '$(basename "${script}" | sed 's/\.sh//')' tasks${ESC_RESET}"; fi
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Running the '$(basename "${script}")' tasks${ESC_RESET}"; fi
   /bin/sh "${script}"
-  if ((VERBOSE > 0)); then echo -e "${ESC_GREEN}'$(basename "${script}" | sed 's/\.sh//')' tasks run${ESC_RESET}"; fi
+  if ((VERBOSE > 0)); then echo -e "${ESC_GREEN}'$(basename "${script}")' tasks run${ESC_RESET}"; fi
   cd - >/dev/null
 done
 if ((QUIET < 1)); then echo -e "\n${ESC_GREEN}==> All tasks run${ESC_RESET}"; fi
