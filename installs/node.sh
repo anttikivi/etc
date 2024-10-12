@@ -10,18 +10,25 @@ not_supported() {
 . ../utils/colors.sh
 . ../versions.sh
 
+# TODO: Find a way to not maybe have to do this.
+NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# shellcheck source=../../.config/nvm/nvm.sh
+[ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
+
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${NVM_VERSION}" | head -c "$(echo "${NVM_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
   wanted_ver="$(gh api -X 'GET' '/repos/nvm-sh/nvm/releases?per_page=100' -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' | jq -r '.[] | .tag_name' | grep "${minor_ver}" | sort -V | tail -1 | cut -c 2-)"
   current_ver=""
   if command -v nvm >/dev/null 2>&1; then
     current_ver="$(nvm --version)"
+    echo "Set ${current_ver} as the current nvm version"
   fi
 
   install_nvm() {
     echo "Installing nvm ${wanted_ver}"
     PROFILE=/dev/null bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${wanted_ver}/install.sh | bash"
     NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    # shellcheck source=../../.config/nvm/nvm.sh
     [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
   }
 
