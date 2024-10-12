@@ -53,26 +53,76 @@ function not_supported() {
   exit 1
 }
 
+function print_help() {
+  echo "help"
+  exit 0
+}
+
+function print_version() {
+  echo "version"
+  exit 0
+}
+
 if [[ ! " ${SUPPORTED_PLATFORMS[*]} " =~ [[:space:]]${OS_NAME}[[:space:]] ]]; then
   not_supported "${OS_NAME}"
 fi
 
+readonly call_args=("$@")
+
+quiet=0
+verbose=0
+
+OPTIND=1
+while getopts "hqQvV" opt; do
+  case "${opt}" in
+    h)
+      print_help
+      ;;
+    q)
+      ((quiet++))
+      ;;
+    Q)
+      quiet=$((quiet + 2))
+      ;;
+    v)
+      ((verbose++))
+      ;;
+    V)
+      print_version
+      ;;
+    *)
+      echo "Unexpected option: ${opt}"
+      exit 1
+      ;;
+  esac
+done
+shift "$((OPTIND - 1))"
+set -- "${call_args[@]}"
+
+if ((verbose > 0)) && ((quiet > 0)); then
+  echo -e "${ESC_RED}You want the script to be both verbose and quiet...${ESC_RESET}"
+  exit 1
+fi
+
+# Printing the verbosity level when it's only one might be too verbose.
+if ((verbose > 1)); then echo -e "${ESC_YELLOW}The verbosity of the script is currently set to ${verbose}${ESC_RESET}"; fi
+
 if [ "${HAS_CONNECTION}" = "true" ]; then
-  echo -e "${ESC_BLUE}The script can use an Internet connection${ESC_RESET}"
-else
+  if ((verbose > 0)); then echo -e "${ESC_BLUE}The script can use an Internet connection${ESC_RESET}"; fi
+elif ((quiet > 1)); then
   echo -e "${ESC_YELLOW}Running the script without an Internet connection${ESC_RESET}"
 fi
 
-if [ "${DO_UPDATES}" = "true" ] && [ "${HAS_CONNECTION}" = "true" ]; then
+if [ "${DO_UPDATES}" = "true" ] && [ "${HAS_CONNECTION}" = "true" ] && ((verbose > 0)); then
   echo -e "${ESC_YELLOW}Installing updates if they are available${ESC_RESET}\n"
 fi
 
 if [ "${OS_NAME}" = "darwin" ] && ! command -v brew >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
-    echo -e "\n${ESC_BLUE}Installing Homebrew${ESC_RESET}"
+    if ((verbose > 0)); then echo -e "\n${ESC_BLUE}Installing Homebrew${ESC_RESET}"; fi
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/opt/homebrew/bin/brew shellenv)"
-    echo -e "${ESC_GREEN}Homebrew installed${ESC_RESET}"
+    if ((quiet < 2)); then echo -e "${ESC_GREEN}Homebrew installed${ESC_RESET}"; fi
   else
     echo "Homebrew is not installed and there is not Internet connection, exiting..." >&2
     exit 1
@@ -81,9 +131,11 @@ fi
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   if [ "${OS_NAME}" = "darwin" ]; then
-    brew update
+    # shellcheck disable=SC2046
+    brew update $( ((quiet > 0)) && printf %s '-q') $( ((verbose > 0)) && printf %s '-v')
     if [ "${UPGRADE_PACKAGES}" = "true" ]; then
-      brew upgrade
+      # shellcheck disable=SC2046
+      brew upgrade $( ((quiet > 0)) && printf %s '-q') $( ((verbose > 0)) && printf %s '-v')
     fi
   elif [ "${OS_NAME}" = "debian" ]; then
     echo -e "${ESC_RED}Updating the packages on '${OS_NAME}' is not implemented yet${ESC_RESET}"
@@ -93,18 +145,19 @@ fi
 
 if ! command -v python >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
-    echo -e "${ESC_BLUE}Installing Python${ESC_RESET}"
+    if ((verbose > 0)); then echo -e "${ESC_BLUE}Installing Python${ESC_RESET}"; fi
     if [ "${OS_NAME}" = "darwin" ]; then
-      brew install python
+      # shellcheck disable=SC2046
+      brew install python $( ((quiet > 0)) && printf %s '-q') $( ((verbose > 0)) && printf %s '-v')
       PATH="$(brew --prefix python)/libexec/bin:${PATH}"
       export PATH
       PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
       export PYTHONPATH
     elif [ "${OS_NAME}" = "debian" ]; then
-      echo -e "${ESC_RED}Installing Python '${OS_NAME}' is not implemented yet${ESC_RESET}"
+      echo -e "${ESC_RED}Installing Python on '${OS_NAME}' is not implemented yet${ESC_RESET}"
       not_supported "${OS_NAME}"
     fi
-    echo -e "${ESC_GREEN}Python installed${ESC_RESET}"
+    if ((quiet < 2)); then echo -e "${ESC_GREEN}Python installed${ESC_RESET}"; fi
   else
     echo "Python is not installed and there is not Internet connection, exiting..." >&2
     exit 1
@@ -113,23 +166,24 @@ fi
 
 if ! command -v pipx >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
-    echo -e "${ESC_BLUE}Installing pipx${ESC_RESET}"
+    if ((verbose > 0)); then echo -e "${ESC_BLUE}Installing pipx${ESC_RESET}"; fi
     if [ "${OS_NAME}" = "darwin" ]; then
-      brew install pipx
+      # shellcheck disable=SC2046
+      brew install pipx $( ((quiet > 0)) && printf %s '-q') $( ((verbose > 0)) && printf %s '-v')
       PATH="${HOME}/.local/bin:${PATH}"
       export PATH
     elif [ "${OS_NAME}" = "debian" ]; then
-      echo -e "${ESC_RED}Installing pipx '${OS_NAME}' is not implemented yet${ESC_RESET}"
+      echo -e "${ESC_RED}Installing pipx on '${OS_NAME}' is not implemented yet${ESC_RESET}"
       not_supported "${OS_NAME}"
     fi
-    echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"
+    if ((quiet < 2)); then echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"; fi
   else
     echo "pipx is not installed and there is not Internet connection, exiting..." >&2
     exit 1
   fi
 fi
 
-echo -e "\n${ESC_GREEN}==> All prerequisites are set up${ESC_RESET}"
+if ((quiet < 2)); then echo -e "\n${ESC_GREEN}==> All prerequisites are set up${ESC_RESET}"; fi
 
 CONFIG="install.conf.yaml"
 DOTBOT_DIR="dotbot"
@@ -144,12 +198,13 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
 if [ "$(basename "${SHELL}")" = "zsh" ]; then
-  echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"
+  if ((verbose > 0)); then echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"; fi
   # shellcheck source=../../.bash_profile
   source "${HOME}/.bash_profile"
+  if ((quiet < 2)); then echo -e "${ESC_GREEN}==> Shell environment sourced${ESC_RESET}"; fi
 fi
 
-echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"
+if ((verbose > 0)); then echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"; fi
 for pkg in "${FULL_PIP_PACKAGES[@]}"; do
   pipx install --include-deps "${pkg}"
 done
@@ -165,15 +220,14 @@ elif [ "${OS_NAME}" = "debian" ]; then
   echo -e "${ESC_RED}Installing packages on '${OS_NAME}' is not implemented yet${ESC_RESET}"
   not_supported "${OS_NAME}"
 fi
-echo -e "\n${ESC_GREEN}==> Tools and utilities installed${ESC_RESET}"
+if ((quiet < 2)); then echo -e "\n${ESC_GREEN}==> Tools and utilities installed${ESC_RESET}"; fi
 
-echo -e "${ESC_BLUE}Running the tasks from scripts${ESC_RESET}"
+if ((quiet < 1)); then echo -e "${ESC_BLUE}Running the tasks from scripts${ESC_RESET}"; fi
 for script in "${BASEDIR}"/installs/*.sh; do
   cd "$(dirname "${script}")"
-  printf "\n"
-  echo -e "${ESC_BLUE}Running the '$(basename "${script}" | sed 's/\.sh//')' tasks${ESC_RESET}"
+  if ((verbose > 0)); then echo -e "${ESC_BLUE}Running the '$(basename "${script}" | sed 's/\.sh//')' tasks${ESC_RESET}"; fi
   /bin/sh "${script}"
-  echo -e "${ESC_GREEN}'$(basename "${script}" | sed 's/\.sh//')' tasks run${ESC_RESET}"
+  if ((verbose > 0)); then echo -e "${ESC_GREEN}'$(basename "${script}" | sed 's/\.sh//')' tasks run${ESC_RESET}"; fi
   cd - >/dev/null
 done
-echo -e "\n${ESC_GREEN}==> All tasks run${ESC_RESET}"
+if ((quiet < 1)); then echo -e "\n${ESC_GREEN}==> All tasks run${ESC_RESET}"; fi
