@@ -4,13 +4,58 @@ set -e
 
 source ./utils/colors.sh
 
-HAS_CONNECTION=false
+declare -a SUPPORTED_PLATFORMS=("darwin" "debian")
+readonly SUPPORTED_PLATFORMS
 
+declare -a FULL_PIP_PACKAGES=("ansible")
+readonly FULL_PIP_PACKAGES
+declare -a PIP_PACKAGES=("ansible-lint")
+readonly PIP_PACKAGES
+declare -a DARWIN_PACKAGES=(
+  "clang-format"
+  "cormacrelf/tap/dark-notify"
+  "gh"
+  "fzf"
+  "jq"
+  "lima"
+  "opentofu"
+  "php"
+  "reattach-to-user-namespace"
+  "ripgrep"
+  "roots/tap/trellis-cli"
+  "shellcheck"
+  "tmux"
+  "wget"
+)
+readonly DARWIN_PACKAGES
+declare -a DARWIN_CASKS=("nikitabobko/tap/aerospace")
+readonly DARWIN_CASKS
+
+OS_NAME="$(uname | tr '[:upper:]' '[:lower:]')"
+if [ "$(uname)" = "Linux" ]; then
+  distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
+  if [ "${distro}" = "debian" ] || [ "${distro}" = "ubuntu" ]; then
+    OS_NAME="debian"
+  fi
+fi
+readonly OS_NAME
+export OS_NAME
+
+HAS_CONNECTION=false
 if ping -q -c1 8.8.8.8 &>/dev/null; then
   HAS_CONNECTION=true
 fi
-
+readonly HAS_CONNECTION
 export HAS_CONNECTION
+
+function not_supported() {
+  echo "This system is not supported: $*" >&2
+  exit 1
+}
+
+if [[ ! " ${SUPPORTED_PLATFORMS[*]} " =~ [[:space:]]${OS_NAME}[[:space:]] ]]; then
+  not_supported "${OS_NAME}"
+fi
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   echo -e "${ESC_BLUE}The script can use an Internet connection${ESC_RESET}"
@@ -19,52 +64,47 @@ else
 fi
 
 if [ "${DO_UPDATES}" = "true" ] && [ "${HAS_CONNECTION}" = "true" ]; then
-  echo -e "${ESC_YELLOW}Installing updates if they are available${ESC_RESET}"
-  printf "\n"
+  echo -e "${ESC_YELLOW}Installing updates if they are available${ESC_RESET}\n"
 fi
 
-os_name="$(uname)"
-if [ "${os_name}" = "Darwin" ] && ! command -v brew >/dev/null 2>&1; then
+if [ "${OS_NAME}" = "darwin" ] && ! command -v brew >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
-    echo -e "${ESC_BLUE}Installing Homebrew${ESC_RESET}"
+    echo -e "\n${ESC_BLUE}Installing Homebrew${ESC_RESET}"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/opt/homebrew/bin/brew shellenv)"
+    echo -e "${ESC_GREEN}Homebrew installed${ESC_RESET}"
   else
     echo "Homebrew is not installed and there is not Internet connection, exiting..." >&2
     exit 1
   fi
 fi
 
-brew update
-
-if [ "${os_name}" = "Darwin" ] && [ "${HAS_CONNECTION}" = "true" ] && [ "${DO_HOMEBREW_UPDATES}" = "true" ]; then
-  brew upgrade
+if [ "${HAS_CONNECTION}" = "true" ]; then
+  if [ "${OS_NAME}" = "darwin" ]; then
+    brew update
+    if [ "${UPGRADE_PACKAGES}" = "true" ]; then
+      brew upgrade
+    fi
+  elif [ "${OS_NAME}" = "debian" ]; then
+    echo -e "${ESC_RED}Updating the packages on '${OS_NAME}' is not implemented yet${ESC_RESET}"
+    not_supported "${OS_NAME}"
+  fi
 fi
-
-not_supported() {
-  echo "This system is not supported: $*" >&2
-  exit 1
-}
 
 if ! command -v python >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
     echo -e "${ESC_BLUE}Installing Python${ESC_RESET}"
-    if [ "${os_name}" = "Darwin" ]; then
+    if [ "${OS_NAME}" = "darwin" ]; then
       brew install python
       PATH="$(brew --prefix python)/libexec/bin:${PATH}"
       export PATH
       PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
       export PYTHONPATH
-    elif [ "${os_name}" = "Linux" ]; then
-      distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
-      if [ "${distro}" = "debian" ]; then
-        not_supported "${os_name}" "${distro}"
-      elif [ "${distro}" = "ubuntu" ]; then
-        not_supported "${os_name}" "${distro}"
-      else
-        not_supported "${os_name}" "${distro}"
-      fi
+    elif [ "${OS_NAME}" = "debian" ]; then
+      echo -e "${ESC_RED}Installing Python '${OS_NAME}' is not implemented yet${ESC_RESET}"
+      not_supported "${OS_NAME}"
     fi
+    echo -e "${ESC_GREEN}Python installed${ESC_RESET}"
   else
     echo "Python is not installed and there is not Internet connection, exiting..." >&2
     exit 1
@@ -74,25 +114,22 @@ fi
 if ! command -v pipx >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" = "true" ]; then
     echo -e "${ESC_BLUE}Installing pipx${ESC_RESET}"
-    if [ "${os_name}" = "Darwin" ]; then
+    if [ "${OS_NAME}" = "darwin" ]; then
       brew install pipx
       PATH="${HOME}/.local/bin:${PATH}"
       export PATH
-    elif [ "${os_name}" = "Linux" ]; then
-      distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
-      if [ "${distro}" = "debian" ]; then
-        not_supported "${os_name}" "${distro}"
-      elif [ "${distro}" = "ubuntu" ]; then
-        not_supported "${os_name}" "${distro}"
-      else
-        not_supported "${os_name}" "${distro}"
-      fi
+    elif [ "${OS_NAME}" = "debian" ]; then
+      echo -e "${ESC_RED}Installing pipx '${OS_NAME}' is not implemented yet${ESC_RESET}"
+      not_supported "${OS_NAME}"
     fi
+    echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"
   else
     echo "pipx is not installed and there is not Internet connection, exiting..." >&2
     exit 1
   fi
 fi
+
+echo -e "\n${ESC_GREEN}==> All prerequisites are set up${ESC_RESET}"
 
 CONFIG="install.conf.yaml"
 DOTBOT_DIR="dotbot"
@@ -113,46 +150,30 @@ if [ "$(basename "${SHELL}")" = "zsh" ]; then
 fi
 
 echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"
-pipx install --include-deps ansible
-if [ "${os_name}" = "Darwin" ]; then
-  darwin_packages=(
-    "clang-format"
-    "cormacrelf/tap/dark-notify"
-    "gh"
-    "fzf"
-    "jq"
-    "lima"
-    "opentofu"
-    "php"
-    "reattach-to-user-namespace"
-    "ripgrep"
-    "roots/tap/trellis-cli"
-    "shellcheck"
-    "tmux"
-    "wget"
-  )
-  brew install "${darwin_packages[@]}"
-  brew install --cask nikitabobko/tap/aerospace
-elif [ "${os_name}" = "Linux" ]; then
-  distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
-  if [ "${distro}" = "debian" ]; then
-    not_supported "${os_name}" "${distro}"
-  elif [ "${distro}" = "ubuntu" ]; then
-    not_supported "${os_name}" "${distro}"
-  else
-    not_supported "${os_name}" "${distro}"
-  fi
-else
-  not_supported "${os_name}"
+for pkg in "${FULL_PIP_PACKAGES[@]}"; do
+  pipx install --include-deps "${pkg}"
+done
+for pkg in "${PIP_PACKAGES[@]}"; do
+  pipx install "${pkg}"
+done
+if [ "${OS_NAME}" = "darwin" ]; then
+  brew install "${DARWIN_PACKAGES[@]}"
+  for cask in "${DARWIN_CASKS[@]}"; do
+    brew install --cask "${cask}"
+  done
+elif [ "${OS_NAME}" = "debian" ]; then
+  echo -e "${ESC_RED}Installing packages on '${OS_NAME}' is not implemented yet${ESC_RESET}"
+  not_supported "${OS_NAME}"
 fi
-pipx install ansible-lint
-echo -e "${ESC_GREEN}==> Tools and utilities installed${ESC_RESET}"
+echo -e "\n${ESC_GREEN}==> Tools and utilities installed${ESC_RESET}"
 
+echo -e "${ESC_BLUE}Running the tasks from scripts${ESC_RESET}"
 for script in "${BASEDIR}"/installs/*.sh; do
   cd "$(dirname "${script}")"
   printf "\n"
   echo -e "${ESC_BLUE}Running the '$(basename "${script}" | sed 's/\.sh//')' tasks${ESC_RESET}"
   /bin/sh "${script}"
-  echo -e "${ESC_GREEN}==> $(basename "${script}" | sed 's/\.sh//') tasks run${ESC_RESET}"
+  echo -e "${ESC_GREEN}'$(basename "${script}" | sed 's/\.sh//')' tasks run${ESC_RESET}"
   cd - >/dev/null
 done
+echo -e "\n${ESC_GREEN}==> All tasks run${ESC_RESET}"
