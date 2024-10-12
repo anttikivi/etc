@@ -152,7 +152,7 @@ for script in "${BASEDIR}"/installs/*.sh; do
   cd "$(dirname "${script}")"
   printf "\n"
   echo -e "${ESC_BLUE}Running the '$(basename "${script}" | sed 's/\.sh//')' tasks${ESC_RESET}"
-  "${script}"
+  /bin/sh "${script}"
   echo -e "${ESC_GREEN}==> $(basename "${script}" | sed 's/\.sh//') tasks run${ESC_RESET}"
   cd - >/dev/null
 done
