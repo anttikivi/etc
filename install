@@ -108,9 +108,8 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 
 if [ "$(basename "${SHELL}")" = "zsh" ]; then
   echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"
-  # shellcheck disable=SC1091
-  source "${HOME}/.zshenv"
-  # source "${HOME}/.zprofile"
+  # shellcheck source=../../.bash_profile
+  source "${HOME}/.bash_profile"
 fi
 
 echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"
