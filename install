@@ -48,17 +48,17 @@ fi
 readonly HAS_CONNECTION
 export HAS_CONNECTION
 
-function not_supported() {
+not_supported() {
   echo "This system is not supported: $*" >&2
   exit 1
 }
 
-function print_help() {
+print_help() {
   echo "help"
   exit 0
 }
 
-function print_version() {
+print_version() {
   echo "version"
   exit 0
 }
