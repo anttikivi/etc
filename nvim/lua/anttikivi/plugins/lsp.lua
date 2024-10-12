@@ -36,7 +36,9 @@ return {
         ansiblels = {},
         astro = {},
         basedpyright = {},
-        bashls = {},
+        bashls = {
+          filetypes = { "sh", "zsh" },
+        },
         black = {},
         clangd = {
           keys = {
