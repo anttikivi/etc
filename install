@@ -241,7 +241,7 @@ if ! command -v python >/dev/null 2>&1; then
     not_supported "${OS_NAME}"
   fi
   if ((QUIET < 2)); then echo -e "${ESC_GREEN}Python installed${ESC_RESET}"; fi
-elif [ "${HAS_CONNECTION}" = "true" ] && [[ " ${updates[*]} " =~ [[:space:]]python[[:space:]] ]]; then
+elif [ "${HAS_CONNECTION}" = "true" ] && { [[ " ${updates[*]} " =~ [[:space:]]python[[:space:]] ]] || [ "${update_all}" = "true" ]; }; then
   if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Updating Python${ESC_RESET}"; fi
   if [ "${OS_NAME}" = "darwin" ]; then
     # shellcheck disable=SC2046
@@ -266,7 +266,7 @@ if ! command -v pipx >/dev/null 2>&1; then
     not_supported "${OS_NAME}"
   fi
   if ((QUIET < 2)); then echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"; fi
-elif [ "${HAS_CONNECTION}" = "true" ] && [[ " ${updates[*]} " =~ [[:space:]]pipx[[:space:]] ]]; then
+elif [ "${HAS_CONNECTION}" = "true" ] && { [[ " ${updates[*]} " =~ [[:space:]]pipx[[:space:]] ]] || [ "${update_all}" = "true" ]; }; then
   if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Updating pipx${ESC_RESET}"; fi
   if [ "${OS_NAME}" = "darwin" ]; then
     # shellcheck disable=SC2046
@@ -283,7 +283,7 @@ if ! command -v ansible >/dev/null 2>&1; then
   if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Ansible${ESC_RESET}"; fi
   pipx install --include-deps ansible
   if ((QUIET < 2)); then echo -e "${ESC_GREEN}Ansible installed${ESC_RESET}"; fi
-elif [ "${HAS_CONNECTION}" = "true" ] && [[ " ${updates[*]} " =~ [[:space:]]ansible[[:space:]] ]]; then
+elif [ "${HAS_CONNECTION}" = "true" ] && { [[ " ${updates[*]} " =~ [[:space:]]ansible[[:space:]] ]] || [ "${update_all}" = "true" ]; }; then
   if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Updating Ansible${ESC_RESET}"; fi
   pipx upgrade ansible
   if ((QUIET < 2)); then echo -e "${ESC_GREEN}Ansible updated${ESC_RESET}"; fi
@@ -317,7 +317,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
         if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} is not installed, installing${ESC_RESET}"; fi
         brew install "${pkg}"
         if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} installed${ESC_RESET}"; fi
-      elif [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+      elif [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]] || [ "${update_all}" = "true" ]; then
         if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}Updating ${pkg}${ESC_RESET}"; fi
         brew upgrade "${pkg}"
         if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} updated${ESC_RESET}"; fi
@@ -338,7 +338,7 @@ for script in "${BASEDIR}"/installs/*; do
   cd "$(dirname "${script}")"
   pkg="$(basename "${script}")"
   if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Running the ${pkg} tasks${ESC_RESET}"; fi
-  if [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+  if [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]] || [ "${update_all}" = "true" ]; then
     if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Also installing possible updates for ${pkg}${ESC_RESET}"; fi
     INSTALL_UPDATES="true" /bin/sh "${script}"
   else
@@ -360,7 +360,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
   if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Go packages${ESC_RESET}"; fi
   for pkg in "${GO_PACKAGES[@]}"; do
     short_name="$(basename "${pkg}" | cut -c "-$(basename "${pkg}" | grep -ob '@' | head -1 | grep -oE "[0-9]+")")"
-    if ! command -v "${short_name}" >/dev/null 2>&1 || [[ " ${updates[*]} " =~ [[:space:]]${short_name}[[:space:]] ]]; then
+    if ! command -v "${short_name}" >/dev/null 2>&1 || [[ " ${updates[*]} " =~ [[:space:]]${short_name}[[:space:]] ]] || [ "${update_all}" = "true" ]; then
       go install "${pkg}"
     fi
   done
@@ -380,7 +380,7 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
       if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} is not installed, installing${ESC_RESET}"; fi
       pipx install "${pkg}"
       if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} installed${ESC_RESET}"; fi
-    elif [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+    elif [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]] || [ "${update_all}" = "true" ]; then
       if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}Updating ${pkg}${ESC_RESET}"; fi
       pipx upgrade "${pkg}"
       if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} updated${ESC_RESET}"; fi
