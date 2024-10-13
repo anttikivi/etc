@@ -200,12 +200,10 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
-if [ "$(basename "${SHELL}")" = "zsh" ]; then
-  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"; fi
-  # shellcheck source=../../.bash_profile
-  source "${HOME}/.bash_profile"
-  if ((QUIET < 2)); then echo -e "${ESC_GREEN}==> Shell environment sourced${ESC_RESET}"; fi
-fi
+if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"; fi
+# shellcheck source=../../.bash_profile
+source "${HOME}/.bash_profile"
+if ((QUIET < 2)); then echo -e "${ESC_GREEN}==> Shell environment sourced${ESC_RESET}"; fi
 
 if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"; fi
 for pkg in "${FULL_PIP_PACKAGES[@]}"; do
