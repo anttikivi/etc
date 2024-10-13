@@ -7,35 +7,39 @@ not_supported() {
   exit 1
 }
 
-if [ "${HAS_CONNECTION}" = "true" ]; then
-  if [ "${OS_NAME}" = "darwin" ]; then
-    if ! command -v aws >/dev/null 2>&1 || [ "${DO_UPDATES}" = "true" ]; then
-      if [ "${VERBOSE}" -gt 0 ]; then echo "Starting to install or update the AWS CLI"; fi
-      tmp_dir="${HOME}/tmp/awscli"
-      if [ ! -d "${tmp_dir}" ]; then
-        mkdir "${tmp_dir}"
-      fi
-      if [ "${VERBOSE}" -gt 1 ]; then echo "Created to temporary directory"; fi
-      pkg_file="${tmp_dir}/AWSCLIV2.pkg"
-      # shellcheck disable=SC2046
-      curl $(if [ "${VERBOSE}" -le 1 ]; then printf %s '-s'; fi) "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
-      if [ "${VERBOSE}" -gt 1 ]; then echo "Downloaded the AWS CLI installer package"; fi
-      installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ../templates/aws_cli_choices.xml
-      if [ "${VERBOSE}" -gt 1 ]; then echo "Ran the AWS CLI installer"; fi
-      if [ -e ~/.local/bin/aws ]; then
-        rm ~/.local/bin/aws
-      fi
-      if [ -e ~/.local/bin/aws_completer ]; then
-        rm ~/.local/bin/aws_completer
-      fi
-      if [ "${VERBOSE}" -gt 1 ]; then echo "Removed the old symlinks"; fi
-      ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
-      ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
-      if [ "${VERBOSE}" -gt 1 ]; then echo "Created new symlinks"; fi
-      rm -rf "${tmp_dir}"
-      if [ "${VERBOSE}" -gt 1 ]; then echo "Removed the temporary files"; fi
+if [ "${HAS_CONNECTION}" != "true" ]; then
+  if [ "${VERBOSE}" -gt 0 ]; then echo "Skipping the AWS CLI tasks as there is no Internet connection"; fi
+  exit 0
+fi
+
+if [ "${OS_NAME}" = "darwin" ]; then
+  if ! command -v aws >/dev/null 2>&1 || [ "${INSTALL_UPDATES}" = "true" ]; then
+    if [ "${VERBOSE}" -gt 0 ]; then echo "Starting to install or update the AWS CLI"; fi
+    tmp_dir="${HOME}/tmp/awscli"
+    if [ ! -d "${tmp_dir}" ]; then
+      mkdir "${tmp_dir}"
     fi
-  else
-    not_supported "${OS_NAME}"
+    if [ "${VERBOSE}" -gt 1 ]; then echo "Created to temporary directory"; fi
+    pkg_file="${tmp_dir}/AWSCLIV2.pkg"
+    # shellcheck disable=SC2046
+    curl $(if [ "${VERBOSE}" -le 1 ]; then printf %s '-s'; fi) "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
+    if [ "${VERBOSE}" -gt 1 ]; then echo "Downloaded the AWS CLI installer package"; fi
+    installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ../templates/aws_cli_choices.xml
+    if [ "${VERBOSE}" -gt 1 ]; then echo "Ran the AWS CLI installer"; fi
+    if [ -e ~/.local/bin/aws ]; then
+      rm ~/.local/bin/aws
+    fi
+    if [ -e ~/.local/bin/aws_completer ]; then
+      rm ~/.local/bin/aws_completer
+    fi
+    if [ "${VERBOSE}" -gt 1 ]; then echo "Removed the old symlinks"; fi
+    ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
+    ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
+    if [ "${VERBOSE}" -gt 1 ]; then echo "Created new symlinks"; fi
+    rm -rf "${tmp_dir}"
+    if [ "${VERBOSE}" -gt 1 ]; then echo "Removed the temporary files"; fi
+    if [ "${VERBOSE}" -gt 0 ]; then echo "Installed or updated the AWS CLI"; fi
   fi
+else
+  not_supported "${OS_NAME}"
 fi
