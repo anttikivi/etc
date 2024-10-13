@@ -7,10 +7,6 @@ source ./utils/colors.sh
 declare -a SUPPORTED_PLATFORMS=("darwin" "debian")
 readonly SUPPORTED_PLATFORMS
 
-declare -a FULL_PIP_PACKAGES=("ansible")
-readonly FULL_PIP_PACKAGES
-declare -a PIP_PACKAGES=("ansible-lint")
-readonly PIP_PACKAGES
 declare -a DARWIN_PACKAGES=(
   "clang-format"
   "cormacrelf/tap/dark-notify"
@@ -18,18 +14,36 @@ declare -a DARWIN_PACKAGES=(
   "fzf"
   "jq"
   "lima"
+  "luarocks"
   "opentofu"
   "php"
   "reattach-to-user-namespace"
   "ripgrep"
   "roots/tap/trellis-cli"
   "shellcheck"
+  "stylua"
   "tmux"
   "wget"
 )
 readonly DARWIN_PACKAGES
+
 declare -a DARWIN_CASKS=("nikitabobko/tap/aerospace")
 readonly DARWIN_CASKS
+
+declare -a CARGO_PACKAGES=("selene")
+readonly CARGO_PACKAGES
+
+declare -a GO_PACKAGES=(
+  "mvdan.cc/sh/v3/cmd/shfmt@latest"
+  "github.com/a-h/templ/cmd/templ@latest"
+)
+readonly GO_PACKAGES
+
+declare -a LUA_PACKAGES=("luacheck")
+readonly LUA_PACKAGES
+
+declare -a PIP_PACKAGES=("ansible-lint")
+readonly PIP_PACKAGES
 
 OS_NAME="$(uname | tr '[:upper:]' '[:lower:]')"
 if [ "$(uname)" = "Linux" ]; then
@@ -47,6 +61,35 @@ if ping -q -c1 8.8.8.8 &>/dev/null; then
 fi
 readonly HAS_CONNECTION
 export HAS_CONNECTION
+
+declare -a VALID_PACKAGES=()
+VALID_PACKAGES+=("python")
+VALID_PACKAGES+=("pipx")
+VALID_PACKAGES+=("ansible")
+if [ "${OS_NAME}" = "darwin" ]; then
+  for pkg in "${DARWIN_PACKAGES[@]}"; do
+    VALID_PACKAGES+=("${pkg}")
+  done
+  for pkg in "${DARWIN_CASKS[@]}"; do
+    VALID_PACKAGES+=("${pkg}")
+  done
+fi
+for pkg in "${CARGO_PACKAGES[@]}"; do
+  VALID_PACKAGES+=("${pkg}")
+done
+for pkg in "${GO_PACKAGES[@]}"; do
+  VALID_PACKAGES+=("$(basename "${pkg}" | cut -c "-$(basename "${pkg}" | grep -ob '@' | head -1 | grep -oE "[0-9]+")")")
+done
+for pkg in "${LUA_PACKAGES[@]}"; do
+  VALID_PACKAGES+=("${pkg}")
+done
+for pkg in "${PIP_PACKAGES[@]}"; do
+  VALID_PACKAGES+=("${pkg}")
+done
+for script in "${BASEDIR}"/installs/*; do
+  VALID_PACKAGES+=("$(basename "${script}")")
+done
+readonly VALID_PACKAGES
 
 not_supported() {
   echo "This system is not supported: $*" >&2
@@ -70,22 +113,43 @@ fi
 readonly call_args=("$@")
 
 QUIET=0
+declare -a updates=""
+update_all="false"
 VERBOSE=0
 
 OPTIND=1
-while getopts "hqQvV" opt; do
+while getopts "hqQuvV" opt; do
   case "${opt}" in
     h)
       print_help
       ;;
     q)
-      ((quiet++))
+      ((QUIET++))
       ;;
     Q)
       QUIET=$((QUIET + 2))
       ;;
+    u)
+      # shellcheck disable=SC1083
+      eval next_opt=\${OPTIND}
+      if [[ -n $next_opt && $next_opt != -* ]]; then
+        OPTIND=$((OPTIND + 1))
+        # IFS=' '
+        if [[ "${OPTARG}" =~ [[:space:]]+ ]]; then
+          read_value="${OPTARG}"
+          read -r -a parsed_value <<<"${read_value}"
+          for value in "${parsed_value[@]}"; do
+            updates+=("${value}")
+          done
+        else
+          updates+=("${OPTARG}")
+        fi
+      else
+        update_all="true"
+      fi
+      ;;
     v)
-      ((verbose++))
+      ((VERBOSE++))
       ;;
     V)
       print_version
@@ -103,43 +167,56 @@ export QUIET
 export VERBOSE
 
 if ((VERBOSE > 0)) && ((QUIET > 0)); then
-  echo -e "${ESC_RED}You want the script to be both verbose and quiet...${ESC_RESET}"
+  echo -e "${ESC_RED}You want the script to be both verbose and quiet...${ESC_RESET}" >&2
   exit 1
 fi
 
 # Printing the verbosity level when it's only one might be too verbose.
 if ((VERBOSE > 1)); then echo -e "${ESC_YELLOW}The verbosity of the script is currently set to ${VERBOSE}${ESC_RESET}"; fi
 
+if ((${#updates[@]} > 0)); then
+  for pkg in "${updates[@]}"; do
+    if ((VERBOSE > 1)); then echo "Checking if ${pkg} is in the list of valid packages"; fi
+    if [[ ! " ${VALID_PACKAGES[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+      echo "${pkg} is not a valid package" >&2
+      exit 1
+    fi
+  done
+fi
+
 if [ "${HAS_CONNECTION}" = "true" ]; then
   if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}The script can use an Internet connection${ESC_RESET}"; fi
-elif ((QUIET > 1)); then
+elif ((QUIET < 1)); then
   echo -e "${ESC_YELLOW}Running the script without an Internet connection${ESC_RESET}"
 fi
 
-if [ "${DO_UPDATES}" = "true" ] && [ "${HAS_CONNECTION}" = "true" ] && ((VERBOSE > 0)); then
-  echo -e "${ESC_YELLOW}Installing updates if they are available${ESC_RESET}\n"
+if [ "${HAS_CONNECTION}" = "true" ] && ((VERBOSE > 0)); then
+  if [ "${update_all}" = "true" ]; then
+    echo -e "${ESC_YELLOW}Installing all available updates${ESC_RESET}\n"
+  elif ((${#updates[@]} != 0)); then
+    echo -e "${ESC_YELLOW}Installing available updates for:${ESC_RESET}"
+    for pkg in "${updates[@]}"; do
+      echo -e "${ESC_YELLOW}${pkg}${ESC_RESET}"
+    done
+    printf "\n"
+  fi
 fi
 
 if [ "${OS_NAME}" = "darwin" ] && ! command -v brew >/dev/null 2>&1; then
-  if [ "${HAS_CONNECTION}" = "true" ]; then
-    if ((VERBOSE > 0)); then echo -e "\n${ESC_BLUE}Installing Homebrew${ESC_RESET}"; fi
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    if ((QUIET < 2)); then echo -e "${ESC_GREEN}Homebrew installed${ESC_RESET}"; fi
-  else
+  if [ "${HAS_CONNECTION}" != "true" ]; then
     echo "Homebrew is not installed and there is not Internet connection, exiting..." >&2
     exit 1
   fi
+  if ((VERBOSE > 0)); then echo -e "\n${ESC_BLUE}Installing Homebrew${ESC_RESET}"; fi
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  if ((QUIET < 2)); then echo -e "${ESC_GREEN}Homebrew installed${ESC_RESET}"; fi
 fi
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   if [ "${OS_NAME}" = "darwin" ]; then
     # shellcheck disable=SC2046
     brew update $( ((QUIET > 0)) && printf %s '-q') $( ((VERBOSE > 0)) && printf %s '-v')
-    if [ "${UPGRADE_PACKAGES}" = "true" ]; then
-      # shellcheck disable=SC2046
-      brew upgrade $( ((QUIET > 0)) && printf %s '-q') $( ((VERBOSE > 0)) && printf %s '-v')
-    fi
   elif [ "${OS_NAME}" = "debian" ]; then
     echo -e "${ESC_RED}Updating the packages on '${OS_NAME}' is not implemented yet${ESC_RESET}"
     not_supported "${OS_NAME}"
@@ -147,43 +224,69 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
 fi
 
 if ! command -v python >/dev/null 2>&1; then
-  if [ "${HAS_CONNECTION}" = "true" ]; then
-    if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Python${ESC_RESET}"; fi
-    if [ "${OS_NAME}" = "darwin" ]; then
-      # shellcheck disable=SC2046
-      brew install python $( ((QUIET > 0)) && printf %s '-q') $( ((VERBOSE > 0)) && printf %s '-v')
-      PATH="$(brew --prefix python)/libexec/bin:${PATH}"
-      export PATH
-      PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
-      export PYTHONPATH
-    elif [ "${OS_NAME}" = "debian" ]; then
-      echo -e "${ESC_RED}Installing Python on '${OS_NAME}' is not implemented yet${ESC_RESET}"
-      not_supported "${OS_NAME}"
-    fi
-    if ((QUIET < 2)); then echo -e "${ESC_GREEN}Python installed${ESC_RESET}"; fi
-  else
+  if [ "${HAS_CONNECTION}" != "true" ]; then
     echo "Python is not installed and there is not Internet connection, exiting..." >&2
     exit 1
   fi
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Python${ESC_RESET}"; fi
+  if [ "${OS_NAME}" = "darwin" ]; then
+    # shellcheck disable=SC2046
+    brew install python $( ((QUIET > 0)) && printf %s '-q') $( ((VERBOSE > 0)) && printf %s '-v')
+    PATH="$(brew --prefix python)/libexec/bin:${PATH}"
+    export PATH
+    PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
+    export PYTHONPATH
+  elif [ "${OS_NAME}" = "debian" ]; then
+    echo -e "${ESC_RED}Installing Python on '${OS_NAME}' is not implemented yet${ESC_RESET}"
+    not_supported "${OS_NAME}"
+  fi
+  if ((QUIET < 2)); then echo -e "${ESC_GREEN}Python installed${ESC_RESET}"; fi
+elif [ "${HAS_CONNECTION}" = "true" ] && [[ " ${updates[*]} " =~ [[:space:]]python[[:space:]] ]]; then
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Updating Python${ESC_RESET}"; fi
+  if [ "${OS_NAME}" = "darwin" ]; then
+    # shellcheck disable=SC2046
+    brew upgrade python $( ((QUIET > 0)) && printf %s '-q') $( ((VERBOSE > 0)) && printf %s '-v')
+  fi
+  if ((QUIET < 2)); then echo -e "${ESC_GREEN}Python updated${ESC_RESET}"; fi
 fi
 
 if ! command -v pipx >/dev/null 2>&1; then
-  if [ "${HAS_CONNECTION}" = "true" ]; then
-    if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing pipx${ESC_RESET}"; fi
-    if [ "${OS_NAME}" = "darwin" ]; then
-      # shellcheck disable=SC2046
-      brew install pipx $( ((QUIET > 0)) && printf %s '-q') $( ((VERBOSE > 0)) && printf %s '-v')
-      PATH="${HOME}/.local/bin:${PATH}"
-      export PATH
-    elif [ "${OS_NAME}" = "debian" ]; then
-      echo -e "${ESC_RED}Installing pipx on '${OS_NAME}' is not implemented yet${ESC_RESET}"
-      not_supported "${OS_NAME}"
-    fi
-    if ((QUIET < 2)); then echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"; fi
-  else
+  if [ "${HAS_CONNECTION}" != "true" ]; then
     echo "pipx is not installed and there is not Internet connection, exiting..." >&2
     exit 1
   fi
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing pipx${ESC_RESET}"; fi
+  if [ "${OS_NAME}" = "darwin" ]; then
+    # shellcheck disable=SC2046
+    brew install pipx $( ((QUIET > 0)) && printf %s '-q') $( ((VERBOSE > 0)) && printf %s '-v')
+    PATH="${HOME}/.local/bin:${PATH}"
+    export PATH
+  elif [ "${OS_NAME}" = "debian" ]; then
+    echo -e "${ESC_RED}Installing pipx on '${OS_NAME}' is not implemented yet${ESC_RESET}"
+    not_supported "${OS_NAME}"
+  fi
+  if ((QUIET < 2)); then echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"; fi
+elif [ "${HAS_CONNECTION}" = "true" ] && [[ " ${updates[*]} " =~ [[:space:]]pipx[[:space:]] ]]; then
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Updating pipx${ESC_RESET}"; fi
+  if [ "${OS_NAME}" = "darwin" ]; then
+    # shellcheck disable=SC2046
+    brew upgrade pipx $( ((QUIET > 0)) && printf %s '-q') $( ((VERBOSE > 0)) && printf %s '-v')
+  fi
+  if ((QUIET < 2)); then echo -e "${ESC_GREEN}pipx updated${ESC_RESET}"; fi
+fi
+
+if ! command -v ansible >/dev/null 2>&1; then
+  if [ "${HAS_CONNECTION}" != "true" ]; then
+    echo "Ansible is not installed and there is not Internet connection, exiting..." >&2
+    exit 1
+  fi
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Ansible${ESC_RESET}"; fi
+  pipx install --include-deps ansible
+  if ((QUIET < 2)); then echo -e "${ESC_GREEN}Ansible installed${ESC_RESET}"; fi
+elif [ "${HAS_CONNECTION}" = "true" ] && [[ " ${updates[*]} " =~ [[:space:]]ansible[[:space:]] ]]; then
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Updating Ansible${ESC_RESET}"; fi
+  pipx upgrade ansible
+  if ((QUIET < 2)); then echo -e "${ESC_GREEN}Ansible updated${ESC_RESET}"; fi
 fi
 
 if ((QUIET < 2)); then echo -e "\n${ESC_GREEN}==> All prerequisites are set up${ESC_RESET}"; fi
@@ -205,30 +308,87 @@ if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Sourcing the shell environment${ESC
 source "${HOME}/.bash_profile"
 if ((QUIET < 2)); then echo -e "${ESC_GREEN}==> Shell environment sourced${ESC_RESET}"; fi
 
-if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing the tools and utilities using package managers${ESC_RESET}"; fi
-for pkg in "${FULL_PIP_PACKAGES[@]}"; do
-  pipx install --include-deps "${pkg}"
-done
-for pkg in "${PIP_PACKAGES[@]}"; do
-  pipx install "${pkg}"
-done
-if [ "${OS_NAME}" = "darwin" ]; then
-  brew install "${DARWIN_PACKAGES[@]}"
-  for cask in "${DARWIN_CASKS[@]}"; do
-    brew install --cask "${cask}"
-  done
-elif [ "${OS_NAME}" = "debian" ]; then
-  echo -e "${ESC_RED}Installing packages on '${OS_NAME}' is not implemented yet${ESC_RESET}"
-  not_supported "${OS_NAME}"
+if [ "${HAS_CONNECTION}" = "true" ]; then
+  if [ "${OS_NAME}" = "darwin" ]; then
+    if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Homebrew packages${ESC_RESET}"; fi
+    for pkg in "${DARWIN_PACKAGES[@]}"; do
+      if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}Checking if ${pkg} is installed${ESC_RESET}"; fi
+      if ! brew ls | grep -qw "${pkg}"; then
+        if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} is not installed, installing${ESC_RESET}"; fi
+        brew install "${pkg}"
+        if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} installed${ESC_RESET}"; fi
+      elif [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+        if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}Updating ${pkg}${ESC_RESET}"; fi
+        brew upgrade "${pkg}"
+        if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} updated${ESC_RESET}"; fi
+      fi
+    done
+    for cask in "${DARWIN_CASKS[@]}"; do
+      # TODO: Maybe show the casks some love.
+      brew install --cask "${cask}"
+    done
+    if ((QUIET < 2)); then echo -e "\n${ESC_GREEN}==> Homebrew packages installed${ESC_RESET}"; fi
+  fi
+else
+  echo -e "${ESC_YELLOW}Not installing or updating the Homebrew packages due to the script not having an Internet connection${ESC_RESET}"
 fi
-if ((QUIET < 2)); then echo -e "\n${ESC_GREEN}==> Tools and utilities installed${ESC_RESET}"; fi
 
 if ((QUIET < 1)); then echo -e "${ESC_BLUE}Running the tasks from scripts${ESC_RESET}"; fi
 for script in "${BASEDIR}"/installs/*; do
   cd "$(dirname "${script}")"
-  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Running the '$(basename "${script}")' tasks${ESC_RESET}"; fi
-  /bin/sh "${script}"
-  if ((VERBOSE > 0)); then echo -e "${ESC_GREEN}'$(basename "${script}")' tasks run${ESC_RESET}"; fi
+  pkg="$(basename "${script}")"
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Running the ${pkg} tasks${ESC_RESET}"; fi
+  if [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+    if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Also installing possible updates for ${pkg}${ESC_RESET}"; fi
+    INSTALL_UPDATES="true" /bin/sh "${script}"
+  else
+    /bin/sh "${script}"
+  fi
+  if ((VERBOSE > 0)); then echo -e "${ESC_GREEN}${pkg} tasks run${ESC_RESET}"; fi
   cd - >/dev/null
 done
-if ((QUIET < 1)); then echo -e "\n${ESC_GREEN}==> All tasks run${ESC_RESET}"; fi
+if ((QUIET < 1)); then echo -e "\n${ESC_GREEN}==> All tasks from the scripts run${ESC_RESET}"; fi
+
+if [ "${HAS_CONNECTION}" = "true" ]; then
+  # TODO: Figure out how to install updates.
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Cargo packages${ESC_RESET}"; fi
+  for pkg in "${CARGO_PACKAGES[@]}"; do
+    cargo install "${pkg}"
+  done
+  if ((QUIET < 2)); then echo -e "\n${ESC_GREEN}==> Cargo packages installed${ESC_RESET}"; fi
+
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Go packages${ESC_RESET}"; fi
+  for pkg in "${GO_PACKAGES[@]}"; do
+    short_name="$(basename "${pkg}" | cut -c "-$(basename "${pkg}" | grep -ob '@' | head -1 | grep -oE "[0-9]+")")"
+    if ! command -v "${short_name}" >/dev/null 2>&1 || [[ " ${updates[*]} " =~ [[:space:]]${short_name}[[:space:]] ]]; then
+      go install "${pkg}"
+    fi
+  done
+  if ((QUIET < 2)); then echo -e "\n${ESC_GREEN}==> Go packages installed${ESC_RESET}"; fi
+
+  # TODO: Figure out how to install updates.
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Luarocks packages${ESC_RESET}"; fi
+  for pkg in "${LUA_PACKAGES[@]}"; do
+    luarocks install "${pkg}"
+  done
+  if ((QUIET < 2)); then echo -e "\n${ESC_GREEN}==> Luarocks packages installed${ESC_RESET}"; fi
+
+  if ((VERBOSE > 0)); then echo -e "${ESC_BLUE}Installing Python packages${ESC_RESET}"; fi
+  for pkg in "${PIP_PACKAGES[@]}"; do
+    if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}Checking if ${pkg} is installed${ESC_RESET}"; fi
+    if ! pipx list | grep -qw "${pkg}"; then
+      if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} is not installed, installing${ESC_RESET}"; fi
+      pipx install "${pkg}"
+      if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} installed${ESC_RESET}"; fi
+    elif [[ " ${updates[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+      if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}Updating ${pkg}${ESC_RESET}"; fi
+      pipx upgrade "${pkg}"
+      if ((VERBOSE > 1)); then echo -e "${ESC_BLUE}${pkg} updated${ESC_RESET}"; fi
+    fi
+  done
+  if ((QUIET < 2)); then echo -e "\n${ESC_GREEN}==> Python packages installed${ESC_RESET}"; fi
+else
+  echo -e "${ESC_YELLOW}Not installing or updating packages due to the script not having an Internet connection${ESC_RESET}"
+fi
+
+if ((QUIET < 3)); then echo -e "\n${ESC_GREEN}==> All tasks run${ESC_RESET}"; fi
