@@ -2,8 +2,8 @@
 
 set -e
 
-. ../versions.sh
-. ../utils/colors.sh
+\. ../versions.sh
+\. ../utils/colors.sh
 
 not_supported() {
   echo "This system is not supported: $*" >&2
