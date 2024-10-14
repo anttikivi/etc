@@ -18,22 +18,21 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
     current_ver="$(nvim --version | head --lines 1 | cut -c 6-)"
     echo "Set ${current_ver} as the current Neovim version"
   fi
-  os_name="$(uname)"
   archive_name=""
-  if [ "${os_name}" = "Darwin" ]; then
+  if [ "${OS_NAME}" = "darwin" ]; then
     darwin_arch="$(uname -m)"
     case "${darwin_arch}" in
       arm64*)
         archive_name="nvim-macos-arm64"
         ;;
       *)
-        not_supported "${os_name}" "${darwin_arch}"
+        not_supported "${OS_NAME}" "${darwin_arch}"
         ;;
     esac
-  elif [ "${os_name}" = "Linux" ]; then
+  elif [ "${OS_NAME}" = "debian" ]; then
     archive_name="nvim-linux64"
   else
-    not_supported "${os_name}"
+    not_supported "${OS_NAME}"
   fi
   archive_filename="${archive_name}.tar.gz"
 
