@@ -7,6 +7,10 @@
 
 - clean: ["~", "~/.config"]
 
+- shell:
+    - [git submodule sync --recursive, Syncing submodules]
+    - [git submodule update --init --recursive, Updating submodules]
+
 - link:
     ~/.aerospace.toml:
       if: '[ "$(uname)" = "Darwin" ]'
@@ -42,8 +46,6 @@
     ~/university:
 
 - shell:
-    - [git submodule sync --recursive, Syncing submodules]
-    - [git submodule update --init --recursive, Updating submodules]
     - [
         ./utils/update_encrypted_config aws,
         Updating the local AWS configuration,
