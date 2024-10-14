@@ -8,6 +8,12 @@ The configuration system is currently under revamp. I’m trying out
 [Dotbot](https://github.com/anishathalye/dotbot) as the new way to manage the
 configuration files.
 
+## Bootstrapping
+
+Run the following command:
+
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/anttikivi/dotfiles/main/bootstrap)"
+
 ## License
 
 This repository is licensed under the MIT License. See the [LICENSE](LICENSE)
