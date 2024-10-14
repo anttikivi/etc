@@ -237,7 +237,18 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
       fi
     done
     for cask in "${DARWIN_CASKS[@]}"; do
-      brew install --cask "${cask}"
+      cask_name="$(basename "${cask}")"
+      echo "Checking if ${cask} is installed"
+      echo "The check is done against '${cask_name}'"
+      if ! brew ls | grep -qw "${cask_name}"; then
+        echo "${cask} is not installed, installing"
+        brew install --cask "${cask}"
+        echo "${cask} installed"
+      elif [ "${DISABLE_UPDATES}" != "true" ]; then
+        echo "Updating ${cask}"
+        brew upgrade --cask "${cask}"
+        echo "${cask} updated"
+      fi
     done
     echo -e "${ESC_GREEN}==> Homebrew packages installed${ESC_RESET}"
   fi
