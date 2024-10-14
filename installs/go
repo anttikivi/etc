@@ -19,11 +19,13 @@ install_go() {
     echo "No version argument was passed to the Go installation function" >&2
     exit 1
   fi
+  echo "Starting the installation of Go $1"
   echo "Removing old Go installation"
   go_dir="/usr/local/go"
   sudo rm -rf "${go_dir}"
   echo "Downloading Go"
-  archive_name="$(curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r --arg "wanted_version" "$1" --arg "os" "$(uname | tr '[:upper:]' '[:lower:]')" --arg "arch" "$(uname -m)" '.[] | select(.version == $wanted_version) | .files[] | select(.os == $os and .arch == $arch and .kind == "archive") | .filename')"
+  archive_name="$(curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r --arg "wanted_version" "go$1" --arg "os" "$(uname | tr '[:upper:]' '[:lower:]')" --arg "arch" "$(uname -m)" '.[] | select(.version == $wanted_version) | .files[] | select(.os == $os and .arch == $arch and .kind == "archive") | .filename')"
+  echo "Resolved ${archive_name} as the name of the archive to install"
   tmp_file="${HOME}/tmp/${archive_name}"
   if [ -f "${tmp_file}" ]; then
     rm "${tmp_file}"
@@ -39,9 +41,13 @@ if [ "${HAS_CONNECTION}" != "true" ]; then
 fi
 
 minor_ver="$(echo "${GO_VERSION}" | head -c "$(echo "${GO_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
-wanted_ver="$(curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | .version' | grep "${minor_ver}" | sort -V | tail -1)"
+wanted_ver="$(curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | .version' | grep "${minor_ver}" | sort -V | tail -1 | cut -c 3-)"
 # TODO: Some values of `uname -m` might need to be changed.
-current_ver="$(go version | sed "s/go version //" | sed "s: $(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)::")"
+current_ver="$(go version | sed "s/go version //" | sed "s: $(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)::" | cut -c 3-)"
+
+echo "Found the following Go versions:"
+echo "Current version: ${current_ver}"
+echo "Wanted version: ${wanted_ver}"
 
 if ! command -v go >/dev/null 2>&1; then
   install_go "${wanted_ver}"
