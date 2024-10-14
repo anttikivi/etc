@@ -52,7 +52,7 @@ echo "Wanted version: ${wanted_ver}"
 if ! command -v go >/dev/null 2>&1; then
   install_go "${wanted_ver}"
 elif [ "${wanted_ver}" != "${current_ver}" ]; then
-  if [ "${DISABLE_UPDATES}" = "true" ]; then
+  if [ "${DISABLE_UPDATES}" != "true" ]; then
     install_go "${wanted_ver}"
   else
     printf "%bGo update available! Current version: %s, available version: %s%b\n" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
