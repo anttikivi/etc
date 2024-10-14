@@ -13,7 +13,11 @@ not_supported() {
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${NVIM_VERSION}" | head -c "$(echo "${NVIM_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
   wanted_ver="$(gh api '/repos/neovim/neovim/releases?per_page=30' -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' | jq -r '.[] | .tag_name' | grep "${minor_ver}" | sort -V | tail -1)"
-  current_ver="$(nvim --version | head --lines 1 | cut -c 6-)"
+  current_ver=""
+  if command -v nvim >/dev/null 2>&1; then
+    current_ver="$(nvim --version | head --lines 1 | cut -c 6-)"
+    echo "Set ${current_ver} as the current Neovim version"
+  fi
   os_name="$(uname)"
   archive_name=""
   if [ "${os_name}" = "Darwin" ]; then

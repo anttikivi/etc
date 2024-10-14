@@ -42,8 +42,12 @@ fi
 
 minor_ver="$(echo "${GO_VERSION}" | head -c "$(echo "${GO_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
 wanted_ver="$(curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | .version' | grep "${minor_ver}" | sort -V | tail -1 | cut -c 3-)"
-# TODO: Some values of `uname -m` might need to be changed.
-current_ver="$(go version | sed "s/go version //" | sed "s: $(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)::" | cut -c 3-)"
+current_ver=""
+if command -v go >/dev/null 2>&1; then
+  # TODO: Some values of `uname -m` might need to be changed.
+  current_ver="$(go version | sed "s/go version //" | sed "s: $(uname | tr '[:upper:]' '[:lower:]')/$(uname -m)::" | cut -c 3-)"
+  echo "Set ${current_ver} as the current Go version"
+fi
 
 echo "Found the following Go versions:"
 echo "Current version: ${current_ver}"
