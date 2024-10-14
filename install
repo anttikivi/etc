@@ -27,7 +27,7 @@ declare -a DARWIN_PACKAGES=(
 )
 readonly DARWIN_PACKAGES
 
-declare -a DARWIN_CASKS=("nikitabobko/tap/aerospace")
+declare -a DARWIN_CASKS=("1password-cli" "nikitabobko/tap/aerospace")
 readonly DARWIN_CASKS
 
 declare -a CARGO_PACKAGES=("selene")
