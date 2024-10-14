@@ -223,8 +223,10 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
   if [ "${OS_NAME}" = "darwin" ]; then
     echo -e "${ESC_BLUE}Installing Homebrew packages${ESC_RESET}"
     for pkg in "${DARWIN_PACKAGES[@]}"; do
+      pkg_name="$(basename "${pkg}")"
       echo "Checking if ${pkg} is installed"
-      if ! brew ls | grep -qw "${pkg}"; then
+      echo "The check is done against '${pkg_name}'"
+      if ! brew ls | grep -qw "${pkg_name}"; then
         echo "${pkg} is not installed, installing"
         brew install "${pkg}"
         echo "${pkg} installed"
