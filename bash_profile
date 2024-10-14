@@ -22,8 +22,10 @@ pathmunge "/usr/local/go/bin"
 pathmunge "${GOBIN}"
 pathmunge "${HOME}/.local/opt/nvim/bin"
 
-# shellcheck source=../../.cargo/env
-source "${HOME}/.cargo/env"
+if [ -e "${HOME}/.cargo/env" ]; then
+  # shellcheck source=../../.cargo/env
+  source "${HOME}/.cargo/env"
+fi
 
 NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export NVM_DIR
