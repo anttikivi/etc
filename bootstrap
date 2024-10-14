@@ -5,8 +5,11 @@ set -e
 DOTFILES_DIR="${HOME}/etc/dotfiles"
 readonly DOTFILES_DIR
 
-REMOTE_URL='git@github.com:anttikivi/dotfiles.git'
-readonly REMOTE_URL
+HTTPS_REMOTE_URL='https://github.com/anttikivi/dotfiles.git'
+readonly HTTPS_REMOTE_URL
+
+SSH_REMOTE_URL='git@github.com:anttikivi/dotfiles.git'
+readonly SSH_REMOTE_URL
 
 echo "Running the dotfiles bootstrapping script!"
 
@@ -14,7 +17,7 @@ echo "Checking if the dotfiles repository is present at ${DOTFILES_DIR}"
 
 if [ ! -e "${DOTFILES_DIR}" ]; then
   echo "Cloning the dotfiles repository into ${DOTFILES_DIR}"
-  git clone "${REMOTE_URL}" "${DOTFILES_DIR}"
+  git clone "${HTTPS_REMOTE_URL}" "${DOTFILES_DIR}"
 fi
 
 cd "${DOTFILES_DIR}"
@@ -22,6 +25,20 @@ cd "${DOTFILES_DIR}"
 echo "Running the main script"
 
 ./install
+
+# shellcheck source=../../.bash_profile
+source ~/.bash_profile
+
+current_url="$(git remote get-url origin)"
+
+echo "The remote URL of the dotfiles repository is currently set to ${current_url}"
+
+if [ "${current_url}" != "${SSH_REMOTE_URL}" ]; then
+  git remote set-url origin "${SSH_REMOTE_URL}"
+fi
+
+echo "The remote URLs of the dotfiles repository are now set to:"
+git remote -v
 
 cd - >/dev/null
 
