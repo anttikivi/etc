@@ -25,11 +25,18 @@ if [ "${OS_NAME}" = "darwin" ]; then
   fi
   echo "Created to temporary directory"
   pkg_file="${tmp_dir}/AWSCLIV2.pkg"
+  choices_file="${tmp_dir}/aws_cli_choices.xml"
+  if [ -f "${choices_file}" ]; then
+    rm "${choices_file}"
+  fi
+  echo "Copying the AWS CLI installation choices file to ${choices_file}"
+  cp ../templates/aws_cli_choices.xml "${choices_file}"
   # TODO: Think about setting the `--silent` flag (or rather `-sS`).
   # shellcheck disable=SC2046
   curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
   echo "Downloaded the AWS CLI installer package"
-  installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML ../templates/aws_cli_choices.xml
+  installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML "${choices_file}"
+  rm "${choices_file}"
   echo "Ran the AWS CLI installer"
   if [ -e ~/.local/bin/aws ]; then
     rm ~/.local/bin/aws
