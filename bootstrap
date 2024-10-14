@@ -4,21 +4,25 @@ set -e
 
 ETC_DIR="${HOME}/etc"
 readonly ETC_DIR
-
 DOTFILES_DIR="${ETC_DIR}/dotfiles"
 readonly DOTFILES_DIR
-
 HTTPS_REMOTE_URL='https://github.com/anttikivi/dotfiles.git'
 readonly HTTPS_REMOTE_URL
-
 SSH_REMOTE_URL='git@github.com:anttikivi/dotfiles.git'
 readonly SSH_REMOTE_URL
+PURUS_HTTPS_URL='https://github.com/anttikivi/purus.git'
+readonly PURUS_HTTPS_URL
+PURUS_SSH_URL='git@github.com:anttikivi/purus.git'
+readonly PURUS_SSH_URL
 
 echo "Running the dotfiles bootstrapping script!"
 
 echo "Checking if the dotfiles repository is present at ${DOTFILES_DIR}"
 
+first_run="false"
+
 if [ ! -e "${DOTFILES_DIR}" ]; then
+  first_run="true"
   if [ ! -d "${ETC_DIR}" ]; then
     mkdir "${ETC_DIR}"
   fi
@@ -28,12 +32,25 @@ fi
 
 cd "${DOTFILES_DIR}"
 
+echo "Changing the URL for the 'purus' submodule"
+
+git submodule set-url -- purus "${PURUS_HTTPS_URL}"
+
 echo "Running the main script"
 
 ./install
 
 # shellcheck source=../../.bash_profile
 source ~/.bash_profile
+
+echo "Changing the URL for the 'purus' submodule back to the original"
+
+git submodule set-url -- purus "${PURUS_SSH_URL}"
+
+echo "Updating the submodules"
+
+git submodule sync --recursive
+git submodule update --init --recursive
 
 current_url="$(git remote get-url origin)"
 
