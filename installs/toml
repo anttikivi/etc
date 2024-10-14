@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+if [ "${HAS_CONNECTION}" != "true" ]; then
+  echo "Skipping the TOML tasks as there is no Internet connection"
+  exit 0
+fi
+
+if ! command -v taplo >/dev/null 2>&1; then
+  echo "Installing Taplo"
+  os="$(uname | tr '[:upper:]' '[:lower:]')"
+  arch="$(uname -m)"
+  if [ "${arch}" = "arm64" ]; then
+    arch="aarch64"
+  fi
+  curl -fsSL "https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-${os}-${arch}.gz" | gzip -d - | install -m 755 /dev/stdin ~/.local/bin/taplo
+fi
