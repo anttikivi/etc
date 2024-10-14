@@ -36,6 +36,7 @@
 - create:
     ~/.aws:
       mode: 0700
+    ~/.local/opt/:
     ~/.ssh:
       mode: 0700
     ~/development:
