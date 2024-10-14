@@ -2,8 +2,8 @@
 
 set -e
 
-. ../utils/colors.sh
-. ../versions.sh
+\. ../utils/colors.sh
+\. ../versions.sh
 
 install_kitty() {
   if [ $# -eq 0 ]; then
