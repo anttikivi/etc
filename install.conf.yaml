@@ -35,8 +35,11 @@
     ~/.ssh:
       mode: 0700
     ~/development:
+    ~/development/learning:
     ~/development/plugins:
+    ~/development/visiosto:
     ~/tmp:
+    ~/university:
 
 - shell:
     - [git submodule sync --recursive, Syncing submodules]
