@@ -2,7 +2,10 @@
 
 set -e
 
-DOTFILES_DIR="${HOME}/etc/dotfiles"
+ETC_DIR="${HOME}/etc"
+readonly ETC_DIR
+
+DOTFILES_DIR="${ETC_DIR}/dotfiles"
 readonly DOTFILES_DIR
 
 HTTPS_REMOTE_URL='https://github.com/anttikivi/dotfiles.git'
@@ -16,6 +19,9 @@ echo "Running the dotfiles bootstrapping script!"
 echo "Checking if the dotfiles repository is present at ${DOTFILES_DIR}"
 
 if [ ! -e "${DOTFILES_DIR}" ]; then
+  if [ ! -d "${ETC_DIR}" ]; then
+    mkdir "${ETC_DIR}"
+  fi
   echo "Cloning the dotfiles repository into ${DOTFILES_DIR}"
   git clone "${HTTPS_REMOTE_URL}" "${DOTFILES_DIR}"
 fi
