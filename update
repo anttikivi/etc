@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+source ./utils/colors.sh
+
+echo -e "${ESC_MAGENTA}Running the installation script with updates allowed${ESC_RESET}"
+
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${BASEDIR}"
+DISABLE_UPDATES=false "${BASEDIR}/install"
+cd - >/dev/null
