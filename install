@@ -272,7 +272,7 @@ if [ "${FIRST_RUN}" = "true" ]; then
   echo "Start by making sure that the desktop integration is set up as per the instructions in the 1Password CLI documentation:"
   echo "https://developer.1password.com/docs/cli/get-started/#step-2-turn-on-the-1password-desktop-app-integration"
   read -p "Press Enter to continue" </dev/tty
-  printf "\nNow running a command to log you in to the 1Password CLI\n"
+  printf "\nNow printing the vaults to ensure that you are logged in to the 1Password CLI\n"
   op vault list
   echo -e "${ESC_GREEN}The 1Password CLI should now be set up!${ESC_RESET}"
 fi
