@@ -27,7 +27,12 @@ declare -a DARWIN_PACKAGES=(
 )
 readonly DARWIN_PACKAGES
 
-declare -a DARWIN_CASKS=("1password-cli" "nikitabobko/tap/aerospace")
+declare -a DARWIN_CASKS=(
+  "1password-cli"
+  "font-jetbrains-mono"
+  "font-jetbrains-mono-nerd-font"
+  "nikitabobko/tap/aerospace"
+)
 readonly DARWIN_CASKS
 
 declare -a CARGO_PACKAGES=("selene")
