@@ -286,10 +286,31 @@ while ! gh auth status >/dev/null 2>&1; do
 done
 echo -e "${ESC_GREEN}The GitHub CLI is set up!${ESC_RESET}"
 
+# The dependant scripts are run last as being in this array implies that they
+# depend on other scripts.
+declare -a DEPENDANT_SCRIPTS=("alacritty")
+
 echo -e "${ESC_BLUE}Running the tasks from scripts in ${BASEDIR}/installs${ESC_RESET}"
 for script in "${BASEDIR}"/installs/*; do
-  cd "$(dirname "${script}")"
   pkg="$(basename "${script}")"
+  if [[ " ${DEPENDANT_SCRIPTS[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+    echo "The ${pkg} script depends on other scripts so it's skipped for now"
+    continue
+  fi
+  cd "$(dirname "${script}")"
+  echo -e "${ESC_BLUE}Running the ${pkg} tasks${ESC_RESET}"
+  /bin/sh "${script}"
+  echo -e "${ESC_GREEN}${pkg} tasks run${ESC_RESET}"
+  cd - >/dev/null
+done
+source_environment
+for script in "${BASEDIR}"/installs/*; do
+  pkg="$(basename "${script}")"
+  if [[ ! " ${DEPENDANT_SCRIPTS[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
+    echo "The ${pkg} script was already run"
+    continue
+  fi
+  cd "$(dirname "${script}")"
   echo -e "${ESC_BLUE}Running the ${pkg} tasks${ESC_RESET}"
   /bin/sh "${script}"
   echo -e "${ESC_GREEN}${pkg} tasks run${ESC_RESET}"

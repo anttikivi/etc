@@ -20,11 +20,17 @@ fi
 
 echo "The current system color scheme is ${system_color_scheme}"
 
+alacritty_color_scheme="${LIGHT_COLOR_SCHEME}"
+if [ "${system_color_scheme}" = "dark" ]; then
+  alacritty_color_scheme="${DARK_COLOR_SCHEME}"
+fi
 kitty_color_scheme="${KITTY_LIGHT_COLOR_SCHEME}"
 if [ "${system_color_scheme}" = "dark" ]; then
   kitty_color_scheme="${KITTY_DARK_COLOR_SCHEME}"
 fi
 
-echo "Changing kitty to the ${system_color_scheme} color scheme: ${kitty_color_scheme}"
+echo "Changing Alacritty to the ${system_color_scheme} color scheme: ${alacritty_color_scheme}"
+cat ~/.config/alacritty/themes/"${alacritty_color_scheme}".toml >~/.config/alacritty/color_scheme.toml
 
+echo "Changing kitty to the ${system_color_scheme} color scheme: ${kitty_color_scheme}"
 ~/.local/bin/kitten themes --reload-in all "${kitty_color_scheme}"

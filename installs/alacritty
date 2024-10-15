@@ -1,0 +1,178 @@
+#!/bin/sh
+
+set -e
+
+\. ../versions.sh
+\. ../utils/colors.sh
+
+not_supported() {
+  echo "This system is not supported: $*" >&2
+  exit 1
+}
+
+install_alacritty() {
+  if [ $# -eq 0 ]; then
+    echo "No arguments were passed to the Alacritty installation function" >&2
+    exit 1
+  fi
+  if [ -z "$1" ]; then
+    echo "No version argument was passed to the Alacritty installation function" >&2
+    exit 1
+  fi
+  echo "Starting the installation of Alacritty version $1"
+  if [ "${OS_NAME}" = "darwin" ]; then
+    echo "Installing Alacritty on macOS"
+    tmp_dir="${HOME}/tmp/alacritty"
+    if [ -d "${tmp_dir}" ]; then
+      rm -rf "${tmp_dir}"
+    fi
+    mkdir -p "${tmp_dir}"
+    file_name="Alacritty-v$1.dmg"
+    tmp_file="${tmp_dir}/${file_name}"
+    echo "Downloading Alacritty"
+    curl -sSL "https://github.com/alacritty/alacritty/releases/download/v$1/${file_name}" -o "${tmp_file}"
+    mount_point="${tmp_dir}/alacritty_mp"
+    echo "Creating the mount point at ${mount_point}"
+    if [ -d "${mount_point}" ]; then
+      rm -rf "${mount_point}"
+    fi
+    mkdir "${mount_point}"
+    hdiutil attach "${tmp_file}" -mountpoint "${mount_point}"
+    dest="/Applications/Alacritty.app"
+    echo "Ensuring a clean installation destination at ${dest}"
+    if [ -e "${dest}" ]; then
+      rm -rf "${dest}"
+    fi
+    echo "Copying Alacritty to the destination"
+    ditto -v "${mount_point}/Alacritty.app" "${dest}"
+    hdiutil detach "${mount_point}"
+    rm -rf "${tmp_dir}"
+    echo "Creating link to the Alacritty binary"
+    if [ -e "${HOME}/.local/bin/alacritty" ]; then
+      rm "${HOME}/.local/bin/alacritty"
+    fi
+    ln -fs /Applications/Alacritty/Contents/MacOS/alacritty ~/.local/bin/alacritty
+  else
+    not_supported "${OS_NAME}"
+  fi
+  echo "Alacritty $1 installed"
+}
+
+if [ "${HAS_CONNECTION}" != "true" ]; then
+  echo "Skipping the Alacritty tasks as there is no Internet connection"
+  exit 0
+fi
+
+minor_ver="$(echo "${ALACRITTY_VERSION}" | head -c "$(echo "${ALACRITTY_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
+# Include `grep -v -` to exclude prereleases from the results.
+wanted_ver="$(gh api -X 'GET' '/repos/alacritty/alacritty/releases' \
+  -H 'Accept: application/vnd.github+json' \
+  -H 'X-GitHub-Api-Version: 2022-11-28' \
+  | jq -r '.[] | .tag_name' | grep "${minor_ver}" | grep -v - | sort -V \
+  | tail -1 | cut -c 2-)"
+current_ver=""
+if command -v alacritty >/dev/null 2>&1; then
+  current_ver="$(alacritty --version | cut -c $(($(alacritty --version | grep -ob "\ " | head -1 | grep -oE "[0-9]+") + 2))-"$(alacritty --version | grep -ob "\ " | head -2 | tail -1 | grep -oE "[0-9]+")")"
+  echo "Set ${current_ver} as the current Alacritty version"
+fi
+
+echo "Found the following Alacritty versions:"
+echo "Current version: ${current_ver}"
+echo "Wanted version: ${wanted_ver}"
+
+if ! command -v alacritty >/dev/null 2>&1; then
+  install_alacritty "${wanted_ver}"
+elif [ "${wanted_ver}" != "${current_ver}" ]; then
+  if [ "${DISABLE_UPDATES}" != "true" ]; then
+    install_alacritty "${wanted_ver}"
+  else
+    printf "%bAlacritty update available! Current version: %s, available version: %s%b\n" "${ESC_YELLOW}" "${current_ver}" "${wanted_ver}" "${ESC_RESET}"
+  fi
+fi
+
+echo "Installing Alacritty themes"
+
+theme_dir="${HOME}/.config/alacritty/themes"
+echo "Ensuring that the themes directory exists: ${theme_dir}"
+if [ ! -d "${theme_dir}" ]; then
+  mkdir -p "${theme_dir}"
+fi
+
+echo "Installing Rosé Pine for Alacritty"
+clone_dir="${HOME}/tmp/rose-pine"
+if [ -d "${clone_dir}" ]; then
+  rm -rf "${clone_dir}"
+fi
+echo "Cloning the theme to ${clone_dir}"
+git clone https://github.com/rose-pine/alacritty.git "${clone_dir}"
+echo "Cleaning up the old theme files"
+file_name="rose-pine.toml"
+echo "Checking ${theme_dir}/${file_name}"
+if [ -f "${theme_dir}/${file_name}" ]; then
+  echo "${theme_dir}/${file_name} exists, removing..."
+  rm "${theme_dir}/${file_name}"
+fi
+file_name="rose-pine-dawn.toml"
+echo "Checking ${theme_dir}/${file_name}"
+if [ -f "${theme_dir}/${file_name}" ]; then
+  echo "${theme_dir}/${file_name} exists, removing..."
+  rm "${theme_dir}/${file_name}"
+fi
+file_name="rose-pine-moon.toml"
+echo "Checking ${theme_dir}/${file_name}"
+if [ -f "${theme_dir}/${file_name}" ]; then
+  echo "${theme_dir}/${file_name} exists, removing..."
+  rm "${theme_dir}/${file_name}"
+fi
+echo "Copying the theme files from ${clone_dir} to ${theme_dir}"
+cp -r "${clone_dir}/dist/" "${theme_dir}/"
+echo "Removing the ${clone_dir}"
+rm -rf "${clone_dir}"
+echo "Installed Rosé Pine for Alacritty"
+
+echo "Installing Catppuccin for Alacritty"
+variant="catppuccin-latte"
+echo "Installing ${variant}"
+echo "Cleaning up the old theme file"
+file_name="${variant}.toml"
+echo "Checking ${theme_dir}/${file_name}"
+if [ -f "${theme_dir}/${file_name}" ]; then
+  echo "${theme_dir}/${file_name} exists, removing..."
+  rm "${theme_dir}/${file_name}"
+fi
+curl -LO --output-dir "${theme_dir}" "https://github.com/catppuccin/alacritty/raw/main/${file_name}"
+
+variant="catppuccin-frappe"
+echo "Installing ${variant}"
+echo "Cleaning up the old theme file"
+file_name="${variant}.toml"
+echo "Checking ${theme_dir}/${file_name}"
+if [ -f "${theme_dir}/${file_name}" ]; then
+  echo "${theme_dir}/${file_name} exists, removing..."
+  rm "${theme_dir}/${file_name}"
+fi
+curl -LO --output-dir "${theme_dir}" "https://github.com/catppuccin/alacritty/raw/main/${file_name}"
+
+variant="catppuccin-macchiato"
+echo "Installing ${variant}"
+echo "Cleaning up the old theme file"
+file_name="${variant}.toml"
+echo "Checking ${theme_dir}/${file_name}"
+if [ -f "${theme_dir}/${file_name}" ]; then
+  echo "${theme_dir}/${file_name} exists, removing..."
+  rm "${theme_dir}/${file_name}"
+fi
+curl -LO --output-dir "${theme_dir}" "https://github.com/catppuccin/alacritty/raw/main/${file_name}"
+
+variant="catppuccin-mocha"
+echo "Installing ${variant}"
+echo "Cleaning up the old theme file"
+file_name="${variant}.toml"
+echo "Checking ${theme_dir}/${file_name}"
+if [ -f "${theme_dir}/${file_name}" ]; then
+  echo "${theme_dir}/${file_name} exists, removing..."
+  rm "${theme_dir}/${file_name}"
+fi
+curl -LO --output-dir "${theme_dir}" "https://github.com/catppuccin/alacritty/raw/main/${file_name}"
+
+echo "Installed Catppuccin for Alacritty"
