@@ -5,6 +5,9 @@ set -e
 \. ../versions.sh
 \. ../utils/colors.sh
 
+THEME_DIR="${HOME}/.config/alacritty/themes"
+readonly THEME_DIR
+
 not_supported() {
   echo "This system is not supported: $*" >&2
   exit 1
@@ -51,11 +54,37 @@ install_alacritty() {
     if [ -e "${HOME}/.local/bin/alacritty" ]; then
       rm "${HOME}/.local/bin/alacritty"
     fi
-    ln -fs /Applications/Alacritty/Contents/MacOS/alacritty ~/.local/bin/alacritty
+    ln -fs /Applications/Alacritty.app/Contents/MacOS/alacritty ~/.local/bin/alacritty
   else
     not_supported "${OS_NAME}"
   fi
   echo "Alacritty $1 installed"
+}
+
+install_theme() {
+  if [ $# -eq 0 ]; then
+    echo "No arguments were passed to the theme installation function" >&2
+    exit 1
+  fi
+  if [ -z "$1" ]; then
+    echo "No variant argument was passed to the theme installation function" >&2
+    exit 1
+  fi
+  if [ -z "$2" ]; then
+    echo "No base URL argument was passed to the theme installation function" >&2
+    exit 1
+  fi
+  echo "Checking if the theme $1 needs to be installed"
+  file_name="$1.toml"
+  echo "Checking ${THEME_DIR}/${file_name}"
+  if [ ! -f "${THEME_DIR}/${file_name}" ] || [ "${DISABLE_UPDATES}" != "true" ]; then
+    if [ -f "${THEME_DIR}/${file_name}" ]; then
+      echo "${THEME_DIR}/${file_name} exists, removing..."
+      rm "${THEME_DIR}/${file_name}"
+    fi
+    curl -LO --output-dir "${THEME_DIR}" "$2/${file_name}"
+  fi
+  echo "$1 installed"
 }
 
 if [ "${HAS_CONNECTION}" != "true" ]; then
@@ -92,87 +121,28 @@ fi
 
 echo "Installing Alacritty themes"
 
-theme_dir="${HOME}/.config/alacritty/themes"
-echo "Ensuring that the themes directory exists: ${theme_dir}"
-if [ ! -d "${theme_dir}" ]; then
-  mkdir -p "${theme_dir}"
+echo "Ensuring that the themes directory exists: ${THEME_DIR}"
+if [ ! -d "${THEME_DIR}" ]; then
+  mkdir -p "${THEME_DIR}"
 fi
 
 echo "Installing Rosé Pine for Alacritty"
-clone_dir="${HOME}/tmp/rose-pine"
-if [ -d "${clone_dir}" ]; then
-  rm -rf "${clone_dir}"
-fi
-echo "Cloning the theme to ${clone_dir}"
-git clone https://github.com/rose-pine/alacritty.git "${clone_dir}"
-echo "Cleaning up the old theme files"
-file_name="rose-pine.toml"
-echo "Checking ${theme_dir}/${file_name}"
-if [ -f "${theme_dir}/${file_name}" ]; then
-  echo "${theme_dir}/${file_name} exists, removing..."
-  rm "${theme_dir}/${file_name}"
-fi
-file_name="rose-pine-dawn.toml"
-echo "Checking ${theme_dir}/${file_name}"
-if [ -f "${theme_dir}/${file_name}" ]; then
-  echo "${theme_dir}/${file_name} exists, removing..."
-  rm "${theme_dir}/${file_name}"
-fi
-file_name="rose-pine-moon.toml"
-echo "Checking ${theme_dir}/${file_name}"
-if [ -f "${theme_dir}/${file_name}" ]; then
-  echo "${theme_dir}/${file_name} exists, removing..."
-  rm "${theme_dir}/${file_name}"
-fi
-echo "Copying the theme files from ${clone_dir} to ${theme_dir}"
-cp -r "${clone_dir}/dist/" "${theme_dir}/"
-echo "Removing the ${clone_dir}"
-rm -rf "${clone_dir}"
-echo "Installed Rosé Pine for Alacritty"
+base_url="https://github.com/rose-pine/alacritty/raw/main/dist"
+variant="rose-pine"
+install_theme "${variant}" "${base_url}"
+variant="rose-pine-dawn"
+install_theme "${variant}" "${base_url}"
+variant="rose-pine-moon"
+install_theme "${variant}" "${base_url}"
 
 echo "Installing Catppuccin for Alacritty"
+base_url="https://github.com/catppuccin/alacritty/raw/main"
 variant="catppuccin-latte"
-echo "Installing ${variant}"
-echo "Cleaning up the old theme file"
-file_name="${variant}.toml"
-echo "Checking ${theme_dir}/${file_name}"
-if [ -f "${theme_dir}/${file_name}" ]; then
-  echo "${theme_dir}/${file_name} exists, removing..."
-  rm "${theme_dir}/${file_name}"
-fi
-curl -LO --output-dir "${theme_dir}" "https://github.com/catppuccin/alacritty/raw/main/${file_name}"
-
+install_theme "${variant}" "${base_url}"
 variant="catppuccin-frappe"
-echo "Installing ${variant}"
-echo "Cleaning up the old theme file"
-file_name="${variant}.toml"
-echo "Checking ${theme_dir}/${file_name}"
-if [ -f "${theme_dir}/${file_name}" ]; then
-  echo "${theme_dir}/${file_name} exists, removing..."
-  rm "${theme_dir}/${file_name}"
-fi
-curl -LO --output-dir "${theme_dir}" "https://github.com/catppuccin/alacritty/raw/main/${file_name}"
-
+install_theme "${variant}" "${base_url}"
 variant="catppuccin-macchiato"
-echo "Installing ${variant}"
-echo "Cleaning up the old theme file"
-file_name="${variant}.toml"
-echo "Checking ${theme_dir}/${file_name}"
-if [ -f "${theme_dir}/${file_name}" ]; then
-  echo "${theme_dir}/${file_name} exists, removing..."
-  rm "${theme_dir}/${file_name}"
-fi
-curl -LO --output-dir "${theme_dir}" "https://github.com/catppuccin/alacritty/raw/main/${file_name}"
-
+install_theme "${variant}" "${base_url}"
 variant="catppuccin-mocha"
-echo "Installing ${variant}"
-echo "Cleaning up the old theme file"
-file_name="${variant}.toml"
-echo "Checking ${theme_dir}/${file_name}"
-if [ -f "${theme_dir}/${file_name}" ]; then
-  echo "${theme_dir}/${file_name} exists, removing..."
-  rm "${theme_dir}/${file_name}"
-fi
-curl -LO --output-dir "${theme_dir}" "https://github.com/catppuccin/alacritty/raw/main/${file_name}"
-
+install_theme "${variant}" "${base_url}"
 echo "Installed Catppuccin for Alacritty"
