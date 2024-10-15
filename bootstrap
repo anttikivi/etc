@@ -45,20 +45,14 @@ fi
 
 echo "Running the main script"
 
-./install
+if [ "${first_run}" = "true" ]; then
+  FIRST_RUN=true ./install
+else
+  ./install
+fi
 
 # shellcheck source=../../.bash_profile
 source ~/.bash_profile
-
-if [ "${first_run}" = "true" ]; then
-  echo "As this is the first run, you need to set up the 1Password CLI"
-  echo "Start by making sure that the desktop integration is set up as per the instructions in the 1Password CLI documentation:"
-  echo "https://developer.1password.com/docs/cli/get-started/#step-2-turn-on-the-1password-desktop-app-integration"
-  read -p "Press Enter to continue" </dev/tty
-  printf "\nNow running a command to log you in to the 1Password CLI\n"
-  op vault list
-  echo "The 1Password CLI should now be set up!"
-fi
 
 if [ "${first_run}" = "true" ]; then
   echo "Changing the URL for the 'purus' submodule back to the original"
