@@ -49,15 +49,19 @@ install_node() {
     echo "Node.js $1 installed"
     return
   elif [ "${DISABLE_UPDATES}" != "true" ]; then
-    echo "Updating Node.js $1"
+    echo "Checking if Node.js $1 needs to be updated"
     current_ver="$(nvm version "$1")"
     echo "The currently installed version of Node.js $1 is ${current_ver}"
-    # remote_ver="$(nvm version-remote "$1")"
-    nvm install --reinstall-packages-from="$1" "$1"
-    echo "Installed Node.js ${current_ver}"
-    echo "Uninstalling the old version of Node.js $1"
-    nvm uninstall "${current_ver}"
-    echo "Uninstalled"
+    remote_ver="$(nvm version-remote "$1")"
+    echo "The currently-available remote version of Node.js $1 is ${remote_ver}"
+    if [ "${remote_ver}" != "${current_ver}" ]; then
+      echo "Updating Node.js $1"
+      nvm install --reinstall-packages-from="$1" "$1"
+      echo "Installed Node.js ${current_ver}"
+      echo "Uninstalling the old version of Node.js $1"
+      nvm uninstall "${current_ver}"
+      echo "Uninstalled"
+    fi
   else
     echo "Not installing Node.js $1"
   fi
