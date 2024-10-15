@@ -42,7 +42,7 @@ readonly GO_PACKAGES
 declare -a LUA_PACKAGES=("luacheck")
 readonly LUA_PACKAGES
 
-declare -a PIP_PACKAGES=("ansible-lint")
+declare -a PIP_PACKAGES=("ansible-lint" "argcomplete")
 readonly PIP_PACKAGES
 
 DISABLE_UPDATES="${DISABLE_UPDATES:-true}"
