@@ -85,6 +85,13 @@ print_version() {
   exit 0
 }
 
+source_environment() {
+  echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"
+  # shellcheck source=../../.bash_profile
+  source "${HOME}/.bash_profile"
+  echo -e "${ESC_GREEN}==> Shell environment sourced${ESC_RESET}"
+}
+
 if [[ ! " ${SUPPORTED_PLATFORMS[*]} " =~ [[:space:]]${OS_NAME}[[:space:]] ]]; then
   not_supported "${OS_NAME}"
 fi
@@ -221,10 +228,7 @@ git submodule update --init --recursive "${DOTBOT_DIR}"
 
 "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
-echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"
-# shellcheck source=../../.bash_profile
-source "${HOME}/.bash_profile"
-echo -e "${ESC_GREEN}==> Shell environment sourced${ESC_RESET}"
+source_environment
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   if [ "${OS_NAME}" = "darwin" ]; then
@@ -292,6 +296,8 @@ for script in "${BASEDIR}"/installs/*; do
   cd - >/dev/null
 done
 echo -e "${ESC_GREEN}==> All tasks from the scripts run${ESC_RESET}"
+
+source_environment
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   # TODO: Figure out how to install updates.
