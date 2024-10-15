@@ -341,4 +341,10 @@ else
   echo -e "${ESC_YELLOW}Not installing or updating packages due to the script not having an Internet connection${ESC_RESET}"
 fi
 
+echo -e "${ESC_BLUE}Creating system daemons${ESC_RESET}"
+cd utils
+/bin/sh "${BASEDIR}/utils/update_color_scheme_daemon"
+cd - >/dev/null
+echo -e "${ESC_GREEN}==> All daemons created${ESC_RESET}"
+
 echo -e "\n${ESC_GREEN}==> All tasks run${ESC_RESET}"

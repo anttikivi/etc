@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+echo "Watching for changes in the system color scheme"
+
+if [ "$(uname)" = "Darwin" ]; then
+  echo "Determined the operating system to be Darwin (macOS)"
+  /opt/homebrew/bin/dark-notify -c ~/.local/bin/update_color_scheme
+fi

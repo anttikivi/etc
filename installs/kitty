@@ -71,39 +71,4 @@ if [ "${OS_NAME}" = "darwin" ]; then
   echo "Creating links on macOS to the kitty binaries"
   ln -sf /Applications/kitty.app/Contents/MacOS/kitty /Applications/kitty.app/Contents/MacOS/kitten ~/.local/bin/
   echo "Links created"
-
-  echo "Starting the daemon for kitty's colors"
-
-  launch_agent="fi.anttikivi.kittycolors.plist"
-  tmp_file="${HOME}/tmp/${launch_agent}"
-  if [ -f "${tmp_file}" ]; then
-    rm "${tmp_file}"
-  fi
-  cp ../templates/"${launch_agent}" "${tmp_file}"
-  echo "Launch agent copied to the temporary file: ${tmp_file}"
-  sed -i '' "s:{HOME}:${HOME}:g" "${tmp_file}"
-  echo "Replaced '{HOME}' with '${HOME}' in ${tmp_file}"
-
-  if ! diff "${tmp_file}" "${HOME}/Library/LaunchAgents/${launch_agent}" >/dev/null 2>&1; then
-    echo "The launch agent at ${HOME}/Library/LaunchAgents/${launch_agent} is different from the new one or does not exist"
-    if [ -f "${HOME}/Library/LaunchAgents/${launch_agent}" ]; then
-      echo "Unloading the launch agent"
-      # TODO: Don't use this legacy syntax for `launchd`.
-      launchctl unload -w ~/Library/LaunchAgents/"${launch_agent}"
-      echo "Launch agent unloaded"
-      echo "Removing the launch agent"
-      rm ~/Library/LaunchAgents/"${launch_agent}"
-      echo "Launch agent removed"
-    fi
-    echo "Copying the launch agent"
-    cp "${tmp_file}" ~/Library/LaunchAgents/"${launch_agent}"
-    echo "Loading the launch agent"
-    # TODO: Don't use this legacy syntax for `launchd`.
-    launchctl load -w ~/Library/LaunchAgents/"${launch_agent}"
-    echo "Started ${HOME}/Library/LaunchAgents/${launch_agent}"
-  else
-    echo "The launch agent property lists match!"
-  fi
-
-  rm "${tmp_file}"
 fi

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+set -e
+
+# shellcheck source=../../.config/env/color_scheme.sh
+. ~/.config/env/color_scheme.sh
+
+echo "Updating the color schemes"
+
+system_color_scheme="$1"
+if [ -z "$1" ]; then
+  echo "No color scheme was passed to the script, figuring it out..."
+  if [ "$(uname)" = "Darwin" ]; then
+    system_color_scheme="$(/opt/homebrew/bin/dark-notify -e)"
+  else
+    echo "Running on a system that is not supported, exiting..." >&2
+    exit 1
+  fi
+fi
+
+echo "The current system color scheme is ${system_color_scheme}"
+
+kitty_color_scheme="${KITTY_LIGHT_COLOR_SCHEME}"
+if [ "${system_color_scheme}" = "dark" ]; then
+  kitty_color_scheme="${KITTY_DARK_COLOR_SCHEME}"
+fi
+
+echo "Changing kitty to the ${system_color_scheme} color scheme: ${kitty_color_scheme}"
+
+~/.local/bin/kitten themes --reload-in all "${kitty_color_scheme}"

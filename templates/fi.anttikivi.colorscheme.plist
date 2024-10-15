@@ -3,10 +3,10 @@
 <plist version="1.0">
   <dict>
     <key>Label</key>
-    <string>fi.anttikivi.kittycolors</string>
+    <string>fi.anttikivi.colorscheme</string>
     <key>ProgramArguments</key>
     <array>
-      <string>{HOME}/.local/bin/kitty_watch_colors</string>
+      <string>{HOME}/.local/bin/watch_color_scheme</string>
     </array>
     <key>RunAtLoad</key>
     <true />
@@ -16,8 +16,8 @@
       <false/>
     </dict>
     <key>StandardErrorPath</key>
-    <string>{HOME}/.local/var/log/kitty_colors.err</string>
+    <string>{HOME}/.local/var/log/color_scheme.err</string>
     <key>StandardOutPath</key>
-    <string>{HOME}/.local/var/log/kitty_colors.log</string>
+    <string>{HOME}/.local/var/log/color_scheme.log</string>
   </dict>
 </plist>
