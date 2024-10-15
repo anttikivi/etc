@@ -9,7 +9,7 @@ fi
 
 if ! command -v rustc >/dev/null 2>&1; then
   echo "Installing the Rust toolchain"
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -- --no-modify-path -y
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y
 elif [ "${DISABLE_UPDATES}" != "true" ]; then
   echo "Updating the Rust toolchain"
   rustup update
