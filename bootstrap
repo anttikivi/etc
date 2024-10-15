@@ -70,6 +70,10 @@ if [ "${first_run}" = "true" ]; then
 
   echo "The remote URLs of the dotfiles repository are now set to:"
   git remote -v
+  echo "Fetching the remote"
+  git fetch
+  echo "The status of the Git repository is:"
+  git status
 fi
 
 cd - >/dev/null
