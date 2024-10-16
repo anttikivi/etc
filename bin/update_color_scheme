@@ -2,7 +2,7 @@
 
 set -e
 
-# shellcheck source=../../.config/env/color_scheme.sh
+# shellcheck source=../color_scheme.sh
 . ~/.config/env/color_scheme.sh
 
 echo "Updating the color schemes"
@@ -23,6 +23,9 @@ echo "The current system color scheme is ${system_color_scheme}"
 alacritty_color_scheme="${LIGHT_COLOR_SCHEME}"
 if [ "${system_color_scheme}" = "dark" ]; then
   alacritty_color_scheme="${DARK_COLOR_SCHEME}"
+fi
+if [ "${COLOR_SCHEME}" = "${TOKYONIGHT_NAME}" ]; then
+  alacritty_color_scheme="$(echo "${alacritty_color_scheme}" | tr '-' '_')"
 fi
 kitty_color_scheme="${KITTY_LIGHT_COLOR_SCHEME}"
 if [ "${system_color_scheme}" = "dark" ]; then

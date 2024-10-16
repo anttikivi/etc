@@ -43,6 +43,20 @@ return {
     end,
   },
   {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    enabled = vim.g.true_colors and vim.g.color_scheme == "tokyonight",
+    opts = {
+      style = vim.g.color_scheme_dark_variant,
+      light_style = vim.g.color_scheme_light_variant,
+    },
+    config = function(_, opts)
+      require("tokyonight").setup(opts)
+      vim.cmd.colorscheme "tokyonight"
+    end,
+    priority = 1000,
+  },
+  {
     "cormacrelf/dark-notify",
     event = "VeryLazy",
     config = function()
