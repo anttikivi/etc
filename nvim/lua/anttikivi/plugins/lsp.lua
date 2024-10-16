@@ -1,6 +1,8 @@
 local util = require "anttikivi.util"
 local mason_util = require "anttikivi.util.mason"
 
+local use_vtsls = false
+
 return {
   {
     "neovim/nvim-lspconfig",
@@ -32,7 +34,7 @@ return {
           },
         },
       },
-      servers = {
+      servers = vim.tbl_extend("error", {
         ansiblels = {},
         astro = {},
         basedpyright = {},
@@ -219,10 +221,29 @@ return {
         },
         templ = {},
         terraformls = {},
-        -- tsserver = {
-        --   enable = false,
-        -- },
         vimls = {},
+        yamlls = {
+          capabilities = {
+            textDocument = {
+              foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
+              },
+            },
+          },
+          settings = {
+            redhat = { telemetry = { enabled = false } },
+            yaml = {
+              keyOrdering = false,
+              format = {
+                enable = true,
+              },
+              validate = true,
+            },
+          },
+        },
+        zls = {},
+      }, use_vtsls and {
         vtsls = {
           filetypes = {
             "javascript",
@@ -273,28 +294,7 @@ return {
           -- TODO: See if it is worth it to implement the keymap overwrites for
           -- vtsls.
         },
-        yamlls = {
-          capabilities = {
-            textDocument = {
-              foldingRange = {
-                dynamicRegistration = false,
-                lineFoldingOnly = true,
-              },
-            },
-          },
-          settings = {
-            redhat = { telemetry = { enabled = false } },
-            yaml = {
-              keyOrdering = false,
-              format = {
-                enable = true,
-              },
-              validate = true,
-            },
-          },
-        },
-        zls = {},
-      },
+      } or { tsserver = {} }),
       setup = {},
     },
     config = function(_, opts)
