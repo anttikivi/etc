@@ -12,17 +12,17 @@ path=("${GOBIN}" "${path[@]}")
 path=("${HOME}/.local/opt/nvim/bin" "${path[@]}")
 
 if [ -e "${HOME}/.cargo/env" ]; then
-  # shellcheck source=../../.cargo/env
+  # shellcheck source=../.cargo/env
   source "${HOME}/.cargo/env"
 fi
 
 NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export NVM_DIR
-# shellcheck source=../../.config/nvm/nvm.sh
+# shellcheck source=../.config/nvm/nvm.sh
 [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
 
 if [ -f "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc" ]; then
-  # shellcheck source=../../.local/opt/google-cloud-sdk/path.zsh.inc
+  # shellcheck source=../.local/opt/google-cloud-sdk/path.zsh.inc
   source "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc"
 fi
 

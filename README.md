@@ -12,7 +12,7 @@ configuration files.
 
 Run the following command:
 
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/anttikivi/dotfiles/main/bootstrap)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/anttikivi/etc/main/bootstrap)"
 
 ## License
 

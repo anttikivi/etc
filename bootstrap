@@ -2,33 +2,32 @@
 
 set -e
 
-ETC_DIR="${HOME}/etc"
-readonly ETC_DIR
-DOTFILES_DIR="${ETC_DIR}/dotfiles"
-readonly DOTFILES_DIR
-HTTPS_REMOTE_URL='https://github.com/anttikivi/dotfiles.git'
+REPO_DIR="${HOME}/etc"
+readonly REPO_DIR
+HTTPS_REMOTE_URL='https://github.com/anttikivi/etc.git'
 readonly HTTPS_REMOTE_URL
-SSH_REMOTE_URL='git@github.com:anttikivi/dotfiles.git'
+SSH_REMOTE_URL='git@github.com:anttikivi/etc.git'
 readonly SSH_REMOTE_URL
 PURUS_HTTPS_URL='https://github.com/anttikivi/purus.git'
 readonly PURUS_HTTPS_URL
 PURUS_SSH_URL='git@github.com:anttikivi/purus.git'
 readonly PURUS_SSH_URL
 
-echo "Running the dotfiles bootstrapping script!"
+echo "Running the configuration bootstrapping script!"
 
-echo "Checking if the dotfiles repository is present at ${DOTFILES_DIR}"
+echo "Checking if the configuration repository is present at ${REPO_DIR}"
 
 first_run="false"
 
-if [ ! -e "${DOTFILES_DIR}" ]; then
+if [ ! -e "${REPO_DIR}" ]; then
   first_run="true"
-  if [ ! -d "${ETC_DIR}" ]; then
-    mkdir "${ETC_DIR}"
+  if [ ! -d "$(dirname "${REPO_DIR}")" ]; then
+    echo "Please make sure that the parent directory for ${REPO_DIR} (i.e. $(dirname "${REPO_DIR}")) exists" >&2
+    exit 1
   fi
-  echo "Cloning the dotfiles repository into ${DOTFILES_DIR}"
-  git clone "${HTTPS_REMOTE_URL}" "${DOTFILES_DIR}"
-elif [ "$(git -C "${DOTFILES_DIR}" remote get-url origin)" != "${SSH_REMOTE_URL}" ]; then
+  echo "Cloning the configuration repository into ${REPO_DIR}"
+  git clone "${HTTPS_REMOTE_URL}" "${REPO_DIR}"
+elif [ "$(git -C "${REPO_DIR}" remote get-url origin)" != "${SSH_REMOTE_URL}" ]; then
   first_run="true"
 fi
 
@@ -36,7 +35,7 @@ if [ "${first_run}" = "true" ]; then
   echo "This is marked as the first run"
 fi
 
-cd "${DOTFILES_DIR}"
+cd "${REPO_DIR}"
 
 if [ "${first_run}" = "true" ]; then
   echo "Changing the URL for the 'purus' submodule"
@@ -51,7 +50,7 @@ else
   ./install
 fi
 
-# shellcheck source=../../.bash_profile
+# shellcheck source=./bash_profile
 source ~/.bash_profile
 
 if [ "${first_run}" = "true" ]; then
@@ -60,15 +59,15 @@ if [ "${first_run}" = "true" ]; then
   echo "Updating the submodules"
   git submodule sync --recursive
   git submodule update --init --recursive
-  echo "Checking the remote URL of the dotfiles repository"
+  echo "Checking the remote URL of the configuration repository"
   current_url="$(git remote get-url origin)"
-  echo "The remote URL of the dotfiles repository is currently set to ${current_url}"
+  echo "The remote URL of the configuration repository is currently set to ${current_url}"
 
   if [ "${current_url}" != "${SSH_REMOTE_URL}" ]; then
     git remote set-url origin "${SSH_REMOTE_URL}"
   fi
 
-  echo "The remote URLs of the dotfiles repository are now set to:"
+  echo "The remote URLs of the configuration repository are now set to:"
   git remote -v
   echo "Fetching the remote"
   git fetch

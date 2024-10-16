@@ -92,7 +92,7 @@ print_version() {
 
 source_environment() {
   echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"
-  # shellcheck source=../../.bash_profile
+  # shellcheck source=./bash_profile
   source "${HOME}/.bash_profile"
   echo -e "${ESC_GREEN}==> Shell environment sourced${ESC_RESET}"
 }
