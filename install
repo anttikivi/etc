@@ -276,7 +276,7 @@ if [ "${FIRST_RUN}" = "true" ]; then
   echo -e "${ESC_YELLOW}As this is the first run, you need to set up the 1Password CLI${ESC_RESET}"
   echo "Start by making sure that the desktop integration is set up as per the instructions in the 1Password CLI documentation:"
   echo "https://developer.1password.com/docs/cli/get-started/#step-2-turn-on-the-1password-desktop-app-integration"
-  read -p "Press Enter to continue" </dev/tty
+  read -rp "Press Enter to continue" </dev/tty
   printf "\nNow printing the vaults to ensure that you are logged in to the 1Password CLI\n"
   op vault list
   echo -e "${ESC_GREEN}The 1Password CLI should now be set up!${ESC_RESET}"
@@ -285,7 +285,7 @@ fi
 echo "Checking the GitHub CLI status..."
 while ! gh auth status >/dev/null 2>&1; do
   echo -e "${ESC_YELLOW}You need to log in to the GitHub CLI${ESC_RESET}"
-  read -p "Press Enter to run the login command" </dev/tty
+  read -rp "Press Enter to run the login command" </dev/tty
   gh auth login
   echo "Checking if the authentication was successful..."
 done
