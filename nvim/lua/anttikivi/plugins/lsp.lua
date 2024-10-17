@@ -294,7 +294,7 @@ return {
           -- TODO: See if it is worth it to implement the keymap overwrites for
           -- vtsls.
         },
-      } or { tsserver = {} }),
+      } or { ts_ls = {} }),
       setup = {},
     },
     config = function(_, opts)
