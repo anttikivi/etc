@@ -24,7 +24,7 @@ alacritty_color_scheme="${LIGHT_COLOR_SCHEME}"
 if [ "${system_color_scheme}" = "dark" ]; then
   alacritty_color_scheme="${DARK_COLOR_SCHEME}"
 fi
-if [ "${COLOR_SCHEME}" = "${TOKYONIGHT_NAME}" ]; then
+if [ "${COLOR_SCHEME}" = "${TOKYONIGHT}" ]; then
   alacritty_color_scheme="$(echo "${alacritty_color_scheme}" | tr '-' '_')"
 fi
 kitty_color_scheme="${KITTY_LIGHT_COLOR_SCHEME}"
