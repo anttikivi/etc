@@ -87,6 +87,45 @@ install_theme() {
   echo "$1 installed"
 }
 
+#######################################
+# Install a variant of the Nightfox theme for Alacritty.
+# Globals:
+#   DISABLE_UPDATES
+#   OS_NAME
+#   THEME_DIR
+# Arguments:
+#   $1 The name of the variant to install.
+#   $2 The URL pattern for the download where the string '{VARIANT}' will be
+#     replaced by the name of the variant.
+#######################################
+install_nightfox_variant() {
+  if [ $# -eq 0 ]; then
+    echo "No arguments were passed to the Nightfox installation function" >&2
+    exit 1
+  fi
+  if [ -z "$1" ]; then
+    echo "No variant argument was passed to the Nightfox installation function" >&2
+    exit 1
+  fi
+  if [ -z "$2" ]; then
+    echo "No base URL argument was passed to the Nightfox installation function" >&2
+    exit 1
+  fi
+  echo "Checking if the Nightfox variant '$1' needs to be installed"
+  file_name="$1.toml"
+  echo "Checking ${THEME_DIR}/${file_name}"
+  if [ ! -f "${THEME_DIR}/${file_name}" ] || [ "${DISABLE_UPDATES}" != "true" ]; then
+    if [ -f "${THEME_DIR}/${file_name}" ]; then
+      echo "${THEME_DIR}/${file_name} exists, removing..."
+      rm "${THEME_DIR}/${file_name}"
+    fi
+    url="$(echo "$2" | sed "s|{VARIANT}|$1|")"
+    echo "Downloading the Nightfox variant from ${url}"
+    curl -sSL "${url}" -o "${THEME_DIR}/$1.toml"
+  fi
+  echo "$1 installed"
+}
+
 if [ "${HAS_CONNECTION}" != "true" ]; then
   echo "Skipping the Alacritty tasks as there is no Internet connection"
   exit 0
@@ -137,6 +176,24 @@ install_theme "${variant}" "${base_url}"
 variant="catppuccin-mocha"
 install_theme "${variant}" "${base_url}"
 echo "Installed Catppuccin for Alacritty"
+
+echo "Installing Nightfox for Alacritty"
+base_url="https://github.com/EdenEast/nightfox.nvim/raw/main/extra/{VARIANT}/alacritty.toml"
+variant="nightfox"
+install_nightfox_variant "${variant}" "${base_url}"
+variant="dayfox"
+install_nightfox_variant "${variant}" "${base_url}"
+variant="dawnfox"
+install_nightfox_variant "${variant}" "${base_url}"
+variant="duskfox"
+install_nightfox_variant "${variant}" "${base_url}"
+variant="nordfox"
+install_nightfox_variant "${variant}" "${base_url}"
+variant="terafox"
+install_nightfox_variant "${variant}" "${base_url}"
+variant="carbonfox"
+install_nightfox_variant "${variant}" "${base_url}"
+echo "Installed Nightfox for Alacritty"
 
 echo "Installing Rosé Pine for Alacritty"
 base_url="https://github.com/rose-pine/alacritty/raw/main/dist"

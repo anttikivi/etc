@@ -5,6 +5,14 @@ CATPPUCCIN_MACCHIATO="macchiato"
 CATPPUCCIN_MOCHA="mocha"
 CATPPUCCIN_LATTE="latte"
 
+NIGHTFOX="nightfox"
+DAYFOX="dayfox"
+DAWNFOX="dawnfox"
+DUSKFOX="duskfox"
+NORDFOX="nordfox"
+TERAFOX="terafox"
+CARBONFOX="carbonfox"
+
 ROSE_PINE="rose-pine"
 ROSE_PINE_MAIN="main"
 ROSE_PINE_MOON="moon"
@@ -26,7 +34,7 @@ capitalize() {
   echo "$(echo "$1" | cut -c -1 | tr '[:lower:]' '[:upper:]')$(echo "$1" | cut -c 2-)"
 }
 
-export COLOR_SCHEME="${TOKYONIGHT}"
+export COLOR_SCHEME="${NIGHTFOX}"
 
 case "${COLOR_SCHEME}" in
   "${CATPPUCCIN}")
@@ -36,6 +44,14 @@ case "${COLOR_SCHEME}" in
     LIGHT_COLOR_SCHEME="${COLOR_SCHEME}-${COLOR_SCHEME_LIGHT_VARIANT}"
     KITTY_DARK_COLOR_SCHEME="$(capitalize "${COLOR_SCHEME}")-$(capitalize "${COLOR_SCHEME_DARK_VARIANT}")"
     KITTY_LIGHT_COLOR_SCHEME="$(capitalize "${COLOR_SCHEME}")-$(capitalize "${COLOR_SCHEME_LIGHT_VARIANT}")"
+    ;;
+  "${NIGHTFOX}")
+    COLOR_SCHEME_DARK_VARIANT="${NIGHTFOX}"
+    COLOR_SCHEME_LIGHT_VARIANT="${DAYFOX}"
+    DARK_COLOR_SCHEME="${COLOR_SCHEME_DARK_VARIANT}"
+    LIGHT_COLOR_SCHEME="${COLOR_SCHEME_LIGHT_VARIANT}"
+    KITTY_DARK_COLOR_SCHEME="$(capitalize "${COLOR_SCHEME_DARK_VARIANT}")"
+    KITTY_LIGHT_COLOR_SCHEME="$(capitalize "${COLOR_SCHEME_LIGHT_VARIANT}")"
     ;;
   "${ROSE_PINE}")
     COLOR_SCHEME_DARK_VARIANT="${ROSE_PINE_MAIN}"

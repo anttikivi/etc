@@ -30,6 +30,23 @@ return {
     priority = 1000,
   },
   {
+    "EdenEast/nightfox.nvim",
+    lazy = false,
+    enabled = vim.g.true_colors and vim.g.color_scheme == "nightfox",
+    opts = {},
+    config = function(_, opts)
+      require("nightfox").setup(opts)
+      if vim.o.background == "light" then
+        vim.cmd.colorscheme(vim.g.color_scheme_light_variant)
+      elseif vim.o.background == "dark" then
+        vim.cmd.colorscheme(vim.g.color_scheme_dark_variant)
+      else
+        vim.cmd.colorscheme(vim.g.color_scheme)
+      end
+    end,
+    priority = 1000,
+  },
+  {
     "rose-pine/neovim",
     lazy = false,
     enabled = vim.g.true_colors and vim.g.color_scheme == "rose-pine",
@@ -60,7 +77,16 @@ return {
     "cormacrelf/dark-notify",
     event = "VeryLazy",
     config = function()
-      require("dark_notify").run()
+      if vim.g.color_scheme == "nightfox" then
+        require("dark_notify").run {
+          schemes = {
+            dark = vim.g.color_scheme_dark_variant,
+            light = vim.g.color_scheme_light_variant,
+          },
+        }
+      else
+        require("dark_notify").run()
+      end
     end,
   },
 }
