@@ -22,6 +22,7 @@ declare -a DARWIN_PACKAGES=(
   "roots/tap/trellis-cli"
   "shellcheck"
   "stylua"
+  "terraform"
   "tmux"
   "wget"
 )
