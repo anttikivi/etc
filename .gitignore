@@ -1,3 +1,4 @@
 .DS_Store
 aws/config
 ssh/config
+ssh/*.pub
