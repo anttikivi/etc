@@ -30,6 +30,7 @@ return {
         typescript = { "prettier" },
         typescriptreact = { "prettier" },
         yaml = { "prettier" },
+        ["yaml.ansible"] = { "prettier" },
         zsh = { "shfmt" },
       },
       formatters = {
