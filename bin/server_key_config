@@ -14,7 +14,7 @@ START_LINE_FORMAT="# start managed: {NAME}"
 #   SSH_CONFIG
 #   START_LINE_FORMAT
 # Arguments:
-#   $1 The name of the server to remove.
+#   $1 The full name of the server to remove.
 #   $2 The base name of the public key file.
 #######################################
 remove_config() {
@@ -93,9 +93,11 @@ full_name="$(basename "$(dirname "${tofu_directory}")")_$(basename "${tofu_direc
 key_file="${ETC_DIR}/ssh/id_${full_name}.pub"
 key_link="${HOME}/.ssh/id_${full_name}.pub"
 
+echo "Resolved ${full_name} as the full server identifier for ${server_name}"
+
 if [ "${remove}" = "true" ]; then
   echo "Removing the SSH configuration for ${server_name}"
-  remove_config "${server_name}"
+  remove_config "${full_name}"
   echo "Removing the public key file from $(dirname "${key_file}") and $(dirname "${key_link}")"
   if [ -e "${key_link}" ]; then
     echo "The file at ${key_link} exists, removing..."
@@ -106,7 +108,7 @@ if [ "${remove}" = "true" ]; then
     rm "${key_file}"
   fi
   git -C "${ETC_DIR}" add "$(basename "${SSH_CONFIG}")"
-  git -C "${ETC_DIR}" commit -m "build: remove the SSH configuration for ${full_name}"
+  git -C "${ETC_DIR}" commit -m "build: remove the SSH configuration for \`${full_name}\`"
 fi
 
 if [ -f "${key_file}" ]; then
@@ -127,8 +129,8 @@ cd "${ETC_DIR}"
 
 ansible-vault decrypt "${SSH_CONFIG}"
 
-start_line="$(echo "${START_LINE_FORMAT}" | sed "s/{NAME}/${server_name}/")"
-end_line="$(echo "${END_LINE_FORMAT}" | sed "s/{NAME}/${server_name}/")"
+start_line="$(echo "${START_LINE_FORMAT}" | sed "s/{NAME}/${full_name}/")"
+end_line="$(echo "${END_LINE_FORMAT}" | sed "s/{NAME}/${full_name}/")"
 
 if grep -xF "${start_line}" "${SSH_CONFIG}" >/dev/null 2>&1; then
   printf "Found the starting line for the managed block in %s:\n%s\nPlease remove the block before trying to modify the file" "${SSH_CONFIG}" "${start_line}" >&2
@@ -152,7 +154,7 @@ ansible-vault encrypt "${SSH_CONFIG}"
 echo "${public_key}" >"${key_file}"
 
 git -C "${ETC_DIR}" add "$(basename "${SSH_CONFIG}")"
-git -C "${ETC_DIR}" commit -m "build: add the SSH configuration for ${full_name}"
+git -C "${ETC_DIR}" commit -m "build: add the SSH configuration for \`${full_name}\`"
 
 ./install
 
