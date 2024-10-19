@@ -59,6 +59,9 @@ export DISABLE_UPDATES
 FIRST_RUN="${FIRST_RUN:-false}"
 readonly FIRST_RUN
 
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly BASEDIR
+
 OS_NAME="$(uname | tr '[:upper:]' '[:lower:]')"
 if [ "$(uname)" = "Linux" ]; then
   distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
@@ -89,6 +92,26 @@ print_help() {
 print_version() {
   echo "version"
   exit 0
+}
+
+#######################################
+# Run Dotbot in the $BASEDIR.
+# Globals:
+#   BASEDIR
+#######################################
+run_dotbot() {
+  CONFIG="install.conf.yaml"
+  DOTBOT_DIR="dotbot"
+
+  DOTBOT_BIN="bin/dotbot"
+
+  cd "${BASEDIR}"
+  git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
+  git submodule update --init --recursive "${DOTBOT_DIR}"
+
+  "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
+
+  cd - >/dev/null
 }
 
 source_environment() {
@@ -222,18 +245,7 @@ fi
 
 echo -e "\n${ESC_GREEN}==> All prerequisites are set up${ESC_RESET}"
 
-CONFIG="install.conf.yaml"
-DOTBOT_DIR="dotbot"
-
-DOTBOT_BIN="bin/dotbot"
-BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-cd "${BASEDIR}"
-git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
-git submodule update --init --recursive "${DOTBOT_DIR}"
-
-"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
-
+run_dotbot
 source_environment
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
@@ -281,6 +293,11 @@ if [ "${FIRST_RUN}" = "true" ]; then
   printf "\nNow printing the vaults to ensure that you are logged in to the 1Password CLI\n"
   op vault list
   echo -e "${ESC_GREEN}The 1Password CLI should now be set up!${ESC_RESET}"
+fi
+
+if [ "${FIRST_RUN}" = "true" ]; then
+  echo -e "${ESC_YELLOW}As this is the first run, Dotbot will be run twice in order to get the public identities from the vault${ESC_RESET}"
+  run_dotbot
 fi
 
 echo "Checking the GitHub CLI status..."

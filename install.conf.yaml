@@ -56,9 +56,15 @@
         ./utils/update_encrypted_config ssh,
         Updating the local SSH configuration,
       ]
+    - command: /bin/bash -c "$(ansible-vault view ./utils/update_public_keys)"
+      description: Update the public identity files,
+      stdout: true
+      stderr: true
 
 - clean: [~/.aws, ~/.ssh]
 
 - link:
     ~/.aws/config: ./aws/config
-    ~/.ssh/config: ./ssh/config
+    ~/.ssh/:
+      glob: true
+      path: ssh/*
