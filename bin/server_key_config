@@ -1,0 +1,159 @@
+#!/bin/sh
+
+set -e
+
+END_LINE_FORMAT="# end managed: {NAME}"
+ETC_DIR="${HOME}/etc"
+SSH_CONFIG="${ETC_DIR}/ssh_config"
+START_LINE_FORMAT="# start managed: {NAME}"
+
+#######################################
+# Remove the configuration of a server from the SSH configuration.
+# Globals:
+#   END_LINE_FORMAT
+#   SSH_CONFIG
+#   START_LINE_FORMAT
+# Arguments:
+#   $1 The name of the server to remove.
+#   $2 The base name of the public key file.
+#######################################
+remove_config() {
+  if [ $# -eq 0 ]; then
+    echo "No arguments were passed to the function for removing a host configuration" >&2
+    exit 1
+  fi
+  if [ -z "$1" ]; then
+    echo "No server name was passed" >&2
+    exit 1
+  fi
+  start_line="$(echo "${START_LINE_FORMAT}" | sed "s/{NAME}/$1/")"
+  end_line="$(echo "${END_LINE_FORMAT}" | sed "s/{NAME}/$1/")"
+  cd "${ETC_DIR}"
+  ansible-vault decrypt "${SSH_CONFIG}"
+  if grep -xF "${start_line}" "${SSH_CONFIG}" >/dev/null 2>&1 && grep -xF "${end_line}" "${SSH_CONFIG}" >/dev/null 2>&1; then
+    echo "Found the starting and ending lines for the managed block in ${SSH_CONFIG}, going to remove the block"
+    os_name="$(uname)"
+    if [ "${os_name}" = "Darwin" ]; then
+      sed -i '' "/${start_line}/,/${end_line}/d" "${SSH_CONFIG}"
+    else
+      sed -i "/${start_line}/,/${end_line}/d" "${SSH_CONFIG}"
+    fi
+  else
+    echo "Didn't find the starting and ending lines for the managed block in ${SSH_CONFIG}, let's skip removing them..."
+  fi
+  ansible-vault encrypt "${SSH_CONFIG}"
+  cd - >/dev/null
+}
+
+tofu_directory=""
+remove="false"
+server_name=""
+
+while getopts "d:n:R" opt; do
+  case "${opt}" in
+    d)
+      tofu_directory="${OPTARG}"
+      ;;
+    n)
+      server_name="${OPTARG}"
+      ;;
+    R)
+      remove="true"
+      ;;
+    *)
+      echo "Unexpected option: ${opt}" >&2
+      exit 4
+      ;;
+  esac
+done
+shift "$((OPTIND - 1))"
+
+if [ -z "${tofu_directory}" ]; then
+  echo "Please provide a directory" >&2
+  exit 1
+fi
+
+if [ -z "${server_name}" ]; then
+  echo "Please provide a server name" >&2
+  exit 1
+fi
+
+if ! git -C "${ETC_DIR}" diff --quiet "${SSH_CONFIG}"; then
+  echo "The SSH configuration at ${SSH_CONFIG} has unstaged changes, exiting..." >&2
+  exit 1
+fi
+
+# Check for staged changes in general as they might mess up this script.
+if ! git -C "${ETC_DIR}" diff --quiet --cached; then
+  echo "The repository at ${ETC_DIR} has staged but uncommitted changes, exiting..." >&2
+  exit 1
+fi
+
+full_name="$(basename "$(dirname "${tofu_directory}")")_$(basename "${tofu_directory}")_${server_name}"
+key_file="${ETC_DIR}/ssh/id_${full_name}.pub"
+key_link="${HOME}/.ssh/id_${full_name}.pub"
+
+if [ "${remove}" = "true" ]; then
+  echo "Removing the SSH configuration for ${server_name}"
+  remove_config "${server_name}"
+  echo "Removing the public key file from $(dirname "${key_file}") and $(dirname "${key_link}")"
+  if [ -e "${key_link}" ]; then
+    echo "The file at ${key_link} exists, removing..."
+    rm "${key_link}"
+  fi
+  if [ -f "${SSH_CONFIG}" ]; then
+    echo "The file at ${key_file} exists, removing..."
+    rm "${key_file}"
+  fi
+  git -C "${ETC_DIR}" rm "$(basename "${SSH_CONFIG}")"
+  git -C "${ETC_DIR}" commit -m "build: remove the SSH configuration for ${full_name}"
+fi
+
+if [ -f "${key_file}" ]; then
+  printf "Found the public key at %s:\nPlease remove the file before trying to add the public key" "${key_file}" >&2
+  exit 1
+fi
+
+cd "${tofu_directory}"
+
+echo "Reading the IP address and the public key from OpenTofu at ${tofu_directory}"
+
+ip_address="$(tofu output -raw "${server_name}_ipv4_address")"
+public_key="$(tofu output -raw "${server_name}_public_key")"
+
+cd - >/dev/null
+
+cd "${ETC_DIR}"
+
+ansible-vault decrypt "${SSH_CONFIG}"
+
+start_line="$(echo "${START_LINE_FORMAT}" | sed "s/{NAME}/${server_name}/")"
+end_line="$(echo "${END_LINE_FORMAT}" | sed "s/{NAME}/${server_name}/")"
+
+if grep -xF "${start_line}" "${SSH_CONFIG}" >/dev/null 2>&1; then
+  printf "Found the starting line for the managed block in %s:\n%s\nPlease remove the block before trying to modify the file" "${SSH_CONFIG}" "${start_line}" >&2
+  exit 1
+fi
+if grep -xF "${end_line}" "${SSH_CONFIG}" >/dev/null 2>&1; then
+  printf "Found the ending line for the managed block in %s:\n%s\nPlease remove the block before trying to modify the file" "${SSH_CONFIG}" "${end_line}" >&2
+  exit 1
+fi
+
+cat <<EOF >>"${SSH_CONFIG}"
+${start_line}
+Host ${ip_address}
+  IdentityFile ${key_link}
+  IdentitiesOnly yes
+${end_line}
+EOF
+
+ansible-vault encrypt "${SSH_CONFIG}"
+
+echo "${public_key}" >"${key_file}"
+
+git -C "${ETC_DIR}" add "$(basename "${SSH_CONFIG}")"
+git -C "${ETC_DIR}" commit -m "build: add the SSH configuration for ${full_name}"
+
+./install
+
+cd - >/dev/null
