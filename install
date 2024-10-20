@@ -17,6 +17,7 @@ declare -a DARWIN_PACKAGES=(
   "luarocks"
   "opentofu"
   "php"
+  "pipx"
   "reattach-to-user-namespace"
   "ripgrep"
   "roots/tap/trellis-cli"
@@ -212,40 +213,24 @@ elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; the
   echo -e "${ESC_GREEN}Python updated${ESC_RESET}"
 fi
 
-if ! command -v pipx >/dev/null 2>&1; then
-  if [ "${HAS_CONNECTION}" != "true" ]; then
-    echo "pipx is not installed and there is not Internet connection, exiting..." >&2
-    exit 1
-  fi
-  echo -e "${ESC_BLUE}Installing pipx${ESC_RESET}"
-  if [ "${OS_NAME}" = "darwin" ]; then
-    brew install pipx
-    PATH="${HOME}/.local/bin:${PATH}"
-    export PATH
-  elif [ "${OS_NAME}" = "debian" ]; then
-    echo -e "${ESC_RED}Installing pipx on '${OS_NAME}' is not implemented yet${ESC_RESET}"
-    not_supported "${OS_NAME}"
-  fi
-  echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"
-elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
-  echo -e "${ESC_BLUE}Updating pipx${ESC_RESET}"
-  if [ "${OS_NAME}" = "darwin" ]; then
-    brew upgrade pipx
-  fi
-  echo -e "${ESC_GREEN}pipx updated${ESC_RESET}"
-fi
-
 if ! command -v ansible >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" != "true" ]; then
     echo "Ansible is not installed and there is not Internet connection, exiting..." >&2
     exit 1
   fi
   echo -e "${ESC_BLUE}Installing Ansible${ESC_RESET}"
-  pipx install --include-deps ansible
+  if [ "${OS_NAME}" = "darwin" ]; then
+    brew install ansible
+  elif [ "${OS_NAME}" = "debian" ]; then
+    echo -e "${ESC_RED}Installing Ansible on '${OS_NAME}' is not implemented yet${ESC_RESET}"
+    not_supported "${OS_NAME}"
+  fi
   echo -e "${ESC_GREEN}Ansible installed${ESC_RESET}"
 elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
   echo -e "${ESC_BLUE}Updating Ansible${ESC_RESET}"
-  pipx upgrade ansible
+  if [ "${OS_NAME}" = "darwin" ]; then
+    brew upgrade ansible
+  fi
   echo -e "${ESC_GREEN}Ansible updated${ESC_RESET}"
 fi
 
