@@ -109,6 +109,9 @@ if [ "${remove}" = "true" ]; then
   fi
   git -C "${ETC_DIR}" add "$(basename "${SSH_CONFIG}")"
   git -C "${ETC_DIR}" commit -m "build: remove the SSH configuration for \`${full_name}\`"
+
+  ./install -D
+
   exit 0
 fi
 
@@ -157,6 +160,6 @@ echo "${public_key}" >"${key_file}"
 git -C "${ETC_DIR}" add "$(basename "${SSH_CONFIG}")"
 git -C "${ETC_DIR}" commit -m "build: add the SSH configuration for \`${full_name}\`"
 
-./install
+./install -D
 
 cd - >/dev/null
