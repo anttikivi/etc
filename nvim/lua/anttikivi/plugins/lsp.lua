@@ -94,6 +94,8 @@ return {
         intelephense = {
           enabled = vim.g.php_lsp == "intelephense",
         },
+        -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#jinja_lsp
+        -- jinja_lsp = {},
         jsonls = {
           settings = {
             json = {
