@@ -125,6 +125,7 @@ return {
           },
         },
         marksman = {},
+        nginx_language_server = {},
         phpactor = {
           enabled = vim.g.php_lsp == "phpactor",
         },
