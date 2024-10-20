@@ -9,7 +9,7 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 max_line_length = off
 
-[{.gitmodules,Makefile,go.mod,go.sum,*.go}]
+[{.gitmodules,Makefile,go.mod,go.sum,*.go,*.conf,*.conf.j2}]
 indent_style = tab
 indent_size = 4
 
