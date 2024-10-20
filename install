@@ -109,7 +109,8 @@ run_dotbot() {
   git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
   git submodule update --init --recursive "${DOTBOT_DIR}"
 
-  "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
+  "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}"
+  # The old command: "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
 
   cd - >/dev/null
 }
@@ -125,11 +126,16 @@ if [[ ! " ${SUPPORTED_PLATFORMS[*]} " =~ [[:space:]]${OS_NAME}[[:space:]] ]]; th
   not_supported "${OS_NAME}"
 fi
 
-readonly call_args=("$@")
+only_dotbot="false"
+
+# readonly call_args=("$@")
 
 OPTIND=1
-while getopts "hV" opt; do
+while getopts "DhV" opt; do
   case "${opt}" in
+    D)
+      only_dotbot="true"
+      ;;
     h)
       print_help
       ;;
@@ -143,7 +149,7 @@ while getopts "hV" opt; do
   esac
 done
 shift "$((OPTIND - 1))"
-set -- "${call_args[@]}"
+# set -- "${call_args[@]}"
 
 if [ "${FIRST_RUN}" = "true" ]; then
   echo -e "${ESC_YELLOW}This is marked as the first run!${ESC_RESET}"
@@ -246,6 +252,11 @@ fi
 echo -e "\n${ESC_GREEN}==> All prerequisites are set up${ESC_RESET}"
 
 run_dotbot
+
+if [ "${only_dotbot}" = "true" ]; then
+  exit 0
+fi
+
 source_environment
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
