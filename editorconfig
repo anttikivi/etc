@@ -9,11 +9,11 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 max_line_length = off
 
-[{.gitmodules,Makefile,go.mod,go.sum,*.go,*.conf,*.conf.j2}]
+[{.gitmodules,Makefile,go.mod,go.sum,*.go}]
 indent_style = tab
 indent_size = 4
 
-[*.py]
+[{*.conf,*.conf.j2,*.py}]
 indent_size = 4
 
 # vi: ft=editorconfig
