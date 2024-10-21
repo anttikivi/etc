@@ -13,7 +13,7 @@ max_line_length = off
 indent_style = tab
 indent_size = 4
 
-[{*.conf,*.conf.j2,*.py}]
+[*.py]
 indent_size = 4
 
 # vi: ft=editorconfig
