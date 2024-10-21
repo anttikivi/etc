@@ -45,6 +45,35 @@ remove_config() {
   cd - >/dev/null
 }
 
+#######################################
+# Remove the the host name and public key from `~/.ssh/known_hosts` for convenience.
+# Globals:
+#   END_LINE_FORMAT
+#   SSH_CONFIG
+#   START_LINE_FORMAT
+# Arguments:
+#   $1 The host name.
+#   $2 The public key.
+#######################################
+remove_known_host() {
+  if [ $# -eq 0 ]; then
+    echo "No arguments were passed to the function for removing a known host" >&2
+    exit 1
+  fi
+  if [ -z "$1" ]; then
+    echo "No hostname was passed" >&2
+    exit 1
+  fi
+  if [ -z "$1" ]; then
+    echo "No public key was passed" >&2
+    exit 1
+  fi
+  to_match="$1 $2"
+  if grep -qw "${to_match}"; then
+    ssh-keygen -R "$1"
+  fi
+}
+
 tofu_directory=""
 remove="false"
 server_name=""
@@ -95,6 +124,15 @@ key_link="${HOME}/.ssh/id_${full_name}.pub"
 
 echo "Resolved ${full_name} as the full server identifier for ${server_name}"
 
+cd "${tofu_directory}"
+
+echo "Reading the IP address and the public key from OpenTofu at ${tofu_directory}"
+
+ip_address="$(tofu output -raw "${server_name}_ipv4_address")"
+public_key="$(tofu output -raw "${server_name}_public_key")"
+
+cd - >/dev/null
+
 if [ "${remove}" = "true" ]; then
   echo "Removing the SSH configuration for ${server_name}"
   remove_config "${full_name}"
@@ -114,6 +152,11 @@ if [ "${remove}" = "true" ]; then
   ./install -D
   cd - >/dev/null
 
+  # I do this last so that the rest of the removal doesn't go off the rails if
+  # this fails.
+  echo "Removing the hostname-public key pair from the known hosts"
+  remove_known_host "${ip_address}" "${public_key}"
+
   exit 0
 fi
 
@@ -121,15 +164,6 @@ if [ -f "${key_file}" ]; then
   printf "Found the public key at %s:\nPlease remove the file before trying to add the public key" "${key_file}" >&2
   exit 1
 fi
-
-cd "${tofu_directory}"
-
-echo "Reading the IP address and the public key from OpenTofu at ${tofu_directory}"
-
-ip_address="$(tofu output -raw "${server_name}_ipv4_address")"
-public_key="$(tofu output -raw "${server_name}_public_key")"
-
-cd - >/dev/null
 
 cd "${ETC_DIR}"
 
