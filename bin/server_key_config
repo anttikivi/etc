@@ -152,10 +152,11 @@ if [ "${remove}" = "true" ]; then
   ./install -D
   cd - >/dev/null
 
+  # TODO: Take this into use.
   # I do this last so that the rest of the removal doesn't go off the rails if
   # this fails.
-  echo "Removing the hostname-public key pair from the known hosts"
-  remove_known_host "${ip_address}" "${public_key}"
+  # echo "Removing the hostname-public key pair from the known hosts"
+  # remove_known_host "${ip_address}" "${public_key}"
 
   exit 0
 fi
