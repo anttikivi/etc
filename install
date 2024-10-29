@@ -46,7 +46,10 @@ declare -a GO_PACKAGES=(
 )
 readonly GO_PACKAGES
 
-declare -a LUA_PACKAGES=("luacheck")
+declare -a LUA_PACKAGES=(
+  "lanes"
+  "luacheck"
+)
 readonly LUA_PACKAGES
 
 declare -a PIP_PACKAGES=("ansible-lint" "argcomplete")
