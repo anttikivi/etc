@@ -1,5 +1,6 @@
 local util = require "anttikivi.util"
 local mason_util = require "anttikivi.util.mason"
+local logging = require "anttikivi.util.logging"
 
 local use_vtsls = false
 
@@ -130,6 +131,7 @@ return {
           enabled = vim.g.php_lsp == "phpactor",
         },
         r_language_server = {},
+        rust_analyzer = {},
         stylelint_lsp = {},
         tailwindcss = {
           filetypes = {
