@@ -15,6 +15,7 @@ declare -a DARWIN_PACKAGES=(
   "jq"
   "lima"
   "luarocks"
+  "neovim"
   "opentofu"
   "php"
   "pipx"
