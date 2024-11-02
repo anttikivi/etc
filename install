@@ -312,8 +312,8 @@ echo -e "${ESC_GREEN}The GitHub CLI is set up!${ESC_RESET}"
 # depend on other scripts.
 declare -a DEPENDANT_SCRIPTS=("alacritty")
 
-echo -e "${ESC_BLUE}Running the tasks from scripts in ${BASEDIR}/installs${ESC_RESET}"
-for script in "${BASEDIR}"/installs/*; do
+echo -e "${ESC_BLUE}Running the tasks from scripts in ${BASEDIR}/runs${ESC_RESET}"
+for script in "${BASEDIR}"/runs/*; do
   pkg="$(basename "${script}")"
   if [[ " ${DEPENDANT_SCRIPTS[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
     echo "The ${pkg} script depends on other scripts so it's skipped for now"
@@ -326,7 +326,7 @@ for script in "${BASEDIR}"/installs/*; do
   cd - >/dev/null
 done
 source_environment
-for script in "${BASEDIR}"/installs/*; do
+for script in "${BASEDIR}"/runs/*; do
   pkg="$(basename "${script}")"
   if [[ ! " ${DEPENDANT_SCRIPTS[*]} " =~ [[:space:]]${pkg}[[:space:]] ]]; then
     echo "The ${pkg} script was already run"
