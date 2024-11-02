@@ -2,7 +2,10 @@
 
 set -e
 
-REPO_DIR="${HOME}/etc"
+# shellcheck source=./directories.sh
+source <(curl -fLsS https://raw.githubusercontent.com/anttikivi/etc/refs/heads/main/directories.sh)
+
+REPO_DIR="${ETC_DIR}"
 readonly REPO_DIR
 HTTPS_REMOTE_URL='https://github.com/anttikivi/etc.git'
 readonly HTTPS_REMOTE_URL
