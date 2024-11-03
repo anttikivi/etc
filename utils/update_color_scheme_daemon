@@ -2,11 +2,13 @@
 
 set -e
 
+\. ../directories.sh
+
 if [ "${OS_NAME}" = "darwin" ]; then
   echo "Creating the daemon for applications' color schemes"
 
   launch_agent="fi.anttikivi.colorscheme.plist"
-  tmp_file="${HOME}/tmp/${launch_agent}"
+  tmp_file="${TMP_DIR}/${launch_agent}"
   if [ -f "${tmp_file}" ]; then
     rm "${tmp_file}"
   fi
