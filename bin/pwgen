@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 password() {
   local len="${1:-"32"}"
