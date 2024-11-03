@@ -20,5 +20,14 @@ export CXX="clang++"
 
 SHARED_ENV_DIR="${XDG_CONFIG_HOME}/env"
 
-source "${SHARED_ENV_DIR}/color_scheme.sh"
-source "${SHARED_ENV_DIR}/directories.sh"
+if [ -e "${SHARED_ENV_DIR}/color_scheme.sh" ]; then
+  source "${SHARED_ENV_DIR}/color_scheme.sh"
+elif [ ! -z "${INSTALL_SCRIPT_BASEDIR}" ]; then
+  source "${INSTALL_SCRIPT_BASEDIR}/color_scheme.sh"
+fi
+
+if [ -e "${SHARED_ENV_DIR}/directories.sh" ]; then
+  source "${SHARED_ENV_DIR}/directories.sh"
+elif [ ! -z "${INSTALL_SCRIPT_BASEDIR}" ]; then
+  source "${INSTALL_SCRIPT_BASEDIR}/directories.sh"
+fi
