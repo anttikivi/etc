@@ -3,7 +3,7 @@
 set -e
 
 # shellcheck source=./directories.sh
-source <(curl -fLsS https://raw.githubusercontent.com/anttikivi/etc/main/directories.sh)
+eval "$(curl -fLsS https://raw.githubusercontent.com/anttikivi/etc/main/directories.sh)"
 
 REPO_DIR="${ETC_DIR}"
 readonly REPO_DIR
