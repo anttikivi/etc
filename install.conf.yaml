@@ -40,12 +40,11 @@
     ~/.local/opt/:
     ~/.ssh:
       mode: 0700
-    ~/development:
-    ~/development/learning:
-    ~/development/plugins:
-    ~/development/visiosto:
-    ~/tmp:
-    ~/university:
+    ${BUILD_DIR}:
+    ${PROJECT_DIR}:
+    ${TMP_DIR}:
+    ${UNIVERSITY_PROJECT_DIR}:
+    ${VISIOSTO_PROJECT_DIR}:
 
 - shell:
     - [
