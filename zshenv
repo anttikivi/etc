@@ -19,3 +19,4 @@ export CXX="clang++"
 SHARED_ENV_DIR="${XDG_CONFIG_HOME}/env"
 
 source "${SHARED_ENV_DIR}/color_scheme.sh"
+source "${SHARED_ENV_DIR}/directories.sh"

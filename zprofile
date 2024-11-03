@@ -5,11 +5,11 @@ if [ -d "/opt/homebrew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-path=("${HOME}/.local/bin" "${path[@]}")
+path=("${LOCAL_BIN_DIR}" "${path[@]}")
 path=("$(brew --prefix python)/libexec/bin" "${path[@]}")
 path=("/usr/local/go/bin" "${path[@]}")
 path=("${GOBIN}" "${path[@]}")
-path=("${HOME}/.local/opt/nvim/bin" "${path[@]}")
+path=("${LOCAL_OPT_DIR}/nvim/bin" "${path[@]}")
 
 if [ -e "${HOME}/.cargo/env" ]; then
   # shellcheck source=../.cargo/env
@@ -21,9 +21,11 @@ export NVM_DIR
 # shellcheck source=../.config/nvm/nvm.sh
 [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
 
-if [ -f "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc" ]; then
+GCLOUD_SDK_DIR="${LOCAL_OPT_DIR}/google-cloud-sdk"
+export GCLOUD_SDK_DIR
+if [ -f "${GCLOUD_SDK_DIR}/path.zsh.inc" ]; then
   # shellcheck source=../.local/opt/google-cloud-sdk/path.zsh.inc
-  source "${HOME}/.local/opt/google-cloud-sdk/path.zsh.inc"
+  source "${GCLOUD_SDK_DIR}/path.zsh.inc"
 fi
 
 PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"

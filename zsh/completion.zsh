@@ -9,6 +9,6 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}
 
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
 
-if [ -f "${GCLOUD_DIR}/completion.zsh.inc" ]; then
-  source "${GCLOUD_DIR}/completion.zsh.inc"
+if [ -f "${GCLOUD_SDK_DIR}/completion.zsh.inc" ]; then
+  source "${GCLOUD_SDK_DIR}/completion.zsh.inc"
 fi

@@ -18,8 +18,10 @@
     ~/.bash_profile:
     ~/.config/alacritty/alacritty.toml: alacritty.toml
     ~/.config/env/color_scheme.sh: color_scheme.sh
+    ~/.config/env/directories.sh: directories.sh
     ~/.config/kitty/user.conf: kitty.conf
     ~/.config/nvim: nvim
+    ~/.config/tmux-sessionizer/directories: tmux-directories
     ~/.editorconfig:
     ~/.gitconfig:
     ~/.gitignore_global:

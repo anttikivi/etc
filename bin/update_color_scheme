@@ -2,8 +2,8 @@
 
 set -e
 
-# shellcheck source=../color_scheme.sh
-. ~/.config/env/color_scheme.sh
+# shellcheck source=../zshenv
+\. ~/.zshenv
 
 echo "Updating the color schemes"
 
@@ -33,7 +33,7 @@ if [ "${system_color_scheme}" = "dark" ]; then
 fi
 
 echo "Changing Alacritty to the ${system_color_scheme} color scheme: ${alacritty_color_scheme}"
-cat ~/.config/alacritty/themes/"${alacritty_color_scheme}".toml >~/.config/alacritty/color_scheme.toml
+cat "${XDG_CONFIG_HOME}/alacritty/themes/${alacritty_color_scheme}.toml" >"${XDG_CONFIG_HOME}/alacritty/color_scheme.toml"
 
 echo "Changing kitty to the ${system_color_scheme} color scheme: ${kitty_color_scheme}"
-~/.local/bin/kitten themes --reload-in all "${kitty_color_scheme}"
+"${LOCAL_BIN_DIR}"/kitten themes --reload-in all "${kitty_color_scheme}"

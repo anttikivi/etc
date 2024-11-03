@@ -3,7 +3,6 @@
 set -e
 
 END_LINE_FORMAT="# end managed: {NAME}"
-ETC_DIR="${HOME}/etc"
 SSH_CONFIG="${ETC_DIR}/ssh_config"
 START_LINE_FORMAT="# start managed: {NAME}"
 
