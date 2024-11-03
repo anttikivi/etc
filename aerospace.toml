@@ -7,7 +7,8 @@ accordion-padding = 0
 
 [mode.main.binding]
 # alt-enter = 'exec-and-forget open -n /System/Applications/Utilities/Terminal.app'
-alt-enter = 'exec-and-forget open -n /Applications/kitty.app'
+# alt-enter = 'exec-and-forget open -n /Applications/kitty.app'
+alt-enter = 'exec-and-forget open -n /Applications/Alacritty.app'
 
 alt-h = 'focus left --boundaries-action wrap-around-the-workspace'
 alt-j = 'focus down --boundaries-action wrap-around-the-workspace'
