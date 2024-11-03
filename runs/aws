@@ -2,6 +2,8 @@
 
 set -e
 
+\. ../directories.sh
+
 not_supported() {
   echo "This system is not supported: $*" >&2
   exit 1
@@ -19,36 +21,34 @@ fi
 
 if [ "${OS_NAME}" = "darwin" ]; then
   echo "Starting to install or update the AWS CLI"
-  tmp_dir="${HOME}/tmp/awscli"
-  if [ ! -d "${tmp_dir}" ]; then
-    mkdir "${tmp_dir}"
+  aws_tmp_dir="${TMP_DIR}/awscli"
+  if [ ! -d "${aws_tmp_dir}" ]; then
+    mkdir "${aws_tmp_dir}"
   fi
   echo "Created to temporary directory"
-  pkg_file="${tmp_dir}/AWSCLIV2.pkg"
-  choices_file="${tmp_dir}/aws_cli_choices.xml"
+  pkg_file="${aws_tmp_dir}/AWSCLIV2.pkg"
+  choices_file="${aws_tmp_dir}/aws_cli_choices.xml"
   if [ -f "${choices_file}" ]; then
     rm "${choices_file}"
   fi
   echo "Copying the AWS CLI installation choices file to ${choices_file}"
   cp ../templates/aws_cli_choices.xml "${choices_file}"
-  # TODO: Think about setting the `--silent` flag (or rather `-sS`).
-  # shellcheck disable=SC2046
-  curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
+  curl -sSL "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "${pkg_file}"
   echo "Downloaded the AWS CLI installer package"
   installer -pkg "${pkg_file}" -target CurrentUserHomeDirectory -applyChoiceChangesXML "${choices_file}"
   rm "${choices_file}"
   echo "Ran the AWS CLI installer"
-  if [ -e ~/.local/bin/aws ]; then
-    rm ~/.local/bin/aws
+  if [ -e "${LOCAL_BIN_DIR}/aws" ]; then
+    rm "${LOCAL_BIN_DIR}/aws"
   fi
-  if [ -e ~/.local/bin/aws_completer ]; then
-    rm ~/.local/bin/aws_completer
+  if [ -e "${LOCAL_BIN_DIR}/aws_completer" ]; then
+    rm "${LOCAL_BIN_DIR}/aws_completer"
   fi
   echo "Removed the old symlinks"
-  ln -s ~/.local/opt/aws-cli/aws ~/.local/bin/aws
-  ln -s ~/.local/opt/aws-cli/aws_completer ~/.local/bin/aws_completer
+  ln -s "${LOCAL_OPT_DIR}/aws-cli/aws" "${LOCAL_BIN_DIR}/aws"
+  ln -s "${LOCAL_OPT_DIR}/aws-cli/aws_completer" "${LOCAL_BIN_DIR}/aws_completer"
   echo "Created new symlinks"
-  rm -rf "${tmp_dir}"
+  rm -rf "${aws_tmp_dir}"
   echo "Removed the temporary files"
   echo "Installed or updated the AWS CLI"
 else

@@ -2,8 +2,9 @@
 
 set -e
 
-\. ../versions.sh
 \. ../utils/colors.sh
+\. ../directories.sh
+\. ../versions.sh
 
 not_supported() {
   echo "This system is not supported: $*" >&2
@@ -26,7 +27,7 @@ install_go() {
   echo "Downloading Go"
   archive_name="$(curl -LsS 'https://go.dev/dl/?mode=json&include=all' | jq -r --arg "wanted_version" "go$1" --arg "os" "$(uname | tr '[:upper:]' '[:lower:]')" --arg "arch" "$(uname -m)" '.[] | select(.version == $wanted_version) | .files[] | select(.os == $os and .arch == $arch and .kind == "archive") | .filename')"
   echo "Resolved ${archive_name} as the name of the archive to install"
-  tmp_file="${HOME}/tmp/${archive_name}"
+  tmp_file="${TMP_DIR}/${archive_name}"
   if [ -f "${tmp_file}" ]; then
     rm "${tmp_file}"
   fi

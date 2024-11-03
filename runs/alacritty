@@ -2,10 +2,11 @@
 
 set -e
 
-\. ../versions.sh
 \. ../utils/colors.sh
+\. ../directories.sh
+\. ../versions.sh
 
-THEME_DIR="${HOME}/.config/alacritty/themes"
+THEME_DIR="${XDG_CONFIG_HOME}/alacritty/themes"
 readonly THEME_DIR
 
 not_supported() {
@@ -25,16 +26,16 @@ install_alacritty() {
   echo "Starting the installation of Alacritty version $1"
   if [ "${OS_NAME}" = "darwin" ]; then
     echo "Installing Alacritty on macOS"
-    tmp_dir="${HOME}/tmp/alacritty"
-    if [ -d "${tmp_dir}" ]; then
-      rm -rf "${tmp_dir}"
+    alacritty_tmp_dir="${TMP_DIR}/alacritty"
+    if [ -d "${alacritty_tmp_dir}" ]; then
+      rm -rf "${alacritty_tmp_dir}"
     fi
-    mkdir -p "${tmp_dir}"
+    mkdir -p "${alacritty_tmp_dir}"
     file_name="Alacritty-v$1.dmg"
-    tmp_file="${tmp_dir}/${file_name}"
+    tmp_file="${alacritty_tmp_dir}/${file_name}"
     echo "Downloading Alacritty"
     curl -sSL "https://github.com/alacritty/alacritty/releases/download/v$1/${file_name}" -o "${tmp_file}"
-    mount_point="${tmp_dir}/alacritty_mp"
+    mount_point="${alacritty_tmp_dir}/alacritty_mp"
     echo "Creating the mount point at ${mount_point}"
     if [ -d "${mount_point}" ]; then
       rm -rf "${mount_point}"
@@ -49,12 +50,12 @@ install_alacritty() {
     echo "Copying Alacritty to the destination"
     ditto -v "${mount_point}/Alacritty.app" "${dest}"
     hdiutil detach "${mount_point}"
-    rm -rf "${tmp_dir}"
+    rm -rf "${alacritty_tmp_dir}"
     echo "Creating link to the Alacritty binary"
-    if [ -e "${HOME}/.local/bin/alacritty" ]; then
-      rm "${HOME}/.local/bin/alacritty"
+    if [ -e "${LOCAL_BIN_DIR}/alacritty" ]; then
+      rm "${LOCAL_BIN_DIR}/alacritty"
     fi
-    ln -fs /Applications/Alacritty.app/Contents/MacOS/alacritty ~/.local/bin/alacritty
+    ln -fs /Applications/Alacritty.app/Contents/MacOS/alacritty "${LOCAL_BIN_DIR}/alacritty"
   else
     not_supported "${OS_NAME}"
   fi

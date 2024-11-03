@@ -2,6 +2,8 @@
 
 set -e
 
+\. ../directories.sh
+
 not_supported() {
   echo "This system is not supported: $*" >&2
   exit 1
@@ -15,7 +17,7 @@ fi
 if [ "${OS_NAME}" = "darwin" ]; then
   if ! command -v gcloud >/dev/null 2>&1; then
     echo "Starting to install the Google Cloud CLI"
-    gcloud_dir="${HOME}/.local/opt/google-cloud-sdk"
+    gcloud_dir="${LOCAL_OPT_DIR}/google-cloud-sdk"
     if [ -d "${gcloud_dir}" ]; then
       rm -rf "${gcloud_dir}"
     fi

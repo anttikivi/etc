@@ -13,6 +13,12 @@ export ETC_DIR
 LOCAL_DIR="${HOME}/.local"
 export LOCAL_DIR
 
+LOCAL_BIN_DIR="${LOCAL_DIR}/bin"
+export LOCAL_BIN_DIR
+
+LOCAL_OPT_DIR="${LOCAL_DIR}/opt"
+export LOCAL_OPT_DIR
+
 PROJECT_DIR="${HOME}/projects"
 if [ "$(uname)" = "Darwin" ]; then
   PROJECT_DIR="${HOME}/Projects"

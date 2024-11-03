@@ -3,6 +3,7 @@
 set -e
 
 \. ../utils/colors.sh
+\. ../directories.sh
 \. ../versions.sh
 
 install_kitty() {
@@ -50,7 +51,7 @@ fi
 
 echo "Setting up the kitty configuration"
 
-readonly config_dir="${HOME}/.config/kitty"
+readonly config_dir="${XDG_CONFIG_HOME}/kitty"
 readonly config_file="${config_dir}/kitty.conf"
 readonly config_line="include user.conf"
 
@@ -69,6 +70,6 @@ echo "kitty configuration set up"
 
 if [ "${OS_NAME}" = "darwin" ]; then
   echo "Creating links on macOS to the kitty binaries"
-  ln -sf /Applications/kitty.app/Contents/MacOS/kitty /Applications/kitty.app/Contents/MacOS/kitten ~/.local/bin/
+  ln -sf /Applications/kitty.app/Contents/MacOS/kitty /Applications/kitty.app/Contents/MacOS/kitten "${LOCAL_BIN_DIR}/"
   echo "Links created"
 fi

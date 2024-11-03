@@ -2,6 +2,10 @@
 
 set -e
 
+\. ../utils/colors.sh
+\. ../directories.sh
+\. ../versions.sh
+
 invalid_channel() {
   echo "The given Neovim release channel, ${NVIM_CHANNEL}, is invalid" >&2
   exit 1
@@ -11,10 +15,6 @@ not_supported() {
   echo "This system is not supported: $*" >&2
   exit 1
 }
-
-. ../utils/colors.sh
-. ../directories.sh
-. ../versions.sh
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   wanted_ver=""
@@ -32,6 +32,14 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
     echo "Set ${current_ver} as the current Neovim version"
   fi
 
+  #######################################
+  # Build and install Neovim.
+  # Globals:
+  #   BUILD_DIR
+  #   LOCAL_DIR
+  #   NVIM_CHANNEL
+  #   wanted_ver
+  #######################################
   install_nvim() {
     nvim_build_dir=""
     if [ "${NVIM_CHANNEL}" = "stable" ]; then

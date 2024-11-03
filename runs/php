@@ -2,13 +2,15 @@
 
 set -e
 
+\. ../directories.sh
+
 if [ "${HAS_CONNECTION}" != "true" ]; then
   echo "Skipping the PHP tasks as there is no Internet connection"
   exit 0
 fi
 
 if ! command -v composer >/dev/null 2>&1; then
-  cd ~/tmp
+  cd "${TMP_DIR}"
   echo "Installing Composer"
   EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
   php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -20,7 +22,7 @@ if ! command -v composer >/dev/null 2>&1; then
     exit 1
   fi
 
-  php composer-setup.php --quiet --install-dir="${HOME}/.local/bin" --filename="composer"
+  php composer-setup.php --quiet --install-dir="${LOCAL_BIN_DIR}" --filename="composer"
   echo "The Composer installation result was $?"
   rm composer-setup.php
   cd - >/dev/null

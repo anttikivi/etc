@@ -41,7 +41,7 @@ declare -a DARWIN_CASKS=(
 )
 readonly DARWIN_CASKS
 
-declare -a CARGO_PACKAGES=("selene")
+declare -a CARGO_PACKAGES=("selene" "taplo-cli")
 readonly CARGO_PACKAGES
 
 declare -a GO_PACKAGES=(
