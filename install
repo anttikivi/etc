@@ -190,6 +190,12 @@ fi
 
 source_environment
 
+if [ "${OS_NAME}" = "darwin" ] && ! xcode-select -p 1>/dev/null; then
+  echo -e "${ESC_BLUE}Installing Xcode command line tools${ESC_RESET}"
+  xcode-select --install
+  echo -e "${ESC_GREEN}Xcode command line tools installed${ESC_RESET}"
+fi
+
 # Package manager installation and updating for each platform.
 if [ "${OS_NAME}" = "darwin" ]; then
   if ! command -v brew >/dev/null 2>&1; then
