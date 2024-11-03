@@ -185,6 +185,8 @@ elif [ "${DISABLE_UPDATES}" = "true" ]; then
   echo -e "${ESC_MAGENTA}Installing updates is disabled${ESC_RESET}"
 fi
 
+source_environment
+
 # Package manager installation and updating for each platform.
 if [ "${OS_NAME}" = "darwin" ]; then
   if ! command -v brew >/dev/null 2>&1; then
