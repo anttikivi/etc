@@ -1,5 +1,7 @@
 # shellcheck source=./zshenv
-source ~/.zshenv
+if [ -e ~/.zshenv ]; then
+  source ~/.zshenv
+fi
 
 pathmunge() {
   if ! echo "${PATH}" | grep -Eq "(^|:)$1($|:)"; then

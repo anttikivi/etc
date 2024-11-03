@@ -125,8 +125,18 @@ run_dotbot() {
 
 source_environment() {
   echo -e "${ESC_BLUE}Sourcing the shell environment${ESC_RESET}"
-  # shellcheck source=./bash_profile
-  source "${HOME}/.bash_profile"
+  # The `.bash_profile` doesn't import `.zshenv` if it doesn't exist.
+  if [ ! -e ~/.zshenv ]; then
+    # shellcheck source=./zshenv
+    source "${BASEDIR}/.zshenv"
+  fi
+  if [ -e ~/.bash_profile ]; then
+    # shellcheck source=./bash_profile
+    source "${HOME}/.bash_profile"
+  else
+    # shellcheck source=./bash_profile
+    source "${BASEDIR}/.bash_profile"
+  fi
   echo -e "${ESC_GREEN}==> Shell environment sourced${ESC_RESET}"
 }
 
