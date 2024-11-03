@@ -1,6 +1,5 @@
 /Users
 ~
-~/development
-~/development/syl
-~/development/visiosto
-~/university
+${ETC_DIR}
+${UNIVERSITY_PROJECT_DIR}
+${VISIOSTO_PROJECT_DIR}
