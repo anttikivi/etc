@@ -8,26 +8,26 @@ vim.g.maplocalleader = " "
 
 require("anttikivi.util").set_global_variables()
 
-require "anttikivi.config.options"
-require "anttikivi.config.keymaps"
-require "anttikivi.config.autocmds"
+require("anttikivi.config.options")
+require("anttikivi.config.keymaps")
+require("anttikivi.config.autocmds")
 
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
+  vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable", -- latest stable release
     lazypath,
-  }
+  })
 end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("anttikivi.plugins", {
   dev = {
-    path = "~/plugins",
+    path = os.getenv("PROJECT_DIR"),
     patterns = { "anttikivi" },
   },
   install = {
@@ -55,5 +55,5 @@ require("lazy").setup("anttikivi.plugins", {
   },
 })
 
-require "anttikivi.filetypes"
-require "anttikivi.parsers"
+require("anttikivi.filetypes")
+require("anttikivi.parsers")

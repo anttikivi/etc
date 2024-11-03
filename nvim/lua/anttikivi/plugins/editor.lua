@@ -38,14 +38,14 @@ return {
       "nvim-lua/plenary.nvim",
     },
     config = function()
-      local harpoon = require "harpoon"
-      harpoon:setup {}
+      local harpoon = require("harpoon")
+      harpoon:setup({})
     end,
     -- TODO: Update this when the branch is merged into master.
     branch = "harpoon2",
     event = "VeryLazy",
     keys = function()
-      local harpoon = require "harpoon"
+      local harpoon = require("harpoon")
       local keys = {
         {
           "<C-a>",
@@ -97,15 +97,15 @@ return {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "make",
         cond = function()
-          return vim.fn.executable "make" == 1
+          return vim.fn.executable("make") == 1
         end,
       },
       { "nvim-telescope/telescope-ui-select.nvim" },
       { "nvim-tree/nvim-web-devicons", enabled = vim.g.icons_enabled },
     },
     config = function()
-      local telescope = require "telescope"
-      local telescope_config = require "telescope.config"
+      local telescope = require("telescope")
+      local telescope_config = require("telescope.config")
 
       local vimgrep_arguments =
         { unpack(telescope_config.values.vimgrep_arguments) }
@@ -117,7 +117,7 @@ return {
       table.insert(vimgrep_arguments, "--glob")
       table.insert(vimgrep_arguments, "!**/.git/*")
 
-      telescope.setup {
+      telescope.setup({
         defaults = {
           mappings = {
             i = {
@@ -145,12 +145,12 @@ return {
             },
           },
         },
-      }
+      })
 
       pcall(require("telescope").load_extension, "fzf")
       pcall(require("telescope").load_extension, "ui-select")
 
-      local builtin = require "telescope.builtin"
+      local builtin = require("telescope.builtin")
 
       vim.keymap.set(
         "n",
@@ -214,20 +214,20 @@ return {
       )
       vim.keymap.set("n", "<leader>/", function()
         builtin.current_buffer_fuzzy_find(
-          require("telescope.themes").get_dropdown {
+          require("telescope.themes").get_dropdown({
             winblend = 10,
             previewer = false,
-          }
+          })
         )
       end, { desc = "[/] Fuzzily search in current buffer" })
       vim.keymap.set("n", "<leader>s/", function()
-        builtin.live_grep {
+        builtin.live_grep({
           grep_open_files = true,
           prompt_title = "Live Grep in Open Files",
-        }
+        })
       end, { desc = "[S]earch [/] in Open Files" })
       vim.keymap.set("n", "<leader>sn", function()
-        builtin.find_files { cwd = vim.fn.stdpath "config" }
+        builtin.find_files({ cwd = vim.fn.stdpath("config") })
       end, { desc = "[S]earch [N]eovim files" })
     end,
   },

@@ -4,7 +4,7 @@ return {
     build = ":TSUpdate",
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require("nvim-treesitter.configs").setup {
+      require("nvim-treesitter.configs").setup({
         ensure_installed = {
           "astro",
           "bash",
@@ -52,7 +52,7 @@ return {
         auto_install = true,
         highlight = { enable = true },
         indent = { enable = true },
-      }
+      })
 
       -- There are additional nvim-treesitter modules that you can use to interact
       -- with nvim-treesitter. You should go explore a few and see what interests you:

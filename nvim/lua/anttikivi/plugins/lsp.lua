@@ -1,6 +1,6 @@
-local util = require "anttikivi.util"
-local mason_util = require "anttikivi.util.mason"
-local logging = require "anttikivi.util.logging"
+local util = require("anttikivi.util")
+local mason_util = require("anttikivi.util.mason")
+local logging = require("anttikivi.util.logging")
 
 local use_vtsls = false
 
@@ -304,7 +304,7 @@ return {
     },
     config = function(_, opts)
       vim.api.nvim_create_autocmd("LspAttach", {
-        group = util.augroup "lsp-attach",
+        group = util.augroup("lsp-attach"),
         callback = function(event)
           local map = function(keys, func, desc)
             vim.keymap.set(
@@ -396,11 +396,11 @@ return {
         "stylua",
       })
 
-      require("mason-tool-installer").setup {
+      require("mason-tool-installer").setup({
         ensure_installed = ensure_installed,
-      }
+      })
 
-      require("mason-lspconfig").setup {
+      require("mason-lspconfig").setup({
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -413,7 +413,7 @@ return {
             require("lspconfig")[server_name].setup(server)
           end,
         },
-      }
+      })
     end,
   },
 }

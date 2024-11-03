@@ -18,13 +18,13 @@ function M.set_global_variables()
   ---Whether true colors are supported by the current terminal.
   ---
   ---@type boolean
-  vim.g.true_colors = os.getenv "COLORTERM" == "truecolor"
+  vim.g.true_colors = os.getenv("COLORTERM") == "truecolor"
 
   ---The name of the current color scheme. Set via environment variable to
   ---match with the terminal's color scheme.
   ---
   ---@type "brunch" | "catppuccin" | "nightfox" | "rose-pine" | "tokyonight"
-  vim.g.color_scheme = vim.g.true_colors and os.getenv "COLOR_SCHEME"
+  vim.g.color_scheme = vim.g.true_colors and os.getenv("COLOR_SCHEME")
     or "brunch"
 
   ---The name of the dark variant for the current color scheme. Set via
@@ -32,7 +32,7 @@ function M.set_global_variables()
   ---
   ---@type string
   vim.g.color_scheme_dark_variant = vim.g.true_colors
-      and os.getenv "COLOR_SCHEME_DARK_VARIANT"
+      and os.getenv("COLOR_SCHEME_DARK_VARIANT")
     or "saturday"
 
   ---The name of the light variant for the current color scheme. Set via
@@ -40,7 +40,7 @@ function M.set_global_variables()
   ---
   ---@type string
   vim.g.color_scheme_light_variant = vim.g.true_colors
-      and os.getenv "COLOR_SCHEME_LIGHT_VARIANT"
+      and os.getenv("COLOR_SCHEME_LIGHT_VARIANT")
     or "sunday"
 
   ---Whether icons are enabled.

@@ -6,7 +6,7 @@ return {
     enabled = not vim.g.true_colors,
     config = function()
       require("brunch").load()
-      vim.cmd.colorscheme "brunch"
+      vim.cmd.colorscheme("brunch")
     end,
     priority = 1000,
   },
@@ -25,7 +25,7 @@ return {
     },
     config = function(_, opts)
       require("catppuccin").setup(opts)
-      vim.cmd.colorscheme "catppuccin"
+      vim.cmd.colorscheme("catppuccin")
     end,
     priority = 1000,
   },
@@ -56,7 +56,7 @@ return {
     },
     config = function(_, opts)
       require("rose-pine").setup(opts)
-      vim.cmd.colorscheme "rose-pine"
+      vim.cmd.colorscheme("rose-pine")
     end,
   },
   {
@@ -69,7 +69,7 @@ return {
     },
     config = function(_, opts)
       require("tokyonight").setup(opts)
-      vim.cmd.colorscheme "tokyonight"
+      vim.cmd.colorscheme("tokyonight")
     end,
     priority = 1000,
   },
@@ -78,12 +78,12 @@ return {
     event = "VeryLazy",
     config = function()
       if vim.g.color_scheme == "nightfox" then
-        require("dark_notify").run {
+        require("dark_notify").run({
           schemes = {
             dark = vim.g.color_scheme_dark_variant,
             light = vim.g.color_scheme_light_variant,
           },
-        }
+        })
       else
         require("dark_notify").run()
       end

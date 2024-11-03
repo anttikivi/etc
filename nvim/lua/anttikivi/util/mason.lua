@@ -1,4 +1,4 @@
-local LazyUtil = require "lazy.core.util"
+local LazyUtil = require("lazy.core.util")
 
 local M = {}
 
@@ -13,7 +13,7 @@ local M = {}
 ---@param opts? { warn?: boolean }
 function M.get_pkg_path(pkg, path, opts)
   pcall(require, "mason") -- make sure Mason is loaded. Will fail when generating docs
-  local root = vim.env.MASON or (vim.fn.stdpath "data" .. "/mason")
+  local root = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
   opts = opts or {}
   opts.warn = opts.warn == nil and true or opts.warn
   path = path or ""
@@ -33,7 +33,7 @@ function M.get_pkg_path(pkg, path, opts)
   return ret
 end
 
-for _, level in ipairs { "info", "warn", "error" } do
+for _, level in ipairs({ "info", "warn", "error" }) do
   M[level] = function(msg, opts)
     opts = opts or {}
     opts.title = opts.title or "anttikivi_lsp"
