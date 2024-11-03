@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# %A: The file permissions in octal.
+# %N: The basename of the file.
+stat -f '%A %N' "$1"
