@@ -3,19 +3,22 @@
 set -e
 
 source ./utils/colors.sh
+source ./directories.sh
 
 declare -a SUPPORTED_PLATFORMS=("darwin" "debian")
 readonly SUPPORTED_PLATFORMS
 
 declare -a DARWIN_PACKAGES=(
   "clang-format"
+  "cmake"
   "cormacrelf/tap/dark-notify"
+  "gettext"
   "gh"
   "fzf"
   "jq"
   "lima"
   "luarocks"
-  "neovim"
+  "ninja"
   "opentofu"
   "php"
   "pipx"

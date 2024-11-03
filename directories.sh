@@ -10,6 +10,9 @@ if [ "$(uname)" = "Darwin" ]; then
 fi
 export ETC_DIR
 
+LOCAL_DIR="${HOME}/.local"
+export LOCAL_DIR
+
 PROJECT_DIR="${HOME}/projects"
 if [ "$(uname)" = "Darwin" ]; then
   PROJECT_DIR="${HOME}/Projects"
