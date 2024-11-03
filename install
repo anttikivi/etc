@@ -9,6 +9,19 @@ source ./versions.sh
 declare -a SUPPORTED_PLATFORMS=("darwin" "debian")
 readonly SUPPORTED_PLATFORMS
 
+declare -a DARWIN_PYTHON_DEPENDENCIES=(
+  "gdbm"
+  "mpdecimal"
+  "openssl@3"
+  "pkg-config"
+  "readline"
+  "sqlite3"
+  "tcl-tk"
+  "xz"
+  "zlib"
+)
+readonly DARWIN_PYTHON_DEPENDENCIES
+
 declare -a DARWIN_PACKAGES=(
   "clang-format"
   "cmake"
@@ -214,6 +227,29 @@ if [ "${OS_NAME}" = "darwin" ]; then
 elif [ "${OS_NAME}" = "debian" ]; then
   echo -e "${ESC_RED}Updating the packages on '${OS_NAME}' is not implemented yet${ESC_RESET}"
   not_supported "${OS_NAME}"
+fi
+
+if [ "${HAS_CONNECTION}" = "true" ]; then
+  if [ "${OS_NAME}" = "darwin" ]; then
+    echo -e "${ESC_BLUE}Installing Python dependencies${ESC_RESET}"
+    for pkg in "${DARWIN_PYTHON_DEPENDENCIES[@]}"; do
+      pkg_name="$(basename "${pkg}")"
+      echo "Checking if ${pkg} is installed"
+      echo "The check is done against '${pkg_name}'"
+      if ! brew ls | grep -qw "${pkg_name}"; then
+        echo "${pkg} is not installed, installing"
+        brew install "${pkg}"
+        echo "${pkg} installed"
+      elif [ "${DISABLE_UPDATES}" != "true" ]; then
+        echo "Updating ${pkg}"
+        brew upgrade "${pkg}"
+        echo "${pkg} updated"
+      fi
+    done
+    echo -e "${ESC_GREEN}==> Python dependencies installed${ESC_RESET}"
+  fi
+else
+  echo -e "${ESC_YELLOW}Not installing or updating the Python dependencies due to the script not having an Internet connection${ESC_RESET}"
 fi
 
 if ! command -v pyenv >/dev/null 2>&1; then
