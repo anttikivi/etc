@@ -8,5 +8,5 @@ echo -e "${ESC_MAGENTA}Running the installation script with updates allowed${ESC
 
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${BASEDIR}"
-DISABLE_UPDATES=false "${BASEDIR}/install"
+DISABLE_UPDATES=false "${BASEDIR}/install" "$@"
 cd - >/dev/null
