@@ -4,6 +4,7 @@ set -e
 
 source ./utils/colors.sh
 source ./directories.sh
+source ./versions.sh
 
 declare -a SUPPORTED_PLATFORMS=("darwin" "debian")
 readonly SUPPORTED_PLATFORMS
@@ -21,7 +22,6 @@ declare -a DARWIN_PACKAGES=(
   "ninja"
   "opentofu"
   "php"
-  "pipx"
   "reattach-to-user-namespace"
   "ripgrep"
   "roots/tap/trellis-cli"
@@ -195,29 +195,49 @@ elif [ "${OS_NAME}" = "debian" ]; then
   not_supported "${OS_NAME}"
 fi
 
+if ! command -v pyenv >/dev/null 2>&1; then
+  if [ "${HAS_CONNECTION}" != "true" ]; then
+    echo "Pyenv is not installed and there is not Internet connection, exiting..." >&2
+    exit 1
+  fi
+  echo -e "${ESC_BLUE}Installing Pyenv${ESC_RESET}"
+  export PYENV_GIT_TAG="v${PYENV_INSTALL_VERSION}"
+  curl https://pyenv.run | bash
+  source_environment
+  echo -e "${ESC_GREEN}Pyenv installed${ESC_RESET}"
+elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
+  echo -e "${ESC_BLUE}Updating Pyenv${ESC_RESET}"
+  export PYENV_GIT_TAG="v${PYENV_INSTALL_VERSION}"
+  pyenv update
+  source_environment
+  echo -e "${ESC_GREEN}Pyenv updated${ESC_RESET}"
+fi
+
 if ! command -v python >/dev/null 2>&1; then
   if [ "${HAS_CONNECTION}" != "true" ]; then
     echo "Python is not installed and there is not Internet connection, exiting..." >&2
     exit 1
   fi
   echo -e "${ESC_BLUE}Installing Python${ESC_RESET}"
-  if [ "${OS_NAME}" = "darwin" ]; then
-    brew install python
-    PATH="$(brew --prefix python)/libexec/bin:${PATH}"
-    export PATH
-    PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
-    export PYTHONPATH
-  elif [ "${OS_NAME}" = "debian" ]; then
-    echo -e "${ESC_RED}Installing Python on '${OS_NAME}' is not implemented yet${ESC_RESET}"
-    not_supported "${OS_NAME}"
-  fi
+  pyenv install "${PYTHON_VERSION}"
+  # env PYTHON_CONFIGURE_OPTS='--enable-optimizations --with-lto' PYTHON_CFLAGS='-march=native -mtune=native' pyenv install --verbose "${PYTHON_VERSION}"
+  source_environment
   echo -e "${ESC_GREEN}Python installed${ESC_RESET}"
 elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
-  echo -e "${ESC_BLUE}Updating Python${ESC_RESET}"
-  if [ "${OS_NAME}" = "darwin" ]; then
-    brew upgrade python
+  echo -e "${ESC_YELLOW}Updating Python is not implemented yet${ESC_RESET}"
+fi
+
+if ! command -v pipx >/dev/null 2>&1; then
+  if [ "${HAS_CONNECTION}" != "true" ]; then
+    echo "pipx is not installed and there is not Internet connection, exiting..." >&2
+    exit 1
   fi
-  echo -e "${ESC_GREEN}Python updated${ESC_RESET}"
+  echo -e "${ESC_BLUE}Installing pipx${ESC_RESET}"
+  pip install --user pipx
+  source_environment
+  echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"
+elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
+  echo -e "${ESC_YELLOW}Updating pipx is not implemented yet${ESC_RESET}"
 fi
 
 if ! command -v ansible >/dev/null 2>&1; then
@@ -226,18 +246,11 @@ if ! command -v ansible >/dev/null 2>&1; then
     exit 1
   fi
   echo -e "${ESC_BLUE}Installing Ansible${ESC_RESET}"
-  if [ "${OS_NAME}" = "darwin" ]; then
-    brew install ansible
-  elif [ "${OS_NAME}" = "debian" ]; then
-    echo -e "${ESC_RED}Installing Ansible on '${OS_NAME}' is not implemented yet${ESC_RESET}"
-    not_supported "${OS_NAME}"
-  fi
+  pipx install --include-deps ansible
   echo -e "${ESC_GREEN}Ansible installed${ESC_RESET}"
 elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
   echo -e "${ESC_BLUE}Updating Ansible${ESC_RESET}"
-  if [ "${OS_NAME}" = "darwin" ]; then
-    brew upgrade ansible
-  fi
+  pipx upgrade --include-injected ansible
   echo -e "${ESC_GREEN}Ansible updated${ESC_RESET}"
 fi
 

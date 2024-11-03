@@ -10,6 +10,8 @@ export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agen
 export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
 
+export PYENV_ROOT="${HOME}/.pyenv"
+
 export EDITOR="nvim"
 export VISUAL="nvim"
 

@@ -6,7 +6,6 @@ if [ -d "/opt/homebrew" ]; then
 fi
 
 path=("${LOCAL_BIN_DIR}" "${path[@]}")
-path=("$(brew --prefix python)/libexec/bin" "${path[@]}")
 path=("/usr/local/go/bin" "${path[@]}")
 path=("${GOBIN}" "${path[@]}")
 path=("${LOCAL_OPT_DIR}/nvim/bin" "${path[@]}")
@@ -15,6 +14,9 @@ if [ -e "${HOME}/.cargo/env" ]; then
   # shellcheck source=../.cargo/env
   source "${HOME}/.cargo/env"
 fi
+
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export NVM_DIR
@@ -27,7 +29,4 @@ if [ -f "${GCLOUD_SDK_DIR}/path.zsh.inc" ]; then
   # shellcheck source=../.local/opt/google-cloud-sdk/path.zsh.inc
   source "${GCLOUD_SDK_DIR}/path.zsh.inc"
 fi
-
-PYTHONPATH="$(brew --prefix)/lib/python$(python --version | awk '{print $2}' | cut -d '.' -f 1,2)/site-packages"
-export PYTHONPATH
 # vi: ft=zsh
