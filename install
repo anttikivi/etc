@@ -35,6 +35,7 @@ declare -a DARWIN_PACKAGES=(
   "ninja"
   "opentofu"
   "php"
+  "r" # The programming language
   "reattach-to-user-namespace"
   "ripgrep"
   "roots/tap/trellis-cli"
@@ -47,10 +48,31 @@ declare -a DARWIN_PACKAGES=(
 readonly DARWIN_PACKAGES
 
 declare -a DARWIN_CASKS=(
+  "1password"
   "1password-cli"
+  "affinity-designer"
+  "affinity-publisher"
+  "discord"
+  "firefox"
+  "font-fraunces"
+  "font-inter"
   "font-jetbrains-mono"
   "font-jetbrains-mono-nerd-font"
+  "font-libre-baskerville"
+  "font-manrope"
+  "font-noto-sans"
+  "font-noto-serif"
+  "google-chrome"
+  "logi-options+"
+  "microsoft-auto-update"
+  "microsoft-excel"
+  "microsoft-teams"
+  "microsoft-word"
   "nikitabobko/tap/aerospace"
+  "rstudio"
+  "slack"
+  "telegram"
+  "whatsapp"
 )
 readonly DARWIN_CASKS
 
