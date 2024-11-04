@@ -6,6 +6,23 @@ function M.augroup(name)
   return vim.api.nvim_create_augroup("anttikivi-" .. name, { clear = true })
 end
 
+---@param o table
+---@return string
+function M.dump(o)
+  if type(o) == "table" then
+    local s = "{ "
+    for k, v in pairs(o) do
+      if type(k) ~= "number" then
+        k = '"' .. k .. '"'
+      end
+      s = s .. "[" .. k .. "] = " .. M.dump(v) .. ","
+    end
+    return s .. "} "
+  else
+    return tostring(o)
+  end
+end
+
 ---@return nil
 function M.set_global_variables()
   vim.g.netrw_list_hide = "^\\.DS_Store$"
