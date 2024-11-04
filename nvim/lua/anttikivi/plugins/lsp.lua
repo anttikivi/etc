@@ -1,6 +1,5 @@
 local util = require("anttikivi.util")
 local mason_util = require("anttikivi.util.mason")
-local logging = require("anttikivi.util.logging")
 
 local use_vtsls = false
 
@@ -380,8 +379,13 @@ return {
 
       local ensure_installed = vim.tbl_keys(servers or {})
 
+      ensure_installed = vim.tbl_filter(function(name)
+        return name ~= "bashls"
+      end, ensure_installed)
+
       vim.list_extend(ensure_installed, {
         "ansible-lint",
+        { "bashls", version = "4.10.3" },
         "gofumpt",
         "goimports",
         "gomodifytags",
