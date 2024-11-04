@@ -1,5 +1,7 @@
 fpath+=("${HOME}/.zfunctions")
 
+fpath=("${LOCAL_DIR}/lib/python3.11/site-packages/argcomplete/bash_completion.d" "${fpath[@]}")
+
 autoload -U promptinit
 promptinit
 
