@@ -1,5 +1,5 @@
+[general]
 import = ["~/.config/alacritty/color_scheme.toml"]
-
 live_config_reload = true
 ipc_socket = true
 
