@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 fpath+=("${HOME}/.zfunctions")
 
 fpath=("${LOCAL_DIR}/lib/python3.11/site-packages/argcomplete/bash_completion.d" "${fpath[@]}")
@@ -46,6 +48,7 @@ load-nvmrc
 # The Zsh options for reference:
 # https://zsh.sourceforge.io/Doc/Release/Options.html
 for file in ~/.zsh/*.zsh; do
+  # shellcheck disable=SC1090
   source "${file}"
 done
 unset file

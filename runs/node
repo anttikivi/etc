@@ -14,7 +14,7 @@ source_nvm() {
   echo "Starting to source nvm"
   NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
   echo "Going to source nvm from ${NVM_DIR}"
-  # shellcheck source=../../.config/nvm/nvm.sh
+  # shellcheck disable=SC1091
   [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
   echo "nvm sourced"
 }

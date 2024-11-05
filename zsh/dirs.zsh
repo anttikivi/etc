@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 setopt AUTO_CD
 setopt AUTO_PUSHD
 setopt CDABLE_VARS

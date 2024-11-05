@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # shellcheck source=./zshenv
 if [ -e ~/.zshenv ]; then
   source ~/.zshenv
@@ -24,7 +26,7 @@ pathmunge "${GOBIN}"
 pathmunge "${LOCAL_OPT_DIR}/nvim/bin"
 
 if [ -e "${HOME}/.cargo/env" ]; then
-  # shellcheck source=../.cargo/env
+  # shellcheck disable=SC1091
   source "${HOME}/.cargo/env"
 fi
 
@@ -33,13 +35,13 @@ eval "$(pyenv init -)"
 
 NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export NVM_DIR
-# shellcheck source=../.config/nvm/nvm.sh
+# shellcheck disable=SC1091
 [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
 
 GCLOUD_SDK_DIR="${LOCAL_OPT_DIR}/google-cloud-sdk"
 export GCLOUD_SDK_DIR
 if [ -f "${GCLOUD_SDK_DIR}/path.zsh.inc" ]; then
-  # shellcheck source=../.local/opt/google-cloud-sdk/path.zsh.inc
+  # shellcheck disable=SC1091
   source "${GCLOUD_SDK_DIR}/path.zsh.inc"
 fi
-# vi: ft=sh
+# vi: ft=bash

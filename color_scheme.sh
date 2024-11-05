@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # shellcheck disable=SC2034
 CATPPUCCIN="catppuccin"
 CATPPUCCIN_FRAPPE="frappe"

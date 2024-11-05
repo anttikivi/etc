@@ -1,3 +1,5 @@
+#!/bin/sh
+
 BUILD_DIR="${HOME}/build"
 if [ "$(uname)" = "Darwin" ]; then
   BUILD_DIR="${HOME}/Build"

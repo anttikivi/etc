@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 alias reload="source ~/.zshrc"
 
 alias -- -="cd -"
@@ -9,6 +11,7 @@ alias _="sudo "
 
 # Directory stack
 for index in {1..9}; do
+  # shellcheck disable=SC2139
   alias "${index}"="cd +${index} > /dev/null"
 done
 unset index
