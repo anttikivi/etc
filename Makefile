@@ -1,6 +1,6 @@
-.PHONY: all fmt lint
+.PHONY: all fmt lint run
 
-all: lint
+all: lint run
 
 fmt:
 	@printf "\nFormatting...\n"
@@ -39,3 +39,6 @@ lint:
 	@printf "\nLinting whatever it is that's checked with Prettier...\n"
 	@printf "(formatting for JSON, Markdown, and YAML files...)\n"
 	prettier --check "**/*.{json,md,prettierrc,y?(a)ml}"
+
+run:
+	./install -D
