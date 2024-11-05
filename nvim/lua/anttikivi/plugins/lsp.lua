@@ -39,7 +39,7 @@ return {
         astro = {},
         basedpyright = {},
         bashls = {
-          filetypes = { "sh", "zsh" },
+          filetypes = { "bash", "sh", "zsh" },
         },
         black = {},
         clangd = {
