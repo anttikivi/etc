@@ -40,7 +40,6 @@ declare -a DARWIN_PACKAGES=(
   "ripgrep"
   "roots/tap/trellis-cli"
   "shellcheck"
-  "stylua"
   "terraform"
   "tmux"
   "wget"
@@ -76,7 +75,11 @@ declare -a DARWIN_CASKS=(
 )
 readonly DARWIN_CASKS
 
-declare -a CARGO_PACKAGES=("selene" "taplo-cli")
+declare -a CARGO_PACKAGES=(
+  "selene"
+  "stylua"
+  "taplo-cli"
+)
 readonly CARGO_PACKAGES
 
 declare -a GO_PACKAGES=(
