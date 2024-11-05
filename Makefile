@@ -8,9 +8,12 @@ fmt:
 	stylua --config-path nvim/stylua.toml nvim/
 	@printf "\nFormatting shell scripts...\n"
 	shfmt -l -w -i 2 -bn -ci .
+	@printf "\nFormatting whatever it is that's formatted with Prettier...\n"
+	@printf "(JSON, Markdown, and YAML files...)\n"
+	prettier --write "**/*.{json,md,prettierrc,y?(a)ml}"
 
 lint:
-	@printf "\nFormatting...\n"
+	@printf "\nLinting...\n"
 	@printf "\nLinting Lua files...\n"
 	stylua --check --config-path nvim/stylua.toml nvim/
 	selene --config nvim/selene.toml .
@@ -33,3 +36,6 @@ lint:
 		./zprofile \
 		./zshenv \
 		./zshrc
+	@printf "\nLinting whatever it is that's checked with Prettier...\n"
+	@printf "(formatting for JSON, Markdown, and YAML files...)\n"
+	prettier --check "**/*.{json,md,prettierrc,y?(a)ml}"
