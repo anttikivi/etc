@@ -23,6 +23,7 @@ declare -a DARWIN_PYTHON_DEPENDENCIES=(
 readonly DARWIN_PYTHON_DEPENDENCIES
 
 declare -a DARWIN_PACKAGES=(
+  "awscli"
   "clang-format"
   "cmake"
   "cormacrelf/tap/dark-notify"
