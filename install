@@ -36,7 +36,6 @@ declare -a DARWIN_PACKAGES=(
   "ninja"
   "opentofu"
   "php"
-  "r" # The programming language
   "reattach-to-user-namespace"
   "ripgrep"
   "roots/tap/trellis-cli"
@@ -50,29 +49,9 @@ readonly DARWIN_PACKAGES
 declare -a DARWIN_CASKS=(
   "1password"
   "1password-cli"
-  "affinity-designer"
-  "affinity-publisher"
-  "discord"
-  "firefox"
-  "font-fraunces"
-  "font-inter"
   "font-jetbrains-mono"
   "font-jetbrains-mono-nerd-font"
-  "font-libre-baskerville"
-  "font-manrope"
-  "font-noto-sans"
-  "font-noto-serif"
-  "google-chrome"
-  "logi-options+"
-  "microsoft-auto-update"
-  "microsoft-excel"
-  "microsoft-teams"
-  "microsoft-word"
   "nikitabobko/tap/aerospace"
-  "rstudio"
-  "slack"
-  "telegram"
-  "whatsapp"
 )
 readonly DARWIN_CASKS
 
@@ -216,6 +195,35 @@ brew_install() {
   fi
 }
 
+########################################
+# Install a Homebrew cask.
+# Arguments:
+#   $1 The cask to install.
+#######################################
+brew_install_cask() {
+  if [ $# -eq 0 ]; then
+    echo "No arguments were passed to the Homebrew cask installation function" >&2
+    exit 1
+  fi
+  if [ -z "$1" ]; then
+    echo "No cask argument was passed to the Homebrew installation function" >&2
+    exit 1
+  fi
+
+  pkg_name="$(basename "$1")"
+  echo "Checking if $1 is installed"
+  echo "The check is done against '${pkg_name}'"
+  if ! brew ls | grep -qw "${pkg_name}"; then
+    echo "$1 is not installed, installing"
+    brew install --cask "$1"
+    echo "$1 installed"
+  elif [ "${DISABLE_UPDATES}" != "true" ]; then
+    echo "Updating $1"
+    brew upgrade --cask "$1"
+    echo "$1 updated"
+  fi
+}
+
 main() {
   if [[ ! " ${SUPPORTED_PLATFORMS[*]} " =~ [[:space:]]${OS_NAME}[[:space:]] ]]; then
     not_supported "${OS_NAME}"
@@ -223,13 +231,20 @@ main() {
 
   only_dotbot="false"
 
+  # Whether or not to install the platform-dependent extra packages that are
+  # defined in separate files.
+  extra_packages="false"
+
   # readonly call_args=("$@")
 
   OPTIND=1
-  while getopts "DhV" opt; do
+  while getopts "DEhV" opt; do
     case "${opt}" in
       D)
         only_dotbot="true"
+        ;;
+      E)
+        extra_packages="true"
         ;;
       h)
         print_help
@@ -374,25 +389,35 @@ main() {
 
   if [ "${HAS_CONNECTION}" = "true" ]; then
     if [ "${OS_NAME}" = "darwin" ]; then
-      echo -e "${ESC_BLUE}Installing Homebrew packages${ESC_RESET}"
+      echo -e "${ESC_BLUE}Installing Homebrew formulae${ESC_RESET}"
       for pkg in "${DARWIN_PACKAGES[@]}"; do
         brew_install "${pkg}"
       done
+
+      if [ -f "${BASEDIR}/extras/darwin-brew-formulae" ] && [ "${extra_packages}" = "true" ]; then
+        echo -e "${ESC_BLUE}Installing the extra Homebrew formulae${ESC_RESET}"
+        # shellcheck disable=SC2162
+        while read pkg; do
+          brew_install "${pkg}"
+        done
+      fi
+
+      echo -e "${ESC_GREEN}==> Homebrew formulae installed${ESC_RESET}"
+
+      echo -e "${ESC_BLUE}Installing Homebrew casks${ESC_RESET}"
       for cask in "${DARWIN_CASKS[@]}"; do
-        cask_name="$(basename "${cask}")"
-        echo "Checking if ${cask} is installed"
-        echo "The check is done against '${cask_name}'"
-        if ! brew ls | grep -qw "${cask_name}"; then
-          echo "${cask} is not installed, installing"
-          brew install --cask "${cask}"
-          echo "${cask} installed"
-        elif [ "${DISABLE_UPDATES}" != "true" ]; then
-          echo "Updating ${cask}"
-          brew upgrade --cask "${cask}"
-          echo "${cask} updated"
-        fi
+        brew_install_cask "${cask}"
       done
-      echo -e "${ESC_GREEN}==> Homebrew packages installed${ESC_RESET}"
+
+      if [ -f "${BASEDIR}/extras/darwin-brew-casks" ] && [ "${extra_packages}" = "true" ]; then
+        echo -e "${ESC_BLUE}Installing the extra Homebrew casks${ESC_RESET}"
+        # shellcheck disable=SC2162
+        while read pkg; do
+          brew_install_cask "${pkg}"
+        done
+      fi
+
+      echo -e "${ESC_GREEN}==> Homebrew casks installed${ESC_RESET}"
     fi
   else
     echo -e "${ESC_YELLOW}Not installing or updating the Homebrew packages due to the script not having an Internet connection${ESC_RESET}"
