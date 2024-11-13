@@ -396,10 +396,9 @@ main() {
 
       if [ -f "${BASEDIR}/extras/darwin-brew-formulae" ] && [ "${extra_packages}" = "true" ]; then
         echo -e "${ESC_BLUE}Installing the extra Homebrew formulae${ESC_RESET}"
-        # shellcheck disable=SC2162
-        while read pkg; do
+        while IFS="" read -r pkg || [ -n "${pkg}" ]; do
           brew_install "${pkg}"
-        done
+        done <"${BASEDIR}/extras/darwin-brew-formulae"
       fi
 
       echo -e "${ESC_GREEN}==> Homebrew formulae installed${ESC_RESET}"
@@ -411,10 +410,9 @@ main() {
 
       if [ -f "${BASEDIR}/extras/darwin-brew-casks" ] && [ "${extra_packages}" = "true" ]; then
         echo -e "${ESC_BLUE}Installing the extra Homebrew casks${ESC_RESET}"
-        # shellcheck disable=SC2162
-        while read pkg; do
+        while IFS="" read -r pkg || [ -n "${pkg}" ]; do
           brew_install_cask "${pkg}"
-        done
+        done <"${BASEDIR}/extras/darwin-brew-casks"
       fi
 
       echo -e "${ESC_GREEN}==> Homebrew casks installed${ESC_RESET}"
