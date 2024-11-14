@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 login_aws() {
   login_session="${AWS_LOGIN_SESSION}"
