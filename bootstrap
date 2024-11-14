@@ -48,9 +48,9 @@ fi
 echo "Running the main script"
 
 if [ "${first_run}" = "true" ]; then
-  FIRST_RUN=true ./install
+  FIRST_RUN=true ./install "$@"
 else
-  ./install
+  ./install "$@"
 fi
 
 # shellcheck source=./bash_profile

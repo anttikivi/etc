@@ -88,6 +88,9 @@ readonly FIRST_RUN
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly BASEDIR
 
+EXTRAS_DIR="${BASEDIR}/extras"
+readonly EXTRAS_DIR
+
 INSTALL_SCRIPT_BASEDIR="${BASEDIR}"
 export INSTALL_SCRIPT_BASEDIR
 
@@ -231,20 +234,26 @@ main() {
 
   only_dotbot="false"
 
-  # Whether or not to install the platform-dependent extra packages that are
-  # defined in separate files.
-  extra_packages="false"
+  # An array of the categories of extra packages to install from the lists in
+  # the separate files.
+  declare -a extra_packages=()
+
+  # Whether or not to install all of the extra packages.
+  all_extra_packages="false"
 
   # readonly call_args=("$@")
 
   OPTIND=1
-  while getopts "DEhV" opt; do
+  while getopts "DEe:hV" opt; do
     case "${opt}" in
       D)
         only_dotbot="true"
         ;;
       E)
-        extra_packages="true"
+        all_extra_packages="true"
+        ;;
+      e)
+        extra_packages+=("${OPTARG}")
         ;;
       h)
         print_help
@@ -394,11 +403,26 @@ main() {
         brew_install "${pkg}"
       done
 
-      if [ -f "${BASEDIR}/extras/darwin-brew-formulae" ] && [ "${extra_packages}" = "true" ]; then
+      if [ "${all_extra_packages}" = "true" ]; then
+        echo -e "${ESC_BLUE}Installing all of the extra Homebrew formulae${ESC_RESET}"
+        for file in "${EXTRAS_DIR}"/darwin-brew-*-formulae; do
+          while IFS="" read -r pkg || [ -n "${pkg}" ]; do
+            brew_install "${pkg}"
+          done <"${file}"
+        done
+      elif ((${#extra_packages[@]} != 0)); then
         echo -e "${ESC_BLUE}Installing the extra Homebrew formulae${ESC_RESET}"
-        while IFS="" read -r pkg || [ -n "${pkg}" ]; do
-          brew_install "${pkg}"
-        done <"${BASEDIR}/extras/darwin-brew-formulae"
+        for category in "${extra_packages[@]}"; do
+          file="${EXTRAS_DIR}/darwin-brew-${category}-formulae"
+          if [ ! -f "${file}" ]; then
+            echo "There are no Homebrew formulae in the \"${category}\" category"
+            continue
+          fi
+          echo -e "${ESC_BLUE}Installing the extra Homebrew formulae in the \"${category}\" category${ESC_RESET}"
+          while IFS="" read -r pkg || [ -n "${pkg}" ]; do
+            brew_install "${pkg}"
+          done <"${file}"
+        done
       fi
 
       echo -e "${ESC_GREEN}==> Homebrew formulae installed${ESC_RESET}"
@@ -408,11 +432,26 @@ main() {
         brew_install_cask "${cask}"
       done
 
-      if [ -f "${BASEDIR}/extras/darwin-brew-casks" ] && [ "${extra_packages}" = "true" ]; then
+      if [ "${all_extra_packages}" = "true" ]; then
+        echo -e "${ESC_BLUE}Installing all of the extra Homebrew casks${ESC_RESET}"
+        for file in "${EXTRAS_DIR}"/darwin-brew-*-casks; do
+          while IFS="" read -r pkg || [ -n "${pkg}" ]; do
+            brew_install_cask "${pkg}"
+          done <"${file}"
+        done
+      elif ((${#extra_packages[@]} != 0)); then
         echo -e "${ESC_BLUE}Installing the extra Homebrew casks${ESC_RESET}"
-        while IFS="" read -r pkg || [ -n "${pkg}" ]; do
-          brew_install_cask "${pkg}"
-        done <"${BASEDIR}/extras/darwin-brew-casks"
+        for category in "${extra_packages[@]}"; do
+          file="${EXTRAS_DIR}/darwin-brew-${category}-casks"
+          if [ ! -f "${file}" ]; then
+            echo "There are no Homebrew casks in the \"${category}\" category"
+            continue
+          fi
+          echo -e "${ESC_BLUE}Installing the extra Homebrew casks in the \"${category}\" category${ESC_RESET}"
+          while IFS="" read -r pkg || [ -n "${pkg}" ]; do
+            brew_install_cask "${pkg}"
+          done <"${file}"
+        done
       fi
 
       echo -e "${ESC_GREEN}==> Homebrew casks installed${ESC_RESET}"
