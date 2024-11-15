@@ -337,11 +337,14 @@ main() {
     source_environment
     echo -e "${ESC_GREEN}Pyenv installed${ESC_RESET}"
   elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
-    echo -e "${ESC_BLUE}Updating Pyenv${ESC_RESET}"
-    export PYENV_GIT_TAG="v${PYENV_INSTALL_VERSION}"
-    pyenv update
+    # echo -e "${ESC_BLUE}Updating Pyenv${ESC_RESET}"
+    echo -e "${ESC_YELLOW}Updating Pyenv is not implemented yet${ESC_RESET}"
+    echo -e "${ESC_YELLOW}To update Pyenv, run the following commands:${ESC_RESET}"
+    echo "source ./versions.sh"
+    echo "export PYENV_GIT_TAG=\"v${PYENV_INSTALL_VERSION}\""
+    echo "pyenv update"
     source_environment
-    echo -e "${ESC_GREEN}Pyenv updated${ESC_RESET}"
+    # echo -e "${ESC_GREEN}Pyenv updated${ESC_RESET}"
   fi
 
   if ! command -v python >/dev/null 2>&1; then
