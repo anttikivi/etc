@@ -36,7 +36,7 @@ capitalize() {
   echo "$(echo "$1" | cut -c -1 | tr '[:lower:]' '[:upper:]')$(echo "$1" | cut -c 2-)"
 }
 
-export COLOR_SCHEME="${TOKYONIGHT}"
+export COLOR_SCHEME="${ROSE_PINE}"
 
 case "${COLOR_SCHEME}" in
   "${CATPPUCCIN}")
