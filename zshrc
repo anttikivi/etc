@@ -45,6 +45,12 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
+for file in ~/.bash/*.sh; do
+  # shellcheck disable=SC1090
+  source "${file}"
+done
+unset file
+
 # The Zsh options for reference:
 # https://zsh.sourceforge.io/Doc/Release/Options.html
 for file in ~/.zsh/*.zsh; do

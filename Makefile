@@ -20,6 +20,7 @@ lint:
 	@printf "\nLinting shell scripts...\n"
 	@shfmt -l -d -i 2 -bn -ci .
 	@shellcheck \
+		./bash/* \
 		./bin/* \
 		./runs/* \
 		./utils/colors.sh \

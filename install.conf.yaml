@@ -15,6 +15,7 @@
     ~/.aerospace.toml:
       if: '[ "$(uname)" = "Darwin" ]'
       path: aerospace.toml
+    ~/.bash:
     ~/.bash_profile:
     ~/.config/alacritty/alacritty.toml: alacritty.toml
     ~/.config/env/color_scheme.sh: color_scheme.sh

@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
 alias reload="source ~/.zshrc"
+alias colors="source ~/.zshenv && source ~/.zprofile && source ~/.zshrc && update_color_scheme"
 
 alias -- -="cd -"
 alias -g ...=../..
