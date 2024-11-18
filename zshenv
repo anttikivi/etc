@@ -33,3 +33,9 @@ if [ -e "${SHARED_ENV_DIR}/directories.sh" ]; then
 elif [ -n "${INSTALL_SCRIPT_BASEDIR}" ]; then
   source "${INSTALL_SCRIPT_BASEDIR}/directories.sh"
 fi
+
+if [ -e "${SHARED_ENV_DIR}/terminals.sh" ]; then
+  source "${SHARED_ENV_DIR}/terminals.sh"
+elif [ -n "${INSTALL_SCRIPT_BASEDIR}" ]; then
+  source "${INSTALL_SCRIPT_BASEDIR}/terminals.sh"
+fi

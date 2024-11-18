@@ -32,8 +32,12 @@ if [ "${system_color_scheme}" = "dark" ]; then
   kitty_color_scheme="${KITTY_DARK_COLOR_SCHEME}"
 fi
 
-echo "Changing Alacritty to the ${system_color_scheme} color scheme: ${alacritty_color_scheme}"
-cat "${XDG_CONFIG_HOME}/alacritty/themes/${alacritty_color_scheme}.toml" >"${XDG_CONFIG_HOME}/alacritty/color_scheme.toml"
+if [ "${ENABLE_ALACRITTY}" = "true" ]; then
+  echo "Changing Alacritty to the ${system_color_scheme} color scheme: ${alacritty_color_scheme}"
+  cat "${XDG_CONFIG_HOME}/alacritty/themes/${alacritty_color_scheme}.toml" >"${XDG_CONFIG_HOME}/alacritty/color_scheme.toml"
+fi
 
-echo "Changing kitty to the ${system_color_scheme} color scheme: ${kitty_color_scheme}"
-"${LOCAL_BIN_DIR}"/kitten themes --reload-in all "${kitty_color_scheme}"
+if [ "${ENABLE_KITTY}" = "true" ]; then
+  echo "Changing kitty to the ${system_color_scheme} color scheme: ${kitty_color_scheme}"
+  "${LOCAL_BIN_DIR}"/kitten themes --reload-in all "${kitty_color_scheme}"
+fi

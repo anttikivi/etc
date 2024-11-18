@@ -4,6 +4,7 @@ set -e
 
 \. ../utils/colors.sh
 \. ../directories.sh
+\. ../terminals.sh
 \. ../versions.sh
 
 THEME_DIR="${XDG_CONFIG_HOME}/alacritty/themes"
@@ -126,6 +127,11 @@ install_nightfox_variant() {
   fi
   echo "$1 installed"
 }
+
+if [ "${ENABLE_ALACRITTY}" != "true" ]; then
+  echo "Skipping the Alacritty tasks as Alacritty is not enabled"
+  exit 0
+fi
 
 if [ "${HAS_CONNECTION}" != "true" ]; then
   echo "Skipping the Alacritty tasks as there is no Internet connection"

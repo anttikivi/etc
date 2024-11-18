@@ -4,6 +4,7 @@ set -e
 
 \. ../utils/colors.sh
 \. ../directories.sh
+\. ../terminals.sh
 \. ../versions.sh
 
 install_kitty() {
@@ -20,6 +21,11 @@ install_kitty() {
   curl -L 'https://sw.kovidgoyal.net/kitty/installer.sh' | sh /dev/stdin launch=n installer="version-${wanted_ver}"
   echo "kitty installed"
 }
+
+if [ "${ENABLE_KITTY}" != "true" ]; then
+  echo "Skipping the kitty tasks as kitty is not enabled"
+  exit 0
+fi
 
 if [ "${HAS_CONNECTION}" = "true" ]; then
   minor_ver="$(echo "${KITTY_VERSION}" | head -c "$(echo "${KITTY_VERSION}" | grep -m 2 -ob "\." | tail -1 | grep -oE "[0-9]+")")"
