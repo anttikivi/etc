@@ -63,6 +63,7 @@ declare -a CARGO_PACKAGES=(
 readonly CARGO_PACKAGES
 
 declare -a GO_PACKAGES=(
+  "mvdan.cc/gofumpt@latest"
   "mvdan.cc/sh/v3/cmd/shfmt@latest"
   "github.com/a-h/templ/cmd/templ@latest"
 )
