@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export ALACRITTY_VERSION="0.14.0"
-export GO_VERSION="1.22.0"
+export GO_VERSION="1.23.0"
 export KITTY_VERSION="0.37.0"
 # Defines the release channel for Neovim to use. The possible values are:
 # "stable", "dev"
