@@ -51,12 +51,17 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
     fi
 
     if [ -e "${nvim_build_dir}" ] && [ ! -d "${nvim_build_dir}" ]; then
+      echo "A file exists in place of the Neovim build directory at ${nvim_build_dir}, removing..."
       rm -rf "${nvim_build_dir}"
     elif [ -d "${nvim_build_dir}" ]; then
       rm -rf "${nvim_build_dir}/build"
       git -C "${nvim_build_dir}" checkout .
       git -C "${nvim_build_dir}" clean -f
       git -C "${nvim_build_dir}" clean -fd
+      git -C "${nvim_build_dir}" checkout master
+      git -C "${nvim_build_dir}" clean -f
+      git -C "${nvim_build_dir}" clean -fd
+      git -C "${nvim_build_dir}" fetch --tags --force
     else
       git clone git@github.com:neovim/neovim.git "${nvim_build_dir}"
     fi
