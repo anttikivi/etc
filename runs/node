@@ -107,3 +107,4 @@ install_node "20"
 install_node "22"
 
 nvm alias default 20
+nvm use default
