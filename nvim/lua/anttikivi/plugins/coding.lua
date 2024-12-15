@@ -1,5 +1,4 @@
 return {
-  { "numToStr/Comment.nvim", opts = {} },
   {
     "folke/lazydev.nvim",
     ft = "lua",
@@ -89,6 +88,11 @@ return {
         },
       } or {}))
     end,
+  },
+  {
+    "folke/ts-comments.nvim",
+    event = "VeryLazy",
+    opts = {},
   },
   {
     "jwalton512/vim-blade",
