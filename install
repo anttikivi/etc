@@ -27,6 +27,7 @@ declare -a DARWIN_PACKAGES=(
   "clang-format"
   "cmake"
   "cormacrelf/tap/dark-notify"
+  "fd"
   "gettext"
   "gh"
   "fzf"
