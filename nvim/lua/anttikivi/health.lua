@@ -1,6 +1,17 @@
-local check_version = function()
+-- This module is based on LazyVim/LazyVim, licensed under Apache-2.0.
+
+local M = {}
+
+local start = vim.health.start or vim.health.report_start
+local ok = vim.health.ok or vim.health.report_ok
+local warn = vim.health.warn or vim.health.report_warn
+local error = vim.health.error or vim.health.report_error
+
+function M.check()
+  start("anttikivi")
+
   if not vim.version.cmp then
-    vim.health.error(
+    error(
       string.format(
         "Neovim out of date: '%s'. Upgrade to latest stable or nightly",
         tostring(vim.version())
@@ -10,41 +21,42 @@ local check_version = function()
   end
 
   if vim.version.cmp(vim.version(), { 0, 10, 0 }) >= 0 then
-    vim.health.ok(
-      string.format("Neovim version is: '%s'", tostring(vim.version()))
-    )
+    ok(string.format("Neovim version is: '%s'", tostring(vim.version())))
   else
-    vim.health.error(
+    error(
       string.format(
         "Neovim out of date: '%s'. Upgrade to latest stable or nightly",
         tostring(vim.version())
       )
     )
   end
-end
 
-local check_external_reqs = function()
-  -- Basic utils: `git`, `make`, `unzip`
-  for _, exe in ipairs({ "git", "make", "unzip", "rg" }) do
-    local is_executable = vim.fn.executable(exe) == 1
-    if is_executable then
-      vim.health.ok(string.format("Found executable: '%s'", exe))
+  for _, cmd in ipairs({
+    "bat",
+    "curl",
+    "fd",
+    "fzf",
+    "git",
+    "rg",
+  }) do
+    local name = type(cmd) == "string" and cmd or vim.inspect(cmd)
+    local commands = type(cmd) == "string" and { cmd } or cmd
+    ---@cast commands string[]
+    local found = false
+
+    for _, c in ipairs(commands) do
+      if vim.fn.executable(c) == 1 then
+        name = c
+        found = true
+      end
+    end
+
+    if found then
+      ok(("`%s` is installed"):format(name))
     else
-      vim.health.warn(string.format("Could not find executable: '%s'", exe))
+      warn(("`%s` is not installed"):format(name))
     end
   end
-
-  return true
 end
 
-return {
-  check = function()
-    vim.health.start("anttikivi.nvim")
-
-    local uv = vim.uv or vim.loop
-    vim.health.info("System Information: " .. vim.inspect(uv.os_uname()))
-
-    check_version()
-    check_external_reqs()
-  end,
-}
+return M
