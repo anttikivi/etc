@@ -50,24 +50,14 @@ if [ "${HAS_CONNECTION}" = "true" ]; then
       invalid_channel
     fi
 
-    if [ -e "${nvim_build_dir}" ] && [ ! -d "${nvim_build_dir}" ]; then
+    if [ -e "${nvim_build_dir}" ]; then
       echo "A file exists in place of the Neovim build directory at ${nvim_build_dir}, removing..."
       rm -rf "${nvim_build_dir}"
-    elif [ -d "${nvim_build_dir}" ]; then
-      rm -rf "${nvim_build_dir}/build"
-      git -C "${nvim_build_dir}" checkout .
-      git -C "${nvim_build_dir}" clean -f
-      git -C "${nvim_build_dir}" clean -fd
-      git -C "${nvim_build_dir}" checkout master
-      git -C "${nvim_build_dir}" clean -f
-      git -C "${nvim_build_dir}" clean -fd
-      git -C "${nvim_build_dir}" fetch --tags --force
-    else
-      git clone git@github.com:neovim/neovim.git "${nvim_build_dir}"
     fi
+    git clone git@github.com:neovim/neovim.git "${nvim_build_dir}"
     if [ "${NVIM_CHANNEL}" = "stable" ]; then
       git -C "${nvim_build_dir}" checkout "tags/${wanted_ver}"
-    elif [ "${NVIM_CHANNEL}" = "dev" ]; then
+    elif [ "${NVIM_CHANNEL}" = "dev" ] || [ "${NVIM_CHANNEL}" = "nightly" ]; then
       git -C "${nvim_build_dir}" checkout "tags/nightly"
     fi
     cd "${nvim_build_dir}"
