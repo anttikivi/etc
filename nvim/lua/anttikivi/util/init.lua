@@ -1,6 +1,8 @@
 local LazyUtil = require("lazy.core.util")
 
 ---@class anttikivi.util: LazyUtilCore
+---@field config AKConfig
+---@field format anttikivi.util.format
 local M = {}
 
 setmetatable(M, {

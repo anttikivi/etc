@@ -1,10 +1,10 @@
-_G.KiviVim = require("anttikivi.util")
+_G.AK = require("anttikivi.util")
 
 local M = {}
 
-KiviVim.config = M
+AK.config = M
 
----@class KiviVimConfig
+---@class AKConfig
 local config = {}
 
 ---This function is based on LazyVim/LazyVim, licensed under Apache-2.0.
@@ -15,7 +15,7 @@ function M.setup()
     M.load("autocmds")
   end
 
-  local group = vim.api.nvim_create_augroup("LazyVim", { clear = true })
+  local group = vim.api.nvim_create_augroup("KiviVim", { clear = true })
   vim.api.nvim_create_autocmd("User", {
     group = group,
     pattern = "VeryLazy",
@@ -25,15 +25,15 @@ function M.setup()
       end
       M.load("keymaps")
 
-      KiviVim.format.setup()
-      KiviVim.root.setup()
+      AK.format.setup()
+      AK.root.setup()
 
-      vim.api.nvim_create_user_command("LazyHealth", function()
+      vim.api.nvim_create_user_command("KiviHealth", function()
         vim.cmd([[Lazy! load all]])
         vim.cmd([[checkhealth]])
       end, { desc = "Load all plugins and run :checkhealth" })
 
-      local health = require("lazy.health")
+      local health = require("anttikivi.health")
       vim.list_extend(health.valid, {
         "recommended",
         "desc",
@@ -48,7 +48,7 @@ end
 function M.load(name)
   local function _load(mod)
     if require("lazy.core.cache").find(mod)[1] then
-      KiviVim.try(function()
+      AK.try(function()
         require(mod)
       end, { msg = "Failed loading " .. mod })
     end
