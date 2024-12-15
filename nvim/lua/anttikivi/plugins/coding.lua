@@ -94,12 +94,4 @@ return {
     "jwalton512/vim-blade",
     ft = "blade",
   },
-  {
-    "phelipetls/vim-hugo",
-    enabled = false,
-  },
-  {
-    "fladson/vim-kitty",
-    enabled = false,
-  },
 }

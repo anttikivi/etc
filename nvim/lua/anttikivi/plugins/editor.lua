@@ -1,19 +1,5 @@
 return {
   {
-    "tpope/vim-fugitive",
-    enabled = false,
-    event = "VeryLazy",
-    keys = function()
-      return {
-        {
-          "<leader>gs",
-          ":Git<CR>",
-          desc = "Open [G]it [S]tatus",
-        },
-      }
-    end,
-  },
-  {
     "lewis6991/gitsigns.nvim",
     opts = {
       -- TODO: Try these fancy icons and see if they work out.
