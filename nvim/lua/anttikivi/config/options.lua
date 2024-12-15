@@ -1,5 +1,4 @@
 vim.opt.breakindent = true -- Enable break indent
-vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
 vim.opt.colorcolumn = "80" -- Highlight column 80
 vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
 vim.opt.cursorline = true -- Enable highlighting of the current line
@@ -40,3 +39,8 @@ vim.opt.timeoutlen = 300
 vim.opt.undofile = true
 vim.opt.updatetime = 250
 vim.opt.wrap = true -- Line wrap
+
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+vim.schedule(function()
+  vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
+end)
