@@ -96,8 +96,10 @@ return {
   },
   {
     "phelipetls/vim-hugo",
+    enabled = false,
   },
   {
     "fladson/vim-kitty",
+    enabled = false,
   },
 }
