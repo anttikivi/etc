@@ -24,6 +24,7 @@ readonly DARWIN_PYTHON_DEPENDENCIES
 
 declare -a DARWIN_PACKAGES=(
   "awscli"
+  "bat"
   "clang-format"
   "cmake"
   "cormacrelf/tap/dark-notify"
