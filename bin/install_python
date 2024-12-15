@@ -1,0 +1,45 @@
+#!/bin/sh
+
+set -e
+
+# Whether or not disable the optimizations.
+disable_optimizations="false"
+
+# The Python version to install.
+version=""
+
+OPTIND=1
+while getopts "DV:" opt; do
+  case "${opt}" in
+    D)
+      disable_optimizations="true"
+      ;;
+    V)
+      version="${OPTARG}"
+      ;;
+    *)
+      echo "Unexpected option: ${opt}"
+      exit 1
+      ;;
+  esac
+done
+shift "$((OPTIND - 1))"
+
+if [ "${disable_optimizations}" = "true" ]; then
+  echo "The optimizations for Python are disabled!"
+fi
+
+if [ -z "${version}" ]; then
+  echo "No Python version specified!" >&2
+  exit 1
+else
+  echo "Installing Python ${version}"
+fi
+
+if [ "${disable_optimizations}" = "true" ]; then
+  pyenv install --verbose "${version}"
+else
+  env PYTHON_CONFIGURE_OPTS='--enable-optimizations --with-lto' PYTHON_CFLAGS='-march=native -mtune=native' pyenv install --verbose "${version}"
+fi
+
+echo "Python installed!"

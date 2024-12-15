@@ -333,7 +333,7 @@ main() {
       exit 1
     fi
     echo -e "${ESC_BLUE}Installing Pyenv${ESC_RESET}"
-    export PYENV_GIT_TAG="v${PYENV_INSTALL_VERSION}"
+    # export PYENV_GIT_TAG="v${PYENV_INSTALL_VERSION}"
     curl https://pyenv.run | bash
     source_environment
     echo -e "${ESC_GREEN}Pyenv installed${ESC_RESET}"
@@ -354,8 +354,7 @@ main() {
       exit 1
     fi
     echo -e "${ESC_BLUE}Installing Python${ESC_RESET}"
-    env PYTHON_CONFIGURE_OPTS='--enable-optimizations --with-lto' PYTHON_CFLAGS='-march=native -mtune=native' pyenv install --verbose "${PYTHON_VERSION}"
-    # env PYTHON_CONFIGURE_OPTS='--enable-optimizations --with-lto' PYTHON_CFLAGS='-march=native -mtune=native' pyenv install --verbose "${PYTHON_VERSION}"
+    ./bin/install_python -V "${PYTHON_VERSION}"
     pyenv global "${PYTHON_VERSION}"
     source_environment
     echo -e "${ESC_GREEN}Python installed${ESC_RESET}"
