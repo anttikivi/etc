@@ -3,6 +3,8 @@ local LazyUtil = require("lazy.core.util")
 ---@class anttikivi.util: LazyUtilCore
 ---@field config AKConfig
 ---@field format anttikivi.util.format
+---@field lsp anttikivi.util.lsp
+---@field root anttikivi.util.root
 local M = {}
 
 setmetatable(M, {
