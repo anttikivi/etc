@@ -10,6 +10,7 @@ local LazyUtil = require("lazy.core.util")
 ---@field mini anttikivi.util.mini
 ---@field plugin anttikivi.util.plugin
 ---@field root anttikivi.util.root
+---@field ui anttikivi.util.ui
 local M = {}
 
 setmetatable(M, {
