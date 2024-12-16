@@ -96,6 +96,14 @@ function M.info(buf)
   )
 end
 
+---@param formatter AKFormatter
+function M.register(formatter)
+  M.formatters[#M.formatters + 1] = formatter
+  table.sort(M.formatters, function(a, b)
+    return a.priority > b.priority
+  end)
+end
+
 ---@param buf? number
 ---@return (AKFormatter | { active: boolean, resolved: string[] })[]
 function M.resolve(buf)

@@ -168,8 +168,8 @@ end
 
 ---@param name "autocmds" | "options" | "keymaps"
 function M.load(name)
-  if name == "lazy" then
-    AK.error("anttikivi.config.load does not support loading lazy.lua")
+  if name == "lazy" or name == "lsp" then
+    AK.error("anttikivi.config.load does not support loading " .. name)
     vim.cmd([[quit]])
   end
   local function _load(mod)
