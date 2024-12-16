@@ -13,6 +13,11 @@ AK.config = M
 ---@field true_colors boolean Whether to enable true colors in the terminal.
 ---@field use_icons boolean Whether to enable icons.
 local config = {
+  -- If the completion engine supports the AI source, use that instead of inline
+  -- suggestions.
+  ai_cmp = false,
+  -- Whether to follow the main branch of `saghen/blink.cmp`.
+  blink_follow_main = false,
   -- Icons used by plugins.
   icons = {
     misc = {
