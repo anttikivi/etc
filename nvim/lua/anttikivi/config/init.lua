@@ -124,6 +124,22 @@ function M.setup(opts)
       end, { desc = "Load all plugins and run :checkhealth" })
     end,
   })
+
+  AK.track("colorscheme")
+  AK.try(function()
+    if type(M.colorscheme) == "function" then
+      M.colorscheme()
+    else
+      vim.cmd.colorscheme(M.colorscheme)
+    end
+  end, {
+    msg = "Could not load the colorscheme",
+    on_error = function(msg)
+      AK.error(msg)
+      vim.cmd.colorscheme("habamax")
+    end,
+  })
+  AK.track()
 end
 
 ---@param name "autocmds" | "options" | "keymaps"
@@ -135,11 +151,11 @@ function M.load(name)
       end, { msg = "Failed loading " .. mod })
     end
   end
-  local pattern = "KiviVim" .. name:sub(1, 1):upper() .. name:sub(2)
+  local pattern = "AK" .. name:sub(1, 1):upper() .. name:sub(2)
   -- always load lazyvim, then user file
   _load("config." .. name)
   if vim.bo.filetype == "lazy" then
-    -- HACK: KiviVim may have overwritten options of the Lazy ui, so reset this here
+    -- HACK: AK may have overwritten options of the Lazy ui, so reset this here
     vim.cmd([[do VimResized]])
   end
   vim.api.nvim_exec_autocmds("User", { pattern = pattern, modeline = false })
