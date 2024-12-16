@@ -109,7 +109,7 @@ return {
       end
 
       ---  NOTE: compat with latest version. Currenlty 0.7.6
-      if not vim.g.lazyvim_blink_main then
+      if not AK.config.blink_follow_main then
         ---@diagnostic disable-next-line: inject-field
         opts.sources.completion = opts.sources.completion or {}
         opts.sources.completion.enabled_providers = enabled

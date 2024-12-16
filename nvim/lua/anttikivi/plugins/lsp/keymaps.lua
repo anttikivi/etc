@@ -134,6 +134,27 @@ function M.get()
   return M._keys
 end
 
+---@param method string | string[]
+function M.has(buffer, method)
+  if type(method) == "table" then
+    for _, m in ipairs(method) do
+      if M.has(buffer, m) then
+        return true
+      end
+    end
+    return false
+  end
+  method = method:find("/") and method or "textDocument/" .. method
+  local clients = AK.lsp.get_clients({ bufnr = buffer })
+  for _, client in ipairs(clients) do
+    ---@diagnostic disable-next-line: missing-parameter, param-type-mismatch
+    if client.supports_method(method) then
+      return true
+    end
+  end
+  return false
+end
+
 function M.on_attach(_, buffer)
   local Keys = require("lazy.core.handler.keys")
   local keymaps = M.resolve(buffer)
@@ -154,6 +175,23 @@ function M.on_attach(_, buffer)
       vim.keymap.set(keys.mode or "n", keys.lhs, keys.rhs, opts)
     end
   end
+end
+
+---@return AKKeysLsp[]
+function M.resolve(buffer)
+  local Keys = require("lazy.core.handler.keys")
+  if not Keys.resolve then
+    return {}
+  end
+  local spec = vim.tbl_extend("force", {}, M.get())
+  local opts = AK.opts("nvim-lspconfig")
+  local clients = AK.lsp.get_clients({ bufnr = buffer })
+  for _, client in ipairs(clients) do
+    local maps = opts.servers[client.name] and opts.servers[client.name].keys
+      or {}
+    vim.list_extend(spec, maps)
+  end
+  return Keys.resolve(spec)
 end
 
 return M

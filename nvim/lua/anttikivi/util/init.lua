@@ -8,6 +8,7 @@ local LazyUtil = require("lazy.core.util")
 ---@field format anttikivi.util.format
 ---@field lsp anttikivi.util.lsp
 ---@field mini anttikivi.util.mini
+---@field pick anttikivi.util.pick
 ---@field plugin anttikivi.util.plugin
 ---@field root anttikivi.util.root
 ---@field ui anttikivi.util.ui
@@ -52,6 +53,20 @@ end
 function M.is_loaded(name)
   local Config = require("lazy.core.config")
   return Config.plugins[name] and Config.plugins[name]._.loaded
+end
+
+function M.is_win()
+  return vim.uv.os_uname().sysname:find("Windows") ~= nil
+end
+
+---@param fn fun()
+function M.on_very_lazy(fn)
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "VeryLazy",
+    callback = function()
+      fn()
+    end,
+  })
 end
 
 ---@param name string
