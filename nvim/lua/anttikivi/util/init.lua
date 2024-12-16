@@ -4,6 +4,7 @@ local LazyUtil = require("lazy.core.util")
 ---@field config AKConfig
 ---@field format anttikivi.util.format
 ---@field lsp anttikivi.util.lsp
+---@field plugin anttikivi.util.plugin
 ---@field root anttikivi.util.root
 local M = {}
 

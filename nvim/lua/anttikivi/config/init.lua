@@ -84,6 +84,25 @@ local config = {
   },
 }
 
+M.did_init = false
+function M.init()
+  if M.did_init then
+    return
+  end
+  M.did_init = true
+
+  -- TODO: Delay notifications until vim.notify was replaced or after 500ms.
+  -- Right now, vim.notify is not replaced in this configuration.
+  -- AK.lazy_notify()
+
+  -- Load options here, before lazy init while sourcing plugin modules. This is
+  -- needed to make sure options will be correctly applied after installing
+  -- missing plugins.
+  M.load("options")
+
+  AK.plugin.setup()
+end
+
 ---@param opts? AKConfig Optional configuration to override the defaults. The parameter is provided mainly for easier debugging.
 function M.setup(opts)
   config.true_colors = os.getenv("COLORTERM") == "truecolor"
