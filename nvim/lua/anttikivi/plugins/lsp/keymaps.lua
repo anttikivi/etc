@@ -69,6 +69,7 @@ function M.get()
       mode = { "n" },
       has = "codeLens",
     },
+    { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
     {
       "<leader>cR",
       function()
@@ -78,7 +79,6 @@ function M.get()
       mode = { "n" },
       has = { "workspace/didRenameFiles", "workspace/willRenameFiles" },
     },
-    { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
     {
       "<leader>cA",
       AK.lsp.action.source,
