@@ -140,3 +140,5 @@ function M.setup()
     M.info()
   end, { desc = "Show info about the formatters for the current buffer" })
 end
+
+return M
