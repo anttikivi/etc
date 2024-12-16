@@ -1,7 +1,7 @@
 -- This module is based on LazyVim/LazyVim, licensed under Apache-2.0.
 
 ---@class anttikivi.util.format
----@overload fun(opts?: {force?:boolean})
+---@overload fun(opts?: { force?: boolean })
 local M = setmetatable({}, {
   __call = function(m, ...)
     return m.format(...)
@@ -11,8 +11,8 @@ local M = setmetatable({}, {
 ---@class AKFormatter
 ---@field name string
 ---@field primary? boolean
----@field format fun(bufnr:number)
----@field sources fun(bufnr:number):string[]
+---@field format fun(bufnr: number)
+---@field sources fun(bufnr: number):string[]
 ---@field priority number
 
 M.formatters = {} ---@type AKFormatter[]
@@ -32,7 +32,7 @@ function M.enabled(buf)
   return gaf == nil or gaf
 end
 
----@param opts? {force?:boolean, buf?:number}
+---@param opts? {force?: boolean, buf?: number}
 function M.format(opts)
   opts = opts or {}
   local buf = opts.buf or vim.api.nvim_get_current_buf()
@@ -97,7 +97,7 @@ function M.info(buf)
 end
 
 ---@param buf? number
----@return (AKFormatter|{active:boolean,resolved:string[]})[]
+---@return (AKFormatter | { active: boolean, resolved: string[] })[]
 function M.resolve(buf)
   buf = buf or vim.api.nvim_get_current_buf()
   local have_primary = false

@@ -12,9 +12,9 @@ local M = setmetatable({}, {
 ---@field paths string[]
 ---@field spec AKRootSpec
 
----@alias AKRootFn fun(buf: number): (string|string[])
+---@alias AKRootFn fun(buf: number): (string | string[])
 
----@alias AKRootSpec string|string[]|AKRootFn
+---@alias AKRootSpec string | string[] | AKRootFn
 
 ---@type AKRootSpec[]
 M.spec = { "lsp", { ".git", "lua" }, "cwd" }
@@ -53,7 +53,7 @@ function M.detectors.lsp(buf)
   end, roots)
 end
 
----@param patterns string[]|string
+---@param patterns string[] | string
 function M.detectors.pattern(buf, patterns)
   patterns = type(patterns) == "string" and { patterns } or patterns
   local path = M.bufpath(buf) or vim.uv.cwd()
