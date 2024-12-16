@@ -40,31 +40,6 @@ function M.disable(server, cond)
   )
 end
 
----@param opts? lsp.Client.filter
-function M.get_clients(opts)
-  local ret = {} ---@type vim.lsp.Client[]
-  if vim.lsp.get_clients then
-    ret = vim.lsp.get_clients(opts)
-  else
-    ---@diagnostic disable-next-line: deprecated
-    ret = vim.lsp.get_active_clients(opts)
-    if opts and opts.method then
-      ---@param client vim.lsp.Client
-      ret = vim.tbl_filter(function(client)
-        ---@diagnostic disable-next-line: param-type-mismatch
-        return client.supports_method(opts.method, { bufnr = opts.bufnr })
-      end, ret)
-    end
-  end
-  return opts and opts.filter and vim.tbl_filter(opts.filter, ret) or ret
-end
-
----@return _.lspconfig.options
-function M.get_config(server)
-  local configs = require("lspconfig.configs")
-  return rawget(configs, server)
-end
-
 ---@param opts? lsp.Client.format
 function M.format(opts)
   opts = vim.tbl_deep_extend(
@@ -115,6 +90,37 @@ function M.formatter(opts)
     end,
   }
   return AK.merge(ret, opts) --[[@as AKFormatter]]
+end
+
+---@param opts? lsp.Client.filter
+function M.get_clients(opts)
+  local ret = {} ---@type vim.lsp.Client[]
+  if vim.lsp.get_clients then
+    ret = vim.lsp.get_clients(opts)
+  else
+    ---@diagnostic disable-next-line: deprecated
+    ret = vim.lsp.get_active_clients(opts)
+    if opts and opts.method then
+      ---@param client vim.lsp.Client
+      ret = vim.tbl_filter(function(client)
+        ---@diagnostic disable-next-line: param-type-mismatch
+        return client.supports_method(opts.method, { bufnr = opts.bufnr })
+      end, ret)
+    end
+  end
+  return opts and opts.filter and vim.tbl_filter(opts.filter, ret) or ret
+end
+
+---@return _.lspconfig.options
+function M.get_config(server)
+  local configs = require("lspconfig.configs")
+  return rawget(configs, server)
+end
+
+function M.is_enabled(server)
+  local c = M.get_config(server)
+  ---@diagnostic disable-next-line: undefined-field
+  return c and c.enabled ~= false
 end
 
 ---@param on_attach fun(client: vim.lsp.Client, buffer)
