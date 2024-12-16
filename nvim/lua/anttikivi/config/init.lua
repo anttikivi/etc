@@ -18,6 +18,14 @@ local config = {
   ai_cmp = false,
   -- Whether to follow the main branch of `saghen/blink.cmp`.
   blink_follow_main = false,
+  defaults = {
+    autocmds = true, -- anttikivi.config.autocmds
+    keymaps = true, -- anttikivi.config.keymaps
+    -- anttikivi.config.options can't be configured here since that's loaded
+    -- before the AK setup. If you want to disable loading options, add
+    -- `package.loaded["anttikivi.config.options"] = true` to the top of your
+    -- init.lua.
+  },
   -- Icons used by plugins.
   icons = {
     misc = {
@@ -168,10 +176,6 @@ end
 
 ---@param name "autocmds" | "options" | "keymaps"
 function M.load(name)
-  if name == "lazy" or name == "lsp" then
-    AK.error("anttikivi.config.load does not support loading " .. name)
-    vim.cmd([[quit]])
-  end
   local function _load(mod)
     if require("lazy.core.cache").find(mod)[1] then
       AK.try(function()
@@ -181,6 +185,13 @@ function M.load(name)
   end
   local pattern = "AK" .. name:sub(1, 1):upper() .. name:sub(2)
   -- always load lazyvim, then user file
+  if M.defaults[name] or name == "options" then
+    _load("anttikivi.config." .. name)
+    vim.api.nvim_exec_autocmds(
+      "User",
+      { pattern = pattern .. "Defaults", modeline = false }
+    )
+  end
   _load("config." .. name)
   if vim.bo.filetype == "lazy" then
     -- HACK: AK may have overwritten options of the Lazy ui, so reset this here
