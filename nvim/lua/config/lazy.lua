@@ -27,6 +27,9 @@ vim.opt.rtp:prepend(lazypath)
 
 ---@param opts? LazyConfig Optional configuration to override the defaults. The parameter is provided mainly for easier debugging.
 function M.load(opts)
+  vim.g.ak_true_colors = os.getenv("COLORTERM") == "truecolor"
+  vim.g.ak_use_icons = vim.g.ak_true_colors
+
   opts = vim.tbl_deep_extend("force", {
     spec = {
       { import = "anttikivi.plugins" },
@@ -36,9 +39,16 @@ function M.load(opts)
       patterns = { "anttikivi" },
     },
     install = {
-      colorscheme = AK.config.colorscheme,
+      -- TODO: Have a common source for the available color schemes.
+      colorscheme = {
+        "brunch",
+        "catppuccin",
+        "nightfox",
+        "rose-pine",
+        "tokyonight",
+      },
     },
-    ui = AK.config.use_icons and {} or {
+    ui = vim.g.ak_use_icons and {} or {
       icons = {
         cmd = "⌘",
         config = "🛠",

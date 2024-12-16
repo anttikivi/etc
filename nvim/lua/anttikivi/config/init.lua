@@ -7,7 +7,7 @@ local M = {}
 AK.config = M
 
 ---@class AKConfig
----@field colorscheme "brunch" | "catppuccin" | "nightfox" | "rose-pine" | "tokyonight" The color scheme to use. This is set via environment variable during the setup.
+---@field colorscheme AKColorscheme The color scheme to use. This is set via environment variable during the setup.
 ---@field colorscheme_dark_variant string The name of the dark variant for the current color scheme. This is set via environment variable during the setup.
 ---@field colorscheme_light_variant string The name of the light variant for the current color scheme. This is set via environment variable during the setup.
 ---@field true_colors boolean Whether to enable true colors in the terminal.
@@ -110,8 +110,8 @@ end
 
 ---@param opts? AKConfig Optional configuration to override the defaults. The parameter is provided mainly for easier debugging.
 function M.setup(opts)
-  config.true_colors = os.getenv("COLORTERM") == "truecolor"
-  config.colorscheme = vim.g.true_colors and os.getenv("COLOR_SCHEME")
+  config.true_colors = vim.g.ak_true_colors
+  config.colorscheme = config.true_colors and os.getenv("COLOR_SCHEME")
     or "brunch"
   config.colorscheme_dark_variant = config.true_colors
       and os.getenv("COLOR_SCHEME_DARK_VARIANT")
@@ -119,7 +119,7 @@ function M.setup(opts)
   config.colorscheme_light_variant = config.true_colors
       and os.getenv("COLOR_SCHEME_LIGHT_VARIANT")
     or "sunday"
-  config.use_icons = config.true_colors
+  config.use_icons = vim.g.ak_use_icons
 
   config = vim.tbl_deep_extend("force", config, opts or {}) or {}
 
