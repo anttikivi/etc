@@ -65,8 +65,8 @@ return {
       },
 
       keymap = {
-        preset = "enter",
-        ["<C-y>"] = { "select_and_accept" },
+        preset = "default",
+        -- ["<C-y>"] = { "select_and_accept" },
       },
     },
     ---@param opts blink.cmp.Config | { sources: { compat: string[] } }
