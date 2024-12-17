@@ -16,7 +16,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out,                            "WarningMsg" },
+      { out, "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
@@ -38,6 +38,7 @@ function M.load(opts)
         opts = {},
         import = "anttikivi.plugins",
       },
+      { import = "plugins" },
     },
     dev = {
       path = os.getenv("PROJECT_DIR"),
@@ -77,7 +78,7 @@ function M.load(opts)
     change_detection = {
       enabled = true,
       notify = false,
-    }
+    },
   }, opts or {})
   require("lazy").setup(opts)
 end
