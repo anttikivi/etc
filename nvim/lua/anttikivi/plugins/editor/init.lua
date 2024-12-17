@@ -90,9 +90,11 @@ return {
   {
     "folke/todo-comments.nvim",
     event = "LazyFile",
-    opts = {
-      signs = AK.config.use_icons,
-    },
+    opts = function()
+      return {
+        signs = AK.config.use_icons,
+      }
+    end,
   },
   {
     import = "anttikivi.plugins.editor.fzf",
