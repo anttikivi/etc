@@ -1,7 +1,5 @@
 -- This module is based on LazyVim/LazyVim, licensed under Apache-2.0.
 
-print(vim.g.ak_python_lsp)
-print(vim.g.ak_python_ruff)
 local lsp = vim.g.ak_python_lsp or "pyright"
 local ruff = vim.g.ak_python_ruff or "ruff"
 

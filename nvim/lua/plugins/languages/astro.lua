@@ -1,6 +1,8 @@
 -- This module is based on LazyVim/LazyVim, licensed under Apache-2.0.
 
 return {
+  -- Astro requires the CSS server.
+  { import = "plugins.languages.css" },
   -- Astro requires the TypeScript server.
   { import = "plugins.languages.typescript" },
   {
@@ -41,6 +43,6 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = { ensure_installed = { "astro", "css" } },
+    opts = { ensure_installed = { "astro" } },
   },
 }
