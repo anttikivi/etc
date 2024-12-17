@@ -20,7 +20,7 @@ local config = {
   blink_follow_main = false,
   defaults = {
     autocmds = true, -- anttikivi.config.autocmds
-    keymaps = true, -- anttikivi.config.keymaps
+    keymaps = true,  -- anttikivi.config.keymaps
     -- anttikivi.config.options can't be configured here since that's loaded
     -- before the AK setup. If you want to disable loading options, add
     -- `package.loaded["anttikivi.config.options"] = true` to the top of your
@@ -118,16 +118,16 @@ end
 
 ---@param opts? AKConfig Optional configuration to override the defaults. The parameter is provided mainly for easier debugging.
 function M.setup(opts)
-  config.true_colors = vim.g.ak_true_colors
+  config.true_colors = vim.g.ak_true_colors ~= nil and vim.g.ak_true_colors or os.getenv("COLORTERM") == "truecolor"
   config.colorscheme = config.true_colors and os.getenv("COLOR_SCHEME")
-    or "brunch"
+      or "brunch"
   config.colorscheme_dark_variant = config.true_colors
       and os.getenv("COLOR_SCHEME_DARK_VARIANT")
-    or "saturday"
+      or "saturday"
   config.colorscheme_light_variant = config.true_colors
       and os.getenv("COLOR_SCHEME_LIGHT_VARIANT")
-    or "sunday"
-  config.use_icons = vim.g.ak_use_icons
+      or "sunday"
+  config.use_icons = vim.g.ak_use_icons ~= nil and vim.g.ak_use_icons or config.true_colors
 
   config = vim.tbl_deep_extend("force", config, opts or {}) or {}
 

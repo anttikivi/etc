@@ -3,7 +3,7 @@
 if vim.fn.has("nvim-0.10.0") == 0 then
   vim.api.nvim_echo({
     { "This Neovim configuration requires Neovim >= 0.10.0\n", "ErrorMsg" },
-    { "Press any key to exit", "MoreMsg" },
+    { "Press any key to exit",                                 "MoreMsg" },
   }, true, {})
   vim.fn.getchar()
   vim.cmd([[quit]])
@@ -16,6 +16,15 @@ return {
   {
     "folke/lazy.nvim",
     version = "*",
+  },
+  {
+    -- "anttikivi/anttikivi",
+    dir = vim.fn.expand("<script>:p:h"),
+    name = "anttikivi",
+    priority = 10000,
+    lazy = false,
+    opts = {},
+    cond = true,
   },
   {
     "folke/snacks.nvim",

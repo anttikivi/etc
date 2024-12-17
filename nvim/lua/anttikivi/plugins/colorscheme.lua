@@ -20,7 +20,6 @@ return {
   },
   {
     "EdenEast/nightfox.nvim",
-    name = "nightfox",
     lazy = true,
     opts = {},
     config = function(_, opts)
@@ -45,12 +44,13 @@ return {
   },
   {
     "folke/tokyonight.nvim",
-    name = "tokyonight",
     lazy = true,
-    opts = {
-      style = AK.config.colorscheme_dark_variant,
-      light_style = AK.config.colorscheme_light_variant,
-    },
+    opts = function()
+      return {
+        style = AK.config.colorscheme_dark_variant,
+        light_style = AK.config.colorscheme_light_variant,
+      }
+    end,
   },
   {
     "cormacrelf/dark-notify",
