@@ -7,6 +7,7 @@ local LazyUtil = require("lazy.core.util")
 ---@field config AKConfig
 ---@field format anttikivi.util.format
 ---@field lsp anttikivi.util.lsp
+---@field lualine anttikivi.util.lualine
 ---@field mini anttikivi.util.mini
 ---@field pick anttikivi.util.pick
 ---@field plugin anttikivi.util.plugin

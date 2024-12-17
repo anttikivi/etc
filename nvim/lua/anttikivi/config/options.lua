@@ -51,7 +51,7 @@ opt.shiftround = true -- Round indent
 opt.shiftwidth = 2 -- Size of an indent
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
 -- TODO: Toggle this if some statusline plugin is in use.
-opt.showmode = true -- Don't show the mode, since it's already in status line
+opt.showmode = false -- Don't show the mode, since it's already in status line
 opt.sidescrolloff = 8 -- Columns of context
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 opt.smartcase = true -- Override the 'ignorecase' option if the search pattern contains upper case characters
