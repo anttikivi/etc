@@ -137,7 +137,7 @@ function M.setup(opts)
     M.load("autocmds")
   end
 
-  local group = vim.api.nvim_create_augroup("KiviVim", { clear = true })
+  local group = vim.api.nvim_create_augroup("AK", { clear = true })
   vim.api.nvim_create_autocmd("User", {
     group = group,
     pattern = "VeryLazy",
@@ -150,7 +150,7 @@ function M.setup(opts)
       AK.format.setup()
       AK.root.setup()
 
-      vim.api.nvim_create_user_command("KiviHealth", function()
+      vim.api.nvim_create_user_command("AKHealth", function()
         vim.cmd([[Lazy! load all]])
         vim.cmd([[checkhealth]])
       end, { desc = "Load all plugins and run :checkhealth" })
