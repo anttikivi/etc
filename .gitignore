@@ -2,6 +2,7 @@
 __pycache__/
 .venv/
 aws/config
+dist/
 ssh/config
 ssh/*.pub
 *.py[cod]
