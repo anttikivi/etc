@@ -142,6 +142,15 @@ function M.get_config(server)
   return rawget(configs, server)
 end
 
+---@return { default_config: lspconfig.Config }
+function M.get_raw_config(server)
+  local ok, ret = pcall(require, "lspconfig.configs." .. server)
+  if ok then
+    return ret
+  end
+  return require("lspconfig.server_configurations." .. server)
+end
+
 function M.is_enabled(server)
   local c = M.get_config(server)
   ---@diagnostic disable-next-line: undefined-field
