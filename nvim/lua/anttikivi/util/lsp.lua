@@ -40,6 +40,31 @@ function M.disable(server, cond)
   )
 end
 
+---@class LspCommand: lsp.ExecuteCommandParams
+---@field open? boolean
+---@field handler? lsp.Handler
+
+---@param opts LspCommand
+function M.execute(opts)
+  local params = {
+    command = opts.command,
+    arguments = opts.arguments,
+  }
+  if opts.open then
+    require("trouble").open({
+      mode = "lsp_command",
+      params = params,
+    })
+  else
+    return vim.lsp.buf_request(
+      0,
+      "workspace/executeCommand",
+      params,
+      opts.handler
+    )
+  end
+end
+
 ---@param opts? lsp.Client.format
 function M.format(opts)
   opts = vim.tbl_deep_extend(

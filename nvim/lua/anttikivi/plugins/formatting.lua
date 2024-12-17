@@ -7,7 +7,7 @@ function M.setup(_, opts)
   for _, key in ipairs({ "format_on_save", "format_after_save" }) do
     if opts[key] then
       local msg =
-        "Don't set `opts.%s` for `conform.nvim`.\n**LazyVim** will use the conform formatter automatically"
+        "Don't set `opts.%s` for `conform.nvim`.\n**AK** will use the conform formatter automatically"
       AK.warn(msg:format(key))
       ---@diagnostic disable-next-line: no-unknown
       opts[key] = nil
