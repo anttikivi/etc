@@ -1,4 +1,7 @@
-if __name__ == "__main__":
-    from etc.cli import main
+import sys
 
-    main()
+
+if __name__ == "__main__":
+    from etc.cli import main as _main
+
+    sys.exit(_main())
