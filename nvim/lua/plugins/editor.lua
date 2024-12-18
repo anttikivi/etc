@@ -17,6 +17,14 @@ return {
         timeout_ms = 2000,
       },
       watch_for_changes = true,
+      keymaps = {
+        ["<CR>"] = "actions.select",
+        ["<C-p>"] = "actions.preview",
+        ["<C-c>"] = { "actions.close", mode = "n" },
+        ["<C-l>"] = "actions.refresh",
+        ["-"] = { "actions.parent", mode = "n" },
+        ["_"] = { "actions.open_cwd", mode = "n" },
+      },
       -- TODO: Review the default keymaps.
       use_default_keymaps = false,
       view_options = {
