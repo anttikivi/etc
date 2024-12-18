@@ -7,7 +7,7 @@ vim.g.ak_eslint_auto_format = false
 vim.g.ak_prettier_needs_config = false
 
 ---@type "basedpyright" | "pyright"
-vim.g.ak_python_lsp = "pyright"
+vim.g.ak_python_lsp = "basedpyright"
 
 ---@type "ruff" | "ruff_lsp"
 vim.g.ak_python_ruff = "ruff"
