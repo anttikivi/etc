@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "etc"
@@ -28,15 +28,9 @@ dependencies = []
 etc = "etc.cli:main"
 
 [project.urls]
-Documentation = "https://github.com/Antti Kivi/etc#readme"
-Issues = "https://github.com/Antti Kivi/etc/issues"
-Source = "https://github.com/Antti Kivi/etc"
+Documentation = "https://github.com/anttikivi/etc#readme"
+Issues = "https://github.com/anttikivi/etc/issues"
+Source = "https://github.com/anttikivi/etc"
 
-[tool.hatch.version]
-path = "src/etc/__about__.py"
-
-[tool.hatch.build.targets.sdist]
-only-include = ["src"]
-
-[tool.hatch.build.targets.wheel]
-only-include = ["src"]
+[tool.setuptools.dynamic]
+version = { attr = "etc.__version__" }
