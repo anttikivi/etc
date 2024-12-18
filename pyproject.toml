@@ -26,6 +26,9 @@ dependencies = []
 [project.scripts]
 etc = "etc.cli:main"
 
+[project.entry-points."pipx.run"]
+etc = "etc.cli:main"
+
 [project.urls]
 Documentation = "https://github.com/anttikivi/etc#readme"
 Issues = "https://github.com/anttikivi/etc/issues"
