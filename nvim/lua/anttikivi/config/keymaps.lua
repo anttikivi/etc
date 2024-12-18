@@ -152,8 +152,8 @@ if vim.fn.has("nvim-0.11") == 0 then
 end
 
 -- To file explorer
-map("n", "<leader>e", "<cmd>Rex<CR>", { desc = "Resume to file explorer" })
-map("n", "<leader>E", "<cmd>Ex<CR>", { desc = "Resume to file explorer" })
+-- map("n", "<leader>e", "<cmd>Rex<CR>", { desc = "Resume to file explorer" })
+-- map("n", "<leader>E", "<cmd>Ex<CR>", { desc = "Resume to file explorer" })
 
 -- To normal mode
 map("i", "<C-c>", "<Esc>")
