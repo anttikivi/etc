@@ -1,3 +1,168 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -e
+
+readonly ESC="\033"
+export ESC_RESET="${ESC}[0m"
+export ESC_RED="${ESC}[31m"
+export ESC_GREEN="${ESC}[32m"
+export ESC_YELLOW="${ESC}[33m"
+export ESC_MAGENTA="${ESC}[35m"
+
+readonly REMOTE_URL='https://github.com/anttikivi/etc.git'
+
+readonly DISABLE_UPDATES="false"
+readonly PYTHON_VERSION="3.11"
+
+declare -a SUPPORTED_PLATFORMS=("darwin")
+readonly SUPPORTED_PLATFORMS
+
+declare -a DARWIN_PYTHON_DEPENDENCIES=(
+  "gdbm"
+  "mpdecimal"
+  "openssl@3"
+  "pkg-config"
+  "readline"
+  "sqlite"
+  "tcl-tk"
+  "xz"
+  "zlib"
+)
+readonly DARWIN_PYTHON_DEPENDENCIES
+
+OS_NAME="$(uname | tr '[:upper:]' '[:lower:]')"
+if [ "$(uname)" = "Linux" ]; then
+  distro="$(cat /etc/*-release | grep ^ID | head -n1 | cut -d '=' -f2)"
+  if [ "${distro}" = "debian" ] || [ "${distro}" = "ubuntu" ]; then
+    OS_NAME="debian"
+  fi
+fi
+readonly OS_NAME
+
+########################################
+# Install a Homebrew formula.
+# Arguments:
+#   $1 The formula to install.
+#######################################
+brew_install() {
+  if [ $# -eq 0 ]; then
+    echo "No arguments were passed to the Homebrew installation function" >&2
+    exit 1
+  fi
+  if [ -z "$1" ]; then
+    echo "No formula argument was passed to the Homebrew installation function" >&2
+    exit 1
+  fi
+
+  pkg_name="$(basename "$1")"
+  echo "Checking if $1 is installed"
+  echo "The check is done against '${pkg_name}'"
+  if ! brew ls | grep -qw "${pkg_name}"; then
+    echo "$1 is not installed, installing"
+    brew install "$1"
+    echo "$1 installed"
+  elif [ "${DISABLE_UPDATES}" != "true" ]; then
+    echo "Updating $1"
+    brew upgrade "$1"
+    echo "$1 updated"
+  fi
+}
+
+########################################
+# Exit with error on a system that is not supported.
+# Arguments:
+#   $* Information about the system (e.g. the name).
+#######################################
+not_supported() {
+  echo "This system is not supported: $*" >&2
+  exit 1
+}
+
+install_package_manager() {
+  if [ "${OS_NAME}" = "darwin" ] && ! xcode-select -p 1>/dev/null; then
+    echo -e "${ESC_MAGENTA}Installing Xcode command line tools${ESC_RESET}"
+    xcode-select --install
+    echo -e "${ESC_GREEN}Xcode command line tools installed${ESC_RESET}"
+  fi
+
+  if [ "${OS_NAME}" = "darwin" ]; then
+    if ! command -v brew >/dev/null 2>&1; then
+      echo -e "${ESC_MAGENTA}Installing Homebrew${ESC_RESET}"
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+      echo -e "${ESC_GREEN}Homebrew installed${ESC_RESET}"
+    fi
+  elif [ "${OS_NAME}" = "debian" ]; then
+    echo -e "${ESC_RED}Updating the packages on '${OS_NAME}' is not implemented yet${ESC_RESET}"
+    not_supported "${OS_NAME}"
+  fi
+}
+
+install_python_dependencies() {
+  if [ "${OS_NAME}" = "darwin" ]; then
+    echo -e "${ESC_MAGENTA}Installing dependencies for building Python${ESC_RESET}"
+    for pkg in "${DARWIN_PYTHON_DEPENDENCIES[@]}"; do
+      brew_install "${pkg}"
+    done
+    echo -e "${ESC_GREEN}==> Python dependencies installed${ESC_RESET}"
+  fi
+}
+
+install_pyenv() {
+  if ! command -v pyenv >/dev/null 2>&1; then
+    echo -e "${ESC_MAGENTA}Installing Pyenv${ESC_RESET}"
+    curl https://pyenv.run | bash
+
+    export PYENV_ROOT="${HOME}/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+
+    echo -e "${ESC_GREEN}Pyenv installed${ESC_RESET}"
+  elif [ "${DISABLE_UPDATES}" != "true" ]; then
+    # echo -e "${ESC_BLUE}Updating Pyenv${ESC_RESET}"
+    echo -e "${ESC_YELLOW}Updating Pyenv is not implemented yet${ESC_RESET}"
+    echo -e "${ESC_YELLOW}To update Pyenv, run the following commands:${ESC_RESET}"
+    echo "pyenv update"
+    source_environment
+    # echo -e "${ESC_GREEN}Pyenv updated${ESC_RESET}"
+  fi
+}
+
+install_python() {
+  if ! command -v python >/dev/null 2>&1; then
+    echo -e "${ESC_MAGENTA}Installing Python${ESC_RESET}"
+    env PYTHON_CONFIGURE_OPTS='--enable-optimizations --with-lto' PYTHON_CFLAGS='-march=native -mtune=native' pyenv install --verbose "${PYTHON_VERSION}"
+    pyenv global "${PYTHON_VERSION}"
+    echo -e "${ESC_GREEN}Python installed${ESC_RESET}"
+  elif [ "${DISABLE_UPDATES}" != "true" ]; then
+    echo -e "${ESC_YELLOW}Updating Python is not implemented yet${ESC_RESET}"
+  fi
+}
+
+install_pipx() {
+  if ! command -v pipx >/dev/null 2>&1; then
+    echo -e "${ESC_MAGENTA}Installing pipx${ESC_RESET}"
+    pip install --user pipx
+    # TODO: The sourcing should be done according to the platform
+    # (see pipx install --help).
+    export PATH="${HOME}/.local/bin:${PATH}"
+    echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"
+  elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
+    echo -e "${ESC_YELLOW}Updating pipx is not implemented yet${ESC_RESET}"
+  fi
+}
+
+main() {
+  if [[ ! " ${SUPPORTED_PLATFORMS[*]} " =~ [[:space:]]${OS_NAME}[[:space:]] ]]; then
+    not_supported "${OS_NAME}"
+  fi
+
+  install_package_manager
+  install_python_dependencies
+  install_pyenv
+  install_python
+  install_pipx
+  pipx run --no-cache --spec "git+${REMOTE_URL}@main" etc install
+}
+
+main "$@"
