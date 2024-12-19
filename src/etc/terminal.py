@@ -1,9 +1,10 @@
+import sys
 from enum import Enum
 from typing import Literal, Self
 
 
-Color = Literal["magenta", "cyan", "light_cyan"]
-HIGHLIGHTS: dict[Color, int] = {"magenta": 35, "cyan": 36, "light_cyan": 96}
+Color = Literal["red", "magenta", "cyan", "light_cyan"]
+HIGHLIGHTS: dict[Color, int] = {"red": 31, "magenta": 35, "cyan": 36, "light_cyan": 96}
 RESET = "\033[0m"
 
 
@@ -79,6 +80,9 @@ class Terminal:
     def debug(self, msg: str):
         self.__print(msg, level=Level.DEBUG, color=None)
 
+    def error(self, msg: str):
+        self.__print(msg, level=Level.ERROR, color="red")
+
     def start_task(self, msg: str):
         self.__print(msg, level=Level.INFO, color="magenta")
 
@@ -87,4 +91,7 @@ class Terminal:
             return
         if color is not None:
             msg = f"\033[{HIGHLIGHTS[color]}m{msg}{RESET}"
-        print(msg)
+        if level >= Level.WARNING:
+            print(msg, file=sys.stderr)
+        else:
+            print(msg)
