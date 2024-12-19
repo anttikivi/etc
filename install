@@ -78,6 +78,10 @@ not_supported() {
   exit 1
 }
 
+########################################
+# Install the package manager for the system if it not already installed and if
+# it is needed for the bootstrapping of Python.
+#######################################
 install_package_manager() {
   if [ "${OS_NAME}" = "darwin" ] && ! xcode-select -p 1>/dev/null; then
     echo -e "${ESC_MAGENTA}Installing Xcode command line tools${ESC_RESET}"
@@ -98,6 +102,9 @@ install_package_manager() {
   fi
 }
 
+########################################
+# Install the dependencies required for building Python via pyenv.
+# #######################################
 install_python_dependencies() {
   if [ "${OS_NAME}" = "darwin" ]; then
     echo -e "${ESC_MAGENTA}Installing dependencies for building Python${ESC_RESET}"
@@ -108,6 +115,9 @@ install_python_dependencies() {
   fi
 }
 
+########################################
+# Install pyenv if it in not already installed.
+# #######################################
 install_pyenv() {
   if ! command -v pyenv >/dev/null 2>&1; then
     echo -e "${ESC_MAGENTA}Installing Pyenv${ESC_RESET}"
@@ -128,6 +138,9 @@ install_pyenv() {
   fi
 }
 
+########################################
+# Install Python if it is not already installed.
+# #######################################
 install_python() {
   if ! command -v python >/dev/null 2>&1; then
     echo -e "${ESC_MAGENTA}Installing Python${ESC_RESET}"
@@ -139,6 +152,9 @@ install_python() {
   fi
 }
 
+########################################
+# Install pipx if it is not already installed.
+# #######################################
 install_pipx() {
   if ! command -v pipx >/dev/null 2>&1; then
     echo -e "${ESC_MAGENTA}Installing pipx${ESC_RESET}"
