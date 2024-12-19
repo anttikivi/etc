@@ -76,6 +76,9 @@ class Terminal:
         """
         self.__print(msg, level=Level.INFO, color=None)
 
+    def debug(self, msg: str):
+        self.__print(msg, level=Level.DEBUG, color=None)
+
     def start_task(self, msg: str):
         self.__print(msg, level=Level.INFO, color="magenta")
 
