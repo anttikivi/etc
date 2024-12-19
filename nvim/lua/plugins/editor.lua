@@ -30,7 +30,7 @@ return {
       view_options = {
         show_hidden = true,
         is_always_hidden = function(name)
-          return name == ".DS_Store"
+          return name == ".." or name == ".DS_Store" or name == ".git"
         end,
       },
     },
