@@ -1,6 +1,6 @@
 import argparse
 import os
-from typing import Any, Literal, TypeAlias, cast
+from typing import Literal, TypeAlias
 
 import etc
 from etc import defaults
