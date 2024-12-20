@@ -1,14 +1,17 @@
 import argparse
 import os
-from typing import Literal
+from typing import Any, Literal, TypeAlias, cast
 
 import etc
 from etc import defaults
 
-Command = Literal["bootstrap", "install"]
+Command: TypeAlias = Literal["bootstrap", "install"]
+
+# For Python 3.12 and up:
+# type Command = Literal["bootstrap", "install"]
 
 
-CONFIGURED_SUBPARSERS: dict[Command, str] = {
+PARSERS_WITH_CONFIG: dict[Command, str] = {
     "bootstrap": "Bootstrap the workstation configuration and environment and run the installation afterwards.",
     "install": "Install the workstation configuration and environment.",
 }
@@ -37,7 +40,10 @@ def create_parser():
 
     subparsers = parser.add_subparsers(required=True, dest="command")
 
-    for name, help in CONFIGURED_SUBPARSERS.items():
+    def __create_parser_with_config(
+        name: Command,
+        help: str,
+    ):
         configured_parser = subparsers.add_parser(
             name=name,
             help=help,
@@ -58,5 +64,18 @@ def create_parser():
             type=str,
             help=f'Path to the configuration file. If the path is an absolute path, it is used as it is. Otherwise it is resolved relative to the base directory. Environment variables are expanded and initial "~" and "~user" are resolved to user\'s home directory. Default: {defaults.DEFAULT_CONFIG}',
         )
+        return configured_parser
+
+    parsers_with_config: dict[Command, argparse.ArgumentParser] = {
+        name: __create_parser_with_config(name=name, help=help)
+        for name, help in PARSERS_WITH_CONFIG.items()
+    }
+    _ = parsers_with_config["bootstrap"].add_argument(
+        "-r",
+        "--remote",
+        action="store",
+        default=defaults.DEFAULT_REMOTE,
+        help="Git repository for the configuration. It will be cloned to the base directory. Default: %(default)s",
+    )
 
     return parser
