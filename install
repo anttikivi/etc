@@ -10,6 +10,7 @@ export ESC_YELLOW="${ESC}[33m"
 export ESC_MAGENTA="${ESC}[35m"
 
 readonly REMOTE_URL='https://github.com/anttikivi/etc.git'
+readonly REMOTE_BRANCH="python-script"
 
 readonly DISABLE_UPDATES="false"
 readonly PYTHON_VERSION="3.11"
@@ -119,6 +120,10 @@ install_python_dependencies() {
 # Install pyenv if it in not already installed.
 # #######################################
 install_pyenv() {
+  export PYENV_ROOT="${HOME}/.pyenv"
+  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
+
   if ! command -v pyenv >/dev/null 2>&1; then
     echo -e "${ESC_MAGENTA}Installing Pyenv${ESC_RESET}"
     curl https://pyenv.run | bash
@@ -133,9 +138,12 @@ install_pyenv() {
     echo -e "${ESC_YELLOW}Updating Pyenv is not implemented yet${ESC_RESET}"
     echo -e "${ESC_YELLOW}To update Pyenv, run the following commands:${ESC_RESET}"
     echo "pyenv update"
-    source_environment
     # echo -e "${ESC_GREEN}Pyenv updated${ESC_RESET}"
   fi
+
+  export PYENV_ROOT="${HOME}/.pyenv"
+  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
 }
 
 ########################################
@@ -156,16 +164,21 @@ install_python() {
 # Install pipx if it is not already installed.
 # #######################################
 install_pipx() {
+  # TODO: The sourcing should be done according to the platform
+  # (see pipx install --help).
+  export PATH="${HOME}/.local/bin:${PATH}"
+
   if ! command -v pipx >/dev/null 2>&1; then
     echo -e "${ESC_MAGENTA}Installing pipx${ESC_RESET}"
     pip install --user pipx
-    # TODO: The sourcing should be done according to the platform
-    # (see pipx install --help).
-    export PATH="${HOME}/.local/bin:${PATH}"
     echo -e "${ESC_GREEN}pipx installed${ESC_RESET}"
   elif [ "${HAS_CONNECTION}" = "true" ] && [ "${DISABLE_UPDATES}" != "true" ]; then
     echo -e "${ESC_YELLOW}Updating pipx is not implemented yet${ESC_RESET}"
   fi
+
+  # TODO: The sourcing should be done according to the platform
+  # (see pipx install --help).
+  export PATH="${HOME}/.local/bin:${PATH}"
 }
 
 main() {
@@ -178,7 +191,7 @@ main() {
   install_pyenv
   install_python
   install_pipx
-  pipx run --no-cache --spec "git+${REMOTE_URL}@main" etc install
+  pipx run --no-cache --spec "git+${REMOTE_URL}@${REMOTE_BRANCH}" etc install
 }
 
 main "$@"
