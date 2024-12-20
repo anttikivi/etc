@@ -28,6 +28,12 @@ def create_parser():
         help="Explicitly enable or disable colors in the program's output. The default value is determined automatically.",
     )
     _ = parser.add_argument(
+        "-n",
+        "--dry-run",
+        action="store_true",
+        help="Show what would have been done instead of executing the commands.",
+    )
+    _ = parser.add_argument(
         "-v",
         "--verbose",
         action="count",

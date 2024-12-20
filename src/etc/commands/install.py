@@ -1,7 +1,7 @@
 from etc.context import Context
-from etc.terminal import Terminal
+from etc.ui import UserInterface
 
 
-def run(ctx: Context, terminal: Terminal) -> int:
-    terminal.start_task("Starting the installation suite")
+def run(ctx: Context, ui: UserInterface) -> int:
+    ui.start_task("Starting the installation suite")
     return 0

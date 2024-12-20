@@ -1,4 +1,5 @@
-from etc.terminal import Terminal
+from etc.shell import Shell
+from etc.ui import UserInterface
 
 
 class Context:
@@ -9,8 +10,11 @@ class Context:
     they are passed to the context.
     """
 
-    def __init__(self, terminal: Terminal, base_directory: str, config: str):
-        self.__terminal = terminal
+    def __init__(
+        self, shell: Shell, ui: UserInterface, base_directory: str, config: str
+    ):
+        self.__shell = shell
+        self.__ui = ui
         self.__base_directory = base_directory
         self.__config = config
 
@@ -19,5 +23,9 @@ class Context:
         return self.__base_directory
 
     @property
-    def terminal(self) -> Terminal:
-        return self.__terminal
+    def shell(self) -> Shell:
+        return self.__shell
+
+    @property
+    def ui(self) -> UserInterface:
+        return self.__ui

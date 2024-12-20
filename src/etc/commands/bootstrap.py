@@ -1,6 +1,6 @@
-from etc.terminal import Terminal
+from etc.ui import UserInterface
 
 
-def run(terminal: Terminal) -> int:
-    terminal.error("Bootstrapping with Python is not implemented yet")
+def run(ui: UserInterface) -> int:
+    ui.start_task("Starting to bootstrap to configuration")
     return 1

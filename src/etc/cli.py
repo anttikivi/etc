@@ -1,10 +1,11 @@
 import os
 from typing import cast
 
+from etc.args import Command, create_parser
 from etc.commands import bootstrap, install
 from etc.context import Context
-from etc.parser import Command, create_parser
-from etc.terminal import Level, Terminal
+from etc.shell import Shell
+from etc.ui import MessageLevel, Terminal
 
 
 def main() -> int:
@@ -16,7 +17,7 @@ def main() -> int:
     if colors is None:
         # TODO: Use a better way to determine the default value.
         colors = True
-    verbosity = Level.INFO - Level(cast(int, args.verbose))
+    verbosity = MessageLevel.INFO - MessageLevel(cast(int, args.verbose))
     base_directory = os.path.expandvars(
         os.path.expanduser(cast(str, args.base_directory))
     )
@@ -26,21 +27,28 @@ def main() -> int:
     if not os.path.isabs(config):
         config = os.path.normpath(os.path.join(base_directory, config))
 
-    terminal = Terminal(colors=colors, level=verbosity)
+    shell = Shell(
+        dry_run=cast(bool, args.dry_run),
+        print_commands=cast(MessageLevel, verbosity) <= MessageLevel.DEBUG,
+    )
+
+    terminal = Terminal(colors=colors, level=verbosity, shell=shell)
 
     terminal.debug(f"Resolved {base_directory} as the base directory")
     terminal.debug(f"Resolved {config} as the configuration file")
 
-    ctx = Context(terminal=terminal, base_directory=base_directory, config=config)
+    ctx = Context(
+        shell=shell, ui=terminal, base_directory=base_directory, config=config
+    )
 
     exit_code: int = 0
 
     # I can use pattern matching as this program is targeted for Python >= 3.11.
     match command:
         case "bootstrap":
-            exit_code = bootstrap.run(terminal=ctx.terminal)
+            exit_code = bootstrap.run(ui=ctx.ui)
         case "install":
-            exit_code = install.run(terminal=ctx.terminal, ctx=ctx)
+            exit_code = install.run(ui=ctx.ui, ctx=ctx)
         case _:
             return 1
 
