@@ -5,11 +5,7 @@ from etc.ui import Terminal
 
 
 def main() -> int:
-    args = create_parser().parse_args()
-
-    print(args)
-
-    opts = Options.parse(args)
+    opts = Options.parse(create_parser().parse_args())
 
     shell = Shell(dry_run=opts.dry_run, verbosity=opts.verbosity)
     terminal = Terminal(

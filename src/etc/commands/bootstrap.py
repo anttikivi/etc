@@ -3,6 +3,7 @@ import subprocess
 from typing import cast
 
 from etc.commands import install
+from etc.message_level import MessageLevel
 from etc.options import Options
 from etc.shell import Shell
 from etc.ui import UserInterface
@@ -52,5 +53,22 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
     )
     current_remote = result.strip()
     ui.trace(f"Got {current_remote} as the current remote URL")
+    if current_remote != opts.remote_repository_url:
+        shell(
+            [
+                "git",
+                "-C",
+                opts.base_directory,
+                "remote",
+                "set-url",
+                "origin",
+                opts.remote_repository_url,
+            ]
+        )
+    ui.debug("The remote URLs of the local repository are now set to:")
+    shell(
+        ["git", "-C", opts.base_directory, "remote", "-v"],
+        allow_output=opts.verbosity <= MessageLevel.DEBUG,
+    )
 
     return 0

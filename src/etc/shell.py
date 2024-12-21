@@ -22,21 +22,24 @@ class Shell:
         self.__dry_run = dry_run
         self.__verobosity = verbosity
         self.__print_commands = (
-            cast(bool, self.__verobosity <= MessageLevel.DEBUG) or dry_run
+            cast(bool, self.__verobosity <= MessageLevel.TRACE) or dry_run
         )
         self.__print_outputs = cast(
             bool, self.__verobosity <= MessageLevel.TRACE
         )
         self.__prompt = prompt
 
-    def __call__(self, command: list[str]):
+    def __call__(self, command: list[str], allow_output: bool | None = None):
         if self.__print_commands:
             self.__echo_command(command)
         if self.__dry_run:
             return
+        disable_output = not self.__print_outputs
+        if allow_output is not None:
+            disable_output = not allow_output
         try:
             _ = subprocess.run(
-                command, check=True, capture_output=not self.__print_outputs
+                command, check=True, capture_output=disable_output
             )
             return None
         except subprocess.CalledProcessError as e:
