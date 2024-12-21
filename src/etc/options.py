@@ -35,7 +35,7 @@ class Options:
         command: Command | None,
         config_file: str | None,
         dry_run: bool,
-        remote_repository: str | None,
+        remote_repository_url: str | None,
         use_colors: bool,
         verbosity: MessageLevel,
     ):
@@ -43,7 +43,7 @@ class Options:
         self.__command: Command | None = command
         self.__config_file: str | None = config_file
         self.__dry_run: bool = dry_run
-        self.__remote_repository: str | None = remote_repository
+        self.__remote_repository_url: str | None = remote_repository_url
         self.__use_colors: bool = use_colors
         self.__verbosity: MessageLevel = verbosity
 
@@ -104,7 +104,7 @@ class Options:
             command=command,
             config_file=config_file,
             dry_run=dry_run,
-            remote_repository=remote_repo,
+            remote_repository_url=remote_repo,
             use_colors=colors,
             verbosity=verbosity,
         )
@@ -126,8 +126,8 @@ class Options:
         return self.__dry_run
 
     @property
-    def remote_repository(self) -> str | None:
-        return self.__remote_repository
+    def remote_repository_url(self) -> str | None:
+        return self.__remote_repository_url
 
     @property
     def use_colors(self) -> bool:
@@ -229,7 +229,10 @@ def create_parser():
         dest="remote_repository",
         help=(
             "Git repository for the configuration. It will be cloned to the "
-            "base directory. Default: %(default)s"
+            "base directory. If the provided URL is an SSH URL for a Git "
+            "repository in GitHub, it is converted into an HTTP URL for "
+            "cloning and changed back to the SSH one after everything has "
+            "been set up correctly. Default: %(default)s"
         ),
     )
 

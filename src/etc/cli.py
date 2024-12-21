@@ -22,6 +22,7 @@ def main() -> int:
     terminal.debug(f"Resolved {opts.base_directory} as the base directory")
     terminal.debug(f"Resolved {opts.config_file} as the configuration file")
 
+    # TODO: Determine some constant values for the exit codes.
     exit_code: int = 0
 
     # I can use pattern matching as this program is targeted for

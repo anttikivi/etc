@@ -1,7 +1,7 @@
 import os
 import shlex
 import sys
-from typing import TextIO
+from typing import Any, TextIO
 
 
 class Shell:
@@ -30,15 +30,9 @@ class Shell:
         else:
             print(s)
 
-    def test_e(self, file: str) -> bool:
+    def echo_test_e(self, file: str):
         if self.__print_commands:
             self._echo_command(["[", "-e", file, "]"])
-        return os.path.exists(file)
-
-    def test_not_e(self, file: str) -> bool:
-        if self.__print_commands:
-            self._echo_command(["[", "!", "-e", file, "]"])
-        return not os.path.exists(file)
 
     def _echo_command(
         self,
