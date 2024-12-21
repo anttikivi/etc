@@ -95,6 +95,11 @@ local config = {
       Variable = "󰀫 ",
     },
   },
+  lsp = {
+    inlay_hints = {
+      enabled = true,
+    },
+  },
 }
 
 M.did_init = false

@@ -35,7 +35,13 @@ function M.load(opts)
         -- "anttikivi/anttikivi",
         dir = vim.fn.expand("<script>:p:h"),
         name = "anttikivi",
-        opts = {},
+        opts = {
+          lsp = {
+            inlay_hints = {
+              enabled = false,
+            },
+          },
+        },
         import = "anttikivi.plugins",
       },
       { import = "plugins" },
