@@ -1,9 +1,10 @@
 import argparse
 import os
-from typing import Literal, TypeAlias
+from typing import Literal, Self, TypeAlias, cast
 
 import etc
 from etc import defaults
+from etc.ui import MessageLevel
 
 Command: TypeAlias = Literal["bootstrap", "install"]
 
@@ -28,13 +29,113 @@ class Options:
     be resolved correctly values before they are passed to the context.
     """
 
-    def __init__(self, base_directory: str, config: str):
-        self.__base_directory = base_directory
-        self.__config = config
+    def __init__(
+        self,
+        base_directory: str | None,
+        command: Command | None,
+        config_file: str | None,
+        dry_run: bool,
+        remote_repository: str | None,
+        use_colors: bool,
+        verbosity: MessageLevel,
+    ):
+        self.__base_directory: str | None = base_directory
+        self.__command: Command | None = command
+        self.__config_file: str | None = config_file
+        self.__dry_run: bool = dry_run
+        self.__remote_repository: str | None = remote_repository
+        self.__use_colors: bool = use_colors
+        self.__verbosity: MessageLevel = verbosity
+
+    @classmethod
+    def parse(cls, args: argparse.Namespace) -> Self:
+        command = cast(Command | None, args.command)
+
+        colors = cast(bool | None, args.colors)
+        if colors is None:
+            # TODO: Use a better way to determine the default value.
+            colors = True
+
+        base_directory = (
+            None
+            if "base_directory" not in args
+            else os.path.expandvars(
+                os.path.expanduser(cast(str, args.base_directory))
+            )
+        )
+        if base_directory is not None and not os.path.isabs(base_directory):
+            base_directory = os.path.abspath(base_directory)
+
+        config_file = (
+            None
+            if "config_file" not in args
+            else os.path.expandvars(
+                os.path.expanduser(cast(str, args.config_file))
+            )
+        )
+        # All commands that use the config file should also specify the
+        # base directory. This might be changed in the future, but for
+        # now, they have at least the default values.
+        if base_directory is None and config_file is not None:
+            raise ValueError(
+                "configuration file has a value while base directory does not"
+            )
+        if (
+            base_directory is not None
+            and config_file is not None
+            and not os.path.isabs(config_file)
+        ):
+            config_file = os.path.normpath(
+                os.path.join(base_directory, config_file)
+            )
+
+        dry_run = cast(bool, args.dry_run)
+
+        remote_repo = (
+            None
+            if "remote_repository" not in args
+            else cast(str, args.remote_repository)
+        )
+
+        verbosity = MessageLevel.INFO - MessageLevel(cast(int, args.verbose))
+
+        return cls(
+            base_directory=base_directory,
+            command=command,
+            config_file=config_file,
+            dry_run=dry_run,
+            remote_repository=remote_repo,
+            use_colors=colors,
+            verbosity=verbosity,
+        )
 
     @property
-    def base_directory(self) -> str:
+    def base_directory(self) -> str | None:
         return self.__base_directory
+
+    @property
+    def command(self) -> Command | None:
+        return self.__command
+
+    @property
+    def config_file(self) -> str | None:
+        return self.__config_file
+
+    @property
+    def dry_run(self) -> bool:
+        return self.__dry_run
+
+    @property
+    def remote_repository(self) -> str | None:
+        return self.__remote_repository
+
+    @property
+    def use_colors(self) -> bool:
+        return self.__use_colors
+
+    @property
+    def verbosity(self) -> MessageLevel:
+        return self.__verbosity
 
 
 def create_parser():
@@ -104,6 +205,7 @@ def create_parser():
             "--config",
             action="store",
             default=defaults.DEFAULT_CONFIG,
+            dest="config_file",
             type=str,
             help=(
                 "Path to the configuration file. If the path is an absolute "
@@ -124,6 +226,7 @@ def create_parser():
         "--remote",
         action="store",
         default=defaults.DEFAULT_REMOTE,
+        dest="remote_repository",
         help=(
             "Git repository for the configuration. It will be cloned to the "
             "base directory. Default: %(default)s"

@@ -1,4 +1,4 @@
-from etc.context import Options
+from etc.options import Options
 from etc.shell import Shell
 from etc.ui import UserInterface
 

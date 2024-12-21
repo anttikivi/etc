@@ -70,9 +70,8 @@ class MessageLevel(Enum):
 
 
 class UserInterface(ABC):
-    def __init__(self, colors: bool, level: MessageLevel):
+    def __init__(self, level: MessageLevel):
         self._level: MessageLevel = level
-        self._use_colors: bool = colors
 
     @abstractmethod
     def print(self, msg: str):
@@ -103,9 +102,10 @@ class Terminal(UserInterface):
     lower level and take a color as an argument.
     """
 
-    def __init__(self, colors: bool, level: MessageLevel, shell: Shell):
-        super().__init__(colors=colors, level=level)
+    def __init__(self, level: MessageLevel, shell: Shell, use_colors: bool):
+        super().__init__(level=level)
         self.__shell: Shell = shell
+        self.__use_colors = use_colors
 
     # TODO: Add @override in Python 3.12.
     def print(self, msg: str):  # pyright: ignore [reportImplicitOverride]
@@ -129,7 +129,7 @@ class Terminal(UserInterface):
     def __print(self, msg: str, level: MessageLevel, color: Color | None):
         if self._level > level:
             return
-        if color is not None:
+        if color is not None and self.__use_colors:
             msg = f"\033[{HIGHLIGHTS[color]}m{msg}{RESET}"
         if level >= MessageLevel.WARNING:
             print(msg, file=sys.stderr)

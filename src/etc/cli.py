@@ -1,9 +1,5 @@
-import os
-from typing import cast
-
 from etc.commands import bootstrap, install
-from etc.context import Options
-from etc.options import Command, create_parser
+from etc.options import Options, create_parser
 from etc.shell import Shell
 from etc.ui import MessageLevel, Terminal
 
@@ -12,42 +8,29 @@ def main() -> int:
     args = create_parser().parse_args()
 
     print(args)
-    command = cast(Command | None, args.command)
-    colors = cast(bool | None, args.colors)
-    if colors is None:
-        # TODO: Use a better way to determine the default value.
-        colors = True
-    verbosity = MessageLevel.INFO - MessageLevel(cast(int, args.verbose))
-    base_directory = os.path.expandvars(
-        os.path.expanduser(cast(str, args.base_directory))
-    )
-    if not os.path.isabs(base_directory):
-        base_directory = os.path.abspath(base_directory)
-    config = os.path.expandvars(os.path.expanduser(cast(str, args.config)))
-    if not os.path.isabs(config):
-        config = os.path.normpath(os.path.join(base_directory, config))
+
+    opts = Options.parse(args)
 
     shell = Shell(
-        dry_run=cast(bool, args.dry_run),
-        print_commands=cast(MessageLevel, verbosity) <= MessageLevel.DEBUG,
+        dry_run=opts.dry_run,
+        print_commands=opts.verbosity <= MessageLevel.DEBUG,
+    )
+    terminal = Terminal(
+        level=opts.verbosity, shell=shell, use_colors=opts.use_colors
     )
 
-    terminal = Terminal(colors=colors, level=verbosity, shell=shell)
-
-    terminal.debug(f"Resolved {base_directory} as the base directory")
-    terminal.debug(f"Resolved {config} as the configuration file")
-
-    ctx = Options(base_directory=base_directory, config=config)
+    terminal.debug(f"Resolved {opts.base_directory} as the base directory")
+    terminal.debug(f"Resolved {opts.config_file} as the configuration file")
 
     exit_code: int = 0
 
     # I can use pattern matching as this program is targeted for
     # Python >= 3.11.
-    match command:
+    match opts.command:
         case "bootstrap":
             exit_code = bootstrap.run(ui=terminal)
         case "install":
-            exit_code = install.run(opts=ctx, shell=shell, ui=terminal)
+            exit_code = install.run(opts=opts, shell=shell, ui=terminal)
         case _:
             return 1
 
