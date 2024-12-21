@@ -1,6 +1,4 @@
 import os
-import subprocess
-from typing import cast
 
 from etc.commands import install
 from etc.message_level import MessageLevel
@@ -16,7 +14,7 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
         opts.base_directory is not None
     ), "the base directory passed to bootstrapping is None"
 
-    shell.echo_test_e(opts.base_directory)
+    shell.echo.test_e(opts.base_directory)
     if os.path.exists(opts.base_directory):
         ui.error(
             f"The configuration directory at {opts.base_directory} exists"
