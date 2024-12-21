@@ -1,72 +1,23 @@
-from abc import ABC, abstractmethod
 import sys
-from enum import Enum
-from typing import Literal, Self
+from abc import ABC, abstractmethod
+from typing import Literal
 
+from etc.message_level import MessageLevel
 from etc.shell import Shell
 
-
-Color = Literal["red", "magenta", "cyan", "light_cyan"]
+Color = Literal[
+    "red", "green", "blue", "magenta", "cyan", "light_green", "light_cyan"
+]
 HIGHLIGHTS: dict[Color, int] = {
     "red": 31,
+    "green": 32,
+    "blue": 34,
     "magenta": 35,
     "cyan": 36,
+    "light_green": 92,
     "light_cyan": 96,
 }
 RESET = "\033[0m"
-
-
-class MessageLevel(Enum):
-    """
-    The so-called logging level for messages that are shown to the user
-    using a user interface.
-    """
-
-    TRACE = 0
-    DEBUG = 1
-    INFO = 2
-    WARNING = 3
-    ERROR = 4
-
-    def __ge__(self, other: Self):
-        if self.__class__ is other.__class__:
-            return self.value >= other.value
-        return NotImplemented
-
-    def __gt__(self, other: Self):
-        if self.__class__ is other.__class__:
-            return self.value > other.value
-        return NotImplemented
-
-    def __le__(self, other: Self):
-        if self.__class__ is other.__class__:
-            return self.value <= other.value
-        return NotImplemented
-
-    def __lt__(self, other: Self):
-        if self.__class__ is other.__class__:
-            return self.value < other.value
-        return NotImplemented
-
-    def __add__(self, other: Self):
-        if self.__class__ is other.__class__:
-            value = self.value + other.value
-            if value > MessageLevel.ERROR.value:
-                value = MessageLevel.ERROR.value
-            elif value < MessageLevel.TRACE.value:
-                value = MessageLevel.TRACE.value
-            return MessageLevel(value)
-        return NotImplemented
-
-    def __sub__(self, other: Self):
-        if self.__class__ is other.__class__:
-            value = self.value - other.value
-            if value > MessageLevel.ERROR.value:
-                value = MessageLevel.ERROR.value
-            elif value < MessageLevel.TRACE.value:
-                value = MessageLevel.TRACE.value
-            return MessageLevel(value)
-        return NotImplemented
 
 
 class UserInterface(ABC):
@@ -86,7 +37,15 @@ class UserInterface(ABC):
         pass
 
     @abstractmethod
-    def start_task(self, msg: str):
+    def start_phase(self, msg: str):
+        pass
+
+    @abstractmethod
+    def start_step(self, msg: str):
+        pass
+
+    @abstractmethod
+    def complete_step(self, msg: str):
         pass
 
 
@@ -123,14 +82,30 @@ class Terminal(UserInterface):
         self.__print(msg, level=MessageLevel.ERROR, color="red")
 
     # TODO: Add @override in Python 3.12.
-    def start_task(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+    def start_phase(self, msg: str):  # pyright: ignore [reportImplicitOverride]
         self.__print(msg, level=MessageLevel.INFO, color="magenta")
+
+    # TODO: Add @override in Python 3.12.
+    def start_step(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+        self.__print(
+            msg,
+            level=MessageLevel.INFO,
+            color="blue" if self._level <= MessageLevel.DEBUG else None,
+        )
+
+    # TODO: Add @override in Python 3.12.
+    def complete_step(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+        self.__print(
+            msg,
+            level=MessageLevel.INFO,
+            color="cyan" if self._level <= MessageLevel.DEBUG else None,
+        )
 
     def __print(self, msg: str, level: MessageLevel, color: Color | None):
         if self._level > level:
             return
         if color is not None and self.__use_colors:
-            msg = f"\033[{HIGHLIGHTS[color]}m{msg}{RESET}"
+            msg = f"\033[0;{HIGHLIGHTS[color]}m{msg}{RESET}"
         if level >= MessageLevel.WARNING:
             self.__shell.echo(msg, file=sys.stderr)
         else:

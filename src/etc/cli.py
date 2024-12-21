@@ -1,7 +1,7 @@
 from etc.commands import bootstrap, install
 from etc.options import Options, create_parser
 from etc.shell import Shell
-from etc.ui import MessageLevel, Terminal
+from etc.ui import Terminal
 
 
 def main() -> int:
@@ -11,10 +11,7 @@ def main() -> int:
 
     opts = Options.parse(args)
 
-    shell = Shell(
-        dry_run=opts.dry_run,
-        print_commands=opts.verbosity <= MessageLevel.DEBUG,
-    )
+    shell = Shell(dry_run=opts.dry_run, verbosity=opts.verbosity)
     terminal = Terminal(
         level=opts.verbosity, shell=shell, use_colors=opts.use_colors
     )

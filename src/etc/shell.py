@@ -1,7 +1,9 @@
-import os
 import shlex
+import subprocess
 import sys
-from typing import Any, TextIO
+from typing import TextIO, cast
+
+from etc.message_level import MessageLevel
 
 
 class Shell:
@@ -12,11 +14,55 @@ class Shell:
     """
 
     def __init__(
-        self, dry_run: bool, print_commands: bool, prompt: str = "+ "
+        self,
+        dry_run: bool,
+        verbosity: MessageLevel,
+        prompt: str = "+ ",
     ):
         self.__dry_run = dry_run
-        self.__print_commands = print_commands or dry_run
+        self.__verobosity = verbosity
+        self.__print_commands = (
+            cast(bool, self.__verobosity <= MessageLevel.DEBUG) or dry_run
+        )
+        self.__print_outputs = cast(
+            bool, self.__verobosity <= MessageLevel.TRACE
+        )
         self.__prompt = prompt
+
+    def __call__(self, command: list[str]):
+        if self.__print_commands:
+            self.__echo_command(command)
+        if self.__dry_run:
+            return
+        try:
+            _: subprocess.CompletedProcess[str] = subprocess.run(
+                command,
+                capture_output=not self.__print_outputs,
+                check=True,
+                text=True,
+            )
+        except subprocess.CalledProcessError as e:
+            print(
+                (
+                    f'Command "{self.__quote_command(command)}" exited with '
+                    f"code {e.returncode}\nThe following output was captured:"
+                ),
+                file=sys.stderr,
+            )
+            print("\nstdout:\n")
+            print(cast(str, e.stdout))
+            print("\nstderr:\n")
+            print(cast(str, e.stderr))
+            sys.exit(e.returncode)
+        except OSError as e:
+            print(
+                (
+                    "Could not run command "
+                    f'"{self.__quote_command(command)}": {e.strerror}'
+                ),
+                file=sys.stderr,
+            )
+            sys.exit(1)
 
     # TODO: Add option for file.
     def echo(self, s: str, file: TextIO | None = None):
@@ -24,7 +70,7 @@ class Shell:
             cmd = ["echo", "-n", s]
             if file is not None and file == sys.stderr:
                 cmd.append(">&2")
-            self._echo_command(cmd)
+            self.__echo_command(cmd)
         if file is not None:
             print(s, file=file)
         else:
@@ -32,9 +78,9 @@ class Shell:
 
     def echo_test_e(self, file: str):
         if self.__print_commands:
-            self._echo_command(["[", "-e", file, "]"])
+            self.__echo_command(["[", "-e", file, "]"])
 
-    def _echo_command(
+    def __echo_command(
         self,
         command: list[str],
         env: dict[str, str] | None = None,
@@ -42,22 +88,16 @@ class Shell:
         """
         Echoes a command to command line.
         """
-        output: list[str] = []
-        if env is not None:
-            output.extend(
-                [
-                    self._quote(f"{name}={value}")
-                    for name, value in sorted(env.items())
-                ]
-            )
-        output.extend([self._quote(s) for s in command])
         file = sys.stderr
         if self.__dry_run:
             file = sys.stdout
-        print(self.__prompt + " ".join(output), file=file)
+        print(
+            f"{self.__prompt}{self.__quote_command(command=command, env=env)}",
+            file=file,
+        )
         _ = file.flush()
 
-    def _quote(self, s: str) -> str:
+    def __quote_argument(self, s: str) -> str:
         """
         Gives a shell-escaped version of the argument.
         """
@@ -66,3 +106,17 @@ class Shell:
         if s == ">&2":
             return s
         return shlex.quote(s)
+
+    def __quote_command(
+        self, command: list[str], env: dict[str, str] | None = None
+    ) -> str:
+        output: list[str] = []
+        if env is not None:
+            output.extend(
+                [
+                    self.__quote_argument(f"{name}={value}")
+                    for name, value in sorted(env.items())
+                ]
+            )
+        output.extend([self.__quote_argument(s) for s in command])
+        return " ".join(output)

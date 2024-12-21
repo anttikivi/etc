@@ -6,7 +6,7 @@ from etc.ui import UserInterface
 
 
 def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
-    ui.start_task("Starting to bootstrap to configuration")
+    ui.start_phase("Starting to bootstrap to configuration")
 
     assert (
         opts.base_directory is not None
@@ -31,5 +31,10 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
     if remote_url.startswith("git@github.com:"):
         _, repo_name = remote_url.split(":")
         remote_url = f"https://github.com/{repo_name}"
+
+    ui.start_step("Cloning the remote directory")
+    ui.debug(f'Cloning from "{remote_url}" to "{opts.base_directory}"')
+    shell(["git", "clone", remote_url, opts.base_directory])
+    ui.complete_step("Repository cloned")
 
     return 0
