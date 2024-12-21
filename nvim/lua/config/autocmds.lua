@@ -5,6 +5,7 @@ local function augroup(name)
   )
 end
 
+-- TODO: The options are not applied if I jump to a Python file by Harpoon.
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup("python_colorcolumn"),
   pattern = "python",
