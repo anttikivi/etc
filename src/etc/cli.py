@@ -28,7 +28,7 @@ def main() -> int:
     # Python >= 3.11.
     match opts.command:
         case "bootstrap":
-            exit_code = bootstrap.run(ui=terminal)
+            exit_code = bootstrap.run(opts=opts, shell=shell, ui=terminal)
         case "install":
             exit_code = install.run(opts=opts, shell=shell, ui=terminal)
         case _:

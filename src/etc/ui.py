@@ -132,6 +132,6 @@ class Terminal(UserInterface):
         if color is not None and self.__use_colors:
             msg = f"\033[{HIGHLIGHTS[color]}m{msg}{RESET}"
         if level >= MessageLevel.WARNING:
-            print(msg, file=sys.stderr)
+            self.__shell.echo(msg, file=sys.stderr)
         else:
             self.__shell.echo(msg)
