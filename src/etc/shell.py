@@ -34,25 +34,36 @@ class Shell:
             self.__echo_command(command)
         if self.__dry_run:
             return
+        # TODO: Later, add argument to capture and return the output.
+        capture_output = not self.__print_outputs
         try:
             _: subprocess.CompletedProcess[str] = subprocess.run(
                 command,
-                capture_output=not self.__print_outputs,
+                capture_output=capture_output,
                 check=True,
                 text=True,
             )
         except subprocess.CalledProcessError as e:
-            print(
-                (
-                    f'Command "{self.__quote_command(command)}" exited with '
-                    f"code {e.returncode}\nThe following output was captured:"
-                ),
-                file=sys.stderr,
-            )
-            print("\nstdout:\n")
-            print(cast(str, e.stdout))
-            print("\nstderr:\n")
-            print(cast(str, e.stderr))
+            if capture_output:
+                print(
+                    (
+                        f'Command "{self.__quote_command(command)}" exited '
+                        f"with code {e.returncode}"
+                    ),
+                    file=sys.stderr,
+                )
+            else:
+                print(
+                    (
+                        f'Command "{self.__quote_command(command)}" exited with '
+                        f"code {e.returncode}\nThe following output was captured:"
+                    ),
+                    file=sys.stderr,
+                )
+                print("\nstdout:\n")
+                print(cast(str, e.stdout))
+                print("\nstderr:\n")
+                print(cast(str, e.stderr))
             sys.exit(e.returncode)
         except OSError as e:
             print(
