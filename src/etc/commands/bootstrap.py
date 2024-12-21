@@ -65,9 +65,19 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
                 opts.remote_repository_url,
             ]
         )
-    ui.debug("The remote URLs of the local repository are now set to:")
+    ui.debug(
+        "The remote URLs of the local repository are now set to:", bold=True
+    )
     shell(
         ["git", "-C", opts.base_directory, "remote", "-v"],
+        allow_output=opts.verbosity <= MessageLevel.DEBUG,
+    )
+    ui.debug("Fetching the remote")
+    shell(["git", "-C", opts.base_directory, "fetch"])
+
+    ui.debug("The status of the repository now is:", bold=True)
+    shell(
+        ["git", "-C", opts.base_directory, "status"],
         allow_output=opts.verbosity <= MessageLevel.DEBUG,
     )
 
