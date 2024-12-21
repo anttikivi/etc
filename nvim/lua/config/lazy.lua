@@ -38,7 +38,7 @@ function M.load(opts)
         opts = {
           lsp = {
             inlay_hints = {
-              enabled = false,
+              enabled = true,
             },
           },
         },
