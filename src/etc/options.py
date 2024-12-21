@@ -4,7 +4,7 @@ from typing import Literal, Self, TypeAlias, cast
 
 import etc
 from etc import defaults
-from etc.ui import MessageLevel
+from etc.message_level import MessageLevel
 
 Command: TypeAlias = Literal["bootstrap", "install"]
 
@@ -39,13 +39,13 @@ class Options:
         use_colors: bool,
         verbosity: MessageLevel,
     ):
-        self.__base_directory: str | None = base_directory
-        self.__command: Command | None = command
-        self.__config_file: str | None = config_file
-        self.__dry_run: bool = dry_run
-        self.__remote_repository_url: str | None = remote_repository_url
-        self.__use_colors: bool = use_colors
-        self.__verbosity: MessageLevel = verbosity
+        self.base_directory: str | None = base_directory
+        self.command: Command | None = command
+        self.config_file: str | None = config_file
+        self.dry_run: bool = dry_run
+        self.remote_repository_url: str | None = remote_repository_url
+        self.use_colors: bool = use_colors
+        self.verbosity: MessageLevel = verbosity
 
     @classmethod
     def parse(cls, args: argparse.Namespace) -> Self:
@@ -108,34 +108,6 @@ class Options:
             use_colors=colors,
             verbosity=verbosity,
         )
-
-    @property
-    def base_directory(self) -> str | None:
-        return self.__base_directory
-
-    @property
-    def command(self) -> Command | None:
-        return self.__command
-
-    @property
-    def config_file(self) -> str | None:
-        return self.__config_file
-
-    @property
-    def dry_run(self) -> bool:
-        return self.__dry_run
-
-    @property
-    def remote_repository_url(self) -> str | None:
-        return self.__remote_repository_url
-
-    @property
-    def use_colors(self) -> bool:
-        return self.__use_colors
-
-    @property
-    def verbosity(self) -> MessageLevel:
-        return self.__verbosity
 
 
 def create_parser():
