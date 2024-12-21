@@ -34,36 +34,23 @@ class Shell:
             self.__echo_command(command)
         if self.__dry_run:
             return
-        # TODO: Later, add argument to capture and return the output.
-        capture_output = not self.__print_outputs
         try:
-            _: subprocess.CompletedProcess[str] = subprocess.run(
-                command,
-                capture_output=capture_output,
-                check=True,
-                text=True,
+            _ = subprocess.run(
+                command, check=True, capture_output=not self.__print_outputs
             )
+            return None
         except subprocess.CalledProcessError as e:
-            if capture_output:
-                print(
-                    (
-                        f'Command "{self.__quote_command(command)}" exited '
-                        f"with code {e.returncode}"
-                    ),
-                    file=sys.stderr,
-                )
-            else:
-                print(
-                    (
-                        f'Command "{self.__quote_command(command)}" exited with '
-                        f"code {e.returncode}\nThe following output was captured:"
-                    ),
-                    file=sys.stderr,
-                )
-                print("\nstdout:\n")
-                print(cast(str, e.stdout))
-                print("\nstderr:\n")
-                print(cast(str, e.stderr))
+            print(
+                (
+                    f'Command "{self.__quote_command(command)}" exited '
+                    f"with code {e.returncode}"
+                ),
+                file=sys.stderr,
+            )
+            print("\nstdout:\n")
+            print(cast(str, e.stdout))
+            print("\nstderr:\n")
+            print(cast(str, e.stderr))
             sys.exit(e.returncode)
         except OSError as e:
             print(
@@ -75,7 +62,48 @@ class Shell:
             )
             sys.exit(1)
 
-    # TODO: Add option for file.
+    def output(self, command: list[str]) -> str:
+        if self.__print_commands:
+            self.__echo_command(command)
+        if self.__dry_run:
+            return ""
+        try:
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                check=True,
+                text=True,
+            )
+
+            if self.__print_outputs and result.stderr.strip() != "":
+                self.__echo_output(result.stderr)
+            if self.__print_outputs and result.stdout.strip() != "":
+                self.__echo_output(result.stdout)
+
+            return result.stdout
+        except subprocess.CalledProcessError as e:
+            print(
+                (
+                    f'Command "{self.__quote_command(command)}" exited with '
+                    f"code {e.returncode}\nThe following output was captured:"
+                ),
+                file=sys.stderr,
+            )
+            print("\nstdout:\n")
+            print(cast(str, e.stdout))
+            print("\nstderr:\n")
+            print(cast(str, e.stderr))
+            sys.exit(e.returncode)
+        except OSError as e:
+            print(
+                (
+                    "Could not run command "
+                    f'"{self.__quote_command(command)}": {e.strerror}'
+                ),
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
     def echo(self, s: str, file: TextIO | None = None):
         if self.__print_commands:
             cmd = ["echo", "-n", s]
@@ -108,11 +136,14 @@ class Shell:
         )
         _ = file.flush()
 
+    def __echo_output(self, s: str):
+        print(s, file=sys.stderr)
+
     def __quote_argument(self, s: str) -> str:
         """
         Gives a shell-escaped version of the argument.
         """
-        if "\033" in s:
+        if "\n" in s or "\033" in s:
             return repr(s)
         if s == ">&2":
             return s

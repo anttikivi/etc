@@ -1,5 +1,8 @@
 import os
+import subprocess
+from typing import cast
 
+from etc.commands import install
 from etc.options import Options
 from etc.shell import Shell
 from etc.ui import UserInterface
@@ -34,7 +37,20 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
 
     ui.start_step("Cloning the remote directory")
     ui.debug(f'Cloning from "{remote_url}" to "{opts.base_directory}"')
-    shell(["git", "clone", remote_url, opts.base_directory])
+    _ = shell(["git", "clone", remote_url, opts.base_directory])
     ui.complete_step("Repository cloned")
+
+    install_exit_code = install.run(opts=opts, shell=shell, ui=ui)
+    if install_exit_code != 0:
+        ui.error(f"The installation failed with the code {install_exit_code}")
+        return install_exit_code
+
+    ui.start_step("Changing the remote URL for the local repository")
+    ui.trace("Checking the current remote URL for origin")
+    result = shell.output(
+        ["git", "-C", opts.base_directory, "remote", "get-url", "origin"]
+    )
+    current_remote = result.strip()
+    ui.trace(f"Got {current_remote} as the current remote URL")
 
     return 0

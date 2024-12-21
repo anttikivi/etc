@@ -29,6 +29,10 @@ class UserInterface(ABC):
         pass
 
     @abstractmethod
+    def trace(self, msg: str):
+        pass
+
+    @abstractmethod
     def debug(self, msg: str):
         pass
 
@@ -72,6 +76,10 @@ class Terminal(UserInterface):
         Prints a message to stdout.
         """
         self.__print(msg, level=MessageLevel.INFO, color=None)
+
+    # TODO: Add @override in Python 3.12.
+    def trace(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+        self.__print(msg, level=MessageLevel.TRACE, color=None)
 
     # TODO: Add @override in Python 3.12.
     def debug(self, msg: str):  # pyright: ignore [reportImplicitOverride]
