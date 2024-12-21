@@ -5,9 +5,9 @@ from typing import TextIO
 
 class Shell:
     """
-    Shell executes the commands run by this script. Because it also prints the
-    commands that would be run, all actions should be handled through an
-    instance of this class.
+    Shell executes the commands run by this script. Because it also
+    prints the commands that would be run, all actions should be handled
+    through an instance of this class.
     """
 
     def __init__(self, dry_run: bool, print_commands: bool):
@@ -35,7 +35,10 @@ class Shell:
         output: list[str] = []
         if env is not None:
             output.extend(
-                [self._quote(f"{name}={value}") for name, value in sorted(env.items())]
+                [
+                    self._quote(f"{name}={value}")
+                    for name, value in sorted(env.items())
+                ]
             )
         output.extend([self._quote(s) for s in command])
         file = sys.stderr

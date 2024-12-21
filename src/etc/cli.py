@@ -1,9 +1,9 @@
 import os
 from typing import cast
 
-from etc.args import Command, create_parser
 from etc.commands import bootstrap, install
-from etc.context import Context
+from etc.context import Options
+from etc.options import Command, create_parser
 from etc.shell import Shell
 from etc.ui import MessageLevel, Terminal
 
@@ -37,18 +37,17 @@ def main() -> int:
     terminal.debug(f"Resolved {base_directory} as the base directory")
     terminal.debug(f"Resolved {config} as the configuration file")
 
-    ctx = Context(
-        shell=shell, ui=terminal, base_directory=base_directory, config=config
-    )
+    ctx = Options(base_directory=base_directory, config=config)
 
     exit_code: int = 0
 
-    # I can use pattern matching as this program is targeted for Python >= 3.11.
+    # I can use pattern matching as this program is targeted for
+    # Python >= 3.11.
     match command:
         case "bootstrap":
-            exit_code = bootstrap.run(ui=ctx.ui)
+            exit_code = bootstrap.run(ui=terminal)
         case "install":
-            exit_code = install.run(ui=ctx.ui, ctx=ctx)
+            exit_code = install.run(opts=ctx, shell=shell, ui=terminal)
         case _:
             return 1
 

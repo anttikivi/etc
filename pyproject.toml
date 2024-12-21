@@ -33,3 +33,12 @@ Source = "https://github.com/anttikivi/etc"
 
 [tool.setuptools.dynamic]
 version = { attr = "etc.__version__" }
+
+[tool.ruff]
+indent-width = 4
+line-length = 79
+
+[tool.ruff.format]
+docstring-code-format = true
+indent-style = "space"
+quote-style = "double"

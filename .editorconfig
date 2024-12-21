@@ -7,7 +7,7 @@ end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
-max_line_length = off
+max_line_length = 80
 
 [{.gitmodules,Makefile,go.mod,go.sum,*.go}]
 indent_style = tab
@@ -15,6 +15,7 @@ indent_size = 4
 
 [*.py]
 indent_size = 4
+max_line_length = 79
 
 [dotbot]
 ignore = true

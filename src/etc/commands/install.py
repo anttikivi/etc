@@ -1,7 +1,8 @@
-from etc.context import Context
+from etc.context import Options
+from etc.shell import Shell
 from etc.ui import UserInterface
 
 
-def run(ctx: Context, ui: UserInterface) -> int:
+def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
     ui.start_task("Starting the installation suite")
     return 0

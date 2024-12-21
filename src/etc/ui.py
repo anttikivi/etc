@@ -7,14 +7,19 @@ from etc.shell import Shell
 
 
 Color = Literal["red", "magenta", "cyan", "light_cyan"]
-HIGHLIGHTS: dict[Color, int] = {"red": 31, "magenta": 35, "cyan": 36, "light_cyan": 96}
+HIGHLIGHTS: dict[Color, int] = {
+    "red": 31,
+    "magenta": 35,
+    "cyan": 36,
+    "light_cyan": 96,
+}
 RESET = "\033[0m"
 
 
 class MessageLevel(Enum):
     """
-    The so-called logging level for messages that are shown to the user using
-    a user interface.
+    The so-called logging level for messages that are shown to the user
+    using a user interface.
     """
 
     TRACE = 0
@@ -90,11 +95,12 @@ class Terminal(UserInterface):
     """
     Terminal is a utility class for interacting with the terminal.
 
-    The functions in this class that are used for debugging are separated into
-    two categories: functions based on logging level and functions based on use
-    case. The functions based on use case have default colors and are printed as
-    INFO level messages by default. The functions based on the logging level can
-    be considered to be lower level and take a color as an argument.
+    The functions in this class that are used for debugging are
+    separated into two categories: functions based on logging level and
+    functions based on use case. The functions based on use case have
+    default colors and are printed as INFO level messages by default.
+    The functions based on the logging level can be considered to be
+    lower level and take a color as an argument.
     """
 
     def __init__(self, colors: bool, level: MessageLevel, shell: Shell):
