@@ -26,9 +26,20 @@ setmetatable(M, {
 })
 
 ---Returns the selected completions engine. For now, I plan to use `blink.cmp`.
----@return "blink.cmp"
+---@return "blink.cmp" | "nvim-cmp"
 function M.cmp_engine()
-  return "blink.cmp"
+  if vim.g.ak_cmp_engine == "auto" then
+    return "nvim-cmp"
+  end
+  -- TODO: Throw error or something if this value is incorrect.
+  return vim.g.ak_cmp_engine
+end
+
+M.CREATE_UNDO = vim.api.nvim_replace_termcodes("<c-G>u", true, true, true)
+function M.create_undo()
+  if vim.api.nvim_get_mode().mode == "i" then
+    vim.api.nvim_feedkeys(M.CREATE_UNDO, "n", false)
+  end
 end
 
 ---@generic T

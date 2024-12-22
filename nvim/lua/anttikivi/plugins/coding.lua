@@ -6,6 +6,12 @@ return {
     end,
   },
   {
+    import = "anttikivi.plugins.cmp.nvim-cmp",
+    enabled = function()
+      return AK.cmp_engine() == "nvim-cmp"
+    end,
+  },
+  {
     "folke/lazydev.nvim",
     ft = "lua",
     cmd = "LazyDev",

@@ -2,6 +2,10 @@
 
 return {
   {
+    "hrsh7th/nvim-cmp",
+    enabled = false,
+  },
+  {
     "saghen/blink.cmp",
     version = not AK.config.blink_follow_main and "*",
     build = AK.config.blink_follow_main and "cargo build --release",

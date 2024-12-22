@@ -27,6 +27,7 @@ vim.opt.rtp:prepend(lazypath)
 
 ---@param opts? LazyConfig Optional configuration to override the defaults. The parameter is provided mainly for easier debugging.
 function M.load(opts)
+  vim.g.ak_cmp_engine = "auto"
   vim.g.ak_use_icons = os.getenv("COLORTERM") == "truecolor"
 
   opts = vim.tbl_deep_extend("force", {
