@@ -5,6 +5,8 @@ from etc.ui import Terminal
 
 
 def main() -> int:
+    # TODO: Maybe check here if the platform is supported?
+
     opts = Options.parse(create_parser().parse_args())
 
     shell = Shell(dry_run=opts.dry_run, verbosity=opts.verbosity)

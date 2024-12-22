@@ -41,7 +41,7 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
 
     install_exit_code = install.run(opts=opts, shell=shell, ui=ui)
     if install_exit_code != 0:
-        ui.error(f"The installation failed with the code {install_exit_code}")
+        ui.error(f"The install failed with the code {install_exit_code}")
         return install_exit_code
 
     ui.start_step("Changing the remote URL for the local repository")
