@@ -9,7 +9,11 @@ def main() -> int:
 
     opts = Options.parse(create_parser().parse_args())
 
-    shell = Shell(dry_run=opts.dry_run, verbosity=opts.verbosity)
+    shell = Shell(
+        dry_run=opts.dry_run,
+        verbosity=opts.verbosity,
+        print_commands=opts.print_commands,
+    )
     terminal = Terminal(
         level=opts.verbosity, shell=shell, use_colors=opts.use_colors
     )

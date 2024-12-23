@@ -38,6 +38,7 @@ class Options:
         remote_repository_url: str | None,
         use_colors: bool,
         verbosity: MessageLevel,
+        print_commands: bool,
     ):
         self.base_directory: str | None = base_directory
         self.command: Command | None = command
@@ -46,6 +47,7 @@ class Options:
         self.remote_repository_url: str | None = remote_repository_url
         self.use_colors: bool = use_colors
         self.verbosity: MessageLevel = verbosity
+        self.print_commands: bool = print_commands
 
     @classmethod
     def parse(cls, args: argparse.Namespace) -> Self:
@@ -98,6 +100,11 @@ class Options:
         )
 
         verbosity = MessageLevel.INFO - MessageLevel(cast(int, args.verbose))
+        print_commands = (
+            False
+            if "print_commands" not in args
+            else cast(bool, args.print_commands)
+        ) or dry_run
 
         return cls(
             base_directory=base_directory,
@@ -107,6 +114,7 @@ class Options:
             remote_repository_url=remote_repo,
             use_colors=colors,
             verbosity=verbosity,
+            print_commands=print_commands,
         )
 
 
@@ -117,6 +125,9 @@ def create_parser():
             "Tool for managing workstation configuration and environment"
         ),
     )
+    # TODO: Add these to the subcommands with different destinations so
+    # that they don't need to be invoked before specifying the
+    # subcommand.
     _ = parser.add_argument(
         "--colors",
         action=argparse.BooleanOptionalAction,
@@ -131,6 +142,14 @@ def create_parser():
         action="store_true",
         help=(
             "Show what would have been done instead of executing the commands."
+        ),
+    )
+    _ = parser.add_argument(
+        "--print-commands",
+        action="store_true",
+        help=(
+            "Show commands before running them. Always true when the program "
+            "is invoked as a dry run."
         ),
     )
     _ = parser.add_argument(
