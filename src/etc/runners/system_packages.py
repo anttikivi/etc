@@ -26,7 +26,7 @@ else:
         return method
 
 
-class PackagesRunner(StepRunner):
+class SystemPackagesRunner(StepRunner):
     def __init__(self, opts: Options, shell: Shell, ui: UserInterface) -> None:
         super().__init__("system-packages", "packages", opts, shell, ui)
 

@@ -5,7 +5,7 @@ import tomllib
 
 from etc.config import Config
 from etc.options import Options
-from etc.runners.packages import PackagesRunner
+from etc.runners.system_packages import SystemPackagesRunner
 from etc.shell import Shell
 from etc.step_runner import StepRunner
 from etc.ui import UserInterface
@@ -70,7 +70,7 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
         )
 
     # TODO: Allowing defining step runners as plugins.
-    runners: list[StepRunner] = [PackagesRunner(opts, shell, ui)]
+    runners: list[StepRunner] = [SystemPackagesRunner(opts, shell, ui)]
 
     if "install" in config and "steps" in config["install"]:
         for step in config["install"]["steps"]:
