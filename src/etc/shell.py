@@ -23,9 +23,7 @@ class Shell:
         self._dry_run: bool = dry_run
         self._verobosity: MessageLevel = verbosity
         self._print_commands: bool = print_commands or dry_run
-        self._print_outputs: bool = cast(
-            bool, self._verobosity <= MessageLevel.TRACE
-        )
+        self._print_outputs: bool = print_commands
         self._prompt: str = prompt
 
     def __call__(self, command: list[str], allow_output: bool | None = None):
@@ -131,6 +129,12 @@ class Shell:
                 ["uname", "|", "tr", "'[:upper:]'", "'[:lower:]'"]
             )
 
+    def print_command(
+        self, command: list[str], env: dict[str, str] | None = None
+    ):
+        if self._print_commands:
+            self._echo_command(command, env)
+
     def _echo_command(
         self,
         command: list[str],
@@ -159,6 +163,8 @@ class Shell:
         if "\n" in s or "\033" in s:
             return repr(s)
         if s == ">&2":
+            return s
+        if s == "|":
             return s
         return shlex.quote(s)
 

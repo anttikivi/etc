@@ -1,3 +1,4 @@
+import os
 import sys
 from typing import cast
 
@@ -258,12 +259,27 @@ class SystemPackagesRunner(StepRunner):
             )
 
         self._ui.start_task("Starting to install the packages")
-        self._ui.debug("Going to install:")
+        self._ui.trace("Going to install:")
         for k, v in all_packages.items():
             s = f" - {k}"
             if v != "":
                 s = f"{s}@{v}"
-            self._ui.debug(s)
+            self._ui.trace(s)
+
+        if current_platform == "darwin":
+            self._install_darwin_packages(all_packages)
+
+            if all_casks:
+                self._ui.start_task("Installing casks")
+                self._install_darwin_packages(all_casks, casks=True)
+                self._ui.complete_task("Casks installed")
+        else:
+            raise ValueError(
+                (
+                    "trying to install packages on an unsupported platform: "
+                    f"{current_platform}"
+                )
+            )  # pyright: ignore[reportUnreachable]
 
         self._ui.complete_task("Packages installed")
 
@@ -271,5 +287,47 @@ class SystemPackagesRunner(StepRunner):
 
         return 0
 
-    def install_darwin_packages(self, packages: dict[str, str]):
-        pass
+    def _install_darwin_packages(
+        self, packages: dict[str, str], casks: bool | None = None
+    ):
+        self._ui.trace("Getting the list of installed Homebrew packages")
+        installed_packages = self._shell.output(["brew", "ls"])
+        for pkg, ver in packages.items():
+            self._ui.trace(
+                f'Handling the {"cask" if casks else "package"} "{pkg}"'
+            )
+            self._ui.trace(
+                (
+                    f'Checking it the {"cask" if casks else "package"} '
+                    f'"{pkg}" is installed'
+                )
+            )
+            self._shell.print_command(["basename", pkg])
+            pkg_name = os.path.basename(pkg) if "/" in pkg else pkg
+            should_install = True
+            self._shell.print_command(
+                ["brew", "ls", "|", "grep", "-qx", pkg_name]
+            )
+            for p in (p for p in installed_packages.splitlines()):
+                if pkg_name == p:
+                    should_install = False
+                    break
+            if not should_install:
+                self._ui.debug(
+                    (
+                        f'The {"cask" if casks else "package"} "{pkg}" is '
+                        'already installed, skipping'
+                    )
+                )
+                continue
+            self._ui.start_task(
+                f'Installing "{(pkg if ver == "" else f"{pkg}@{ver}")}"'
+            )
+            self._shell(
+                ["brew", "install", "--cask", pkg]
+                if casks
+                else ["brew", "install", pkg]
+            )
+            self._ui.complete_task(
+                f'"{(pkg if ver == "" else f"{pkg}@{ver}")}" installed'
+            )
