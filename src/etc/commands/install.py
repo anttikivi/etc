@@ -49,7 +49,6 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
             )
         )
         return cast(int, e.errno)
-    print(config)
 
     ui.complete_step("Configuration file parsed")
     ui.start_phase("Starting to run the install steps")
@@ -69,14 +68,33 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
             )
         )
 
+    # TODO: Allowing defining step runners as plugins.
     runners: list[StepRunner] = [PackagesRunner(opts, shell, ui)]
 
     if "install" in config and "steps" in config["install"]:
         for step in config["install"]["steps"]:
+            ui.debug(
+                (
+                    "Finding runners for the current step with the "
+                    f'"{step["directive"]}" directive'
+                )
+            )
             for runner in filter(
                 lambda s: s.can_handle(step["directive"]), runners
             ):
-                print(runner)
+                try:
+                    runner_exit_code = runner.run()
+                    if runner_exit_code != 0:
+                        ui.error(
+                            (
+                                f"The execution of {runner} returned "
+                                f"a non-zero exit code: {runner_exit_code}"
+                            )
+                        )
+                        return runner_exit_code
+                except Exception as e:
+                    ui.error(f"An error occured when executing {runner}: {e}")
+                    return 1  # TODO: Or something.
 
     ui.complete_phase("Install steps run")
     ui.complete_phase("Install suite complete")
