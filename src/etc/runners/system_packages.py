@@ -257,4 +257,19 @@ class SystemPackagesRunner(StepRunner):
                 )
             )
 
+        self._ui.start_task("Starting to install the packages")
+        self._ui.debug("Going to install:")
+        for k, v in all_packages.items():
+            s = f" - {k}"
+            if v != "":
+                s = f"{s}@{v}"
+            self._ui.debug(s)
+
+        self._ui.complete_task("Packages installed")
+
+        self._ui.complete_step(f'Step "{config["directive"]}" complete')
+
         return 0
+
+    def install_darwin_packages(self, packages: dict[str, str]):
+        pass

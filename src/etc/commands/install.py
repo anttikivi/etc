@@ -16,7 +16,7 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
 
     # TODO: Maybe check the prerequisites again?
 
-    ui.start_step("Starting to parse the configuration file")
+    ui.start_task("Starting to parse the configuration file")
     assert (
         opts.config_file is not None
     ), "the configuration file passed to the install suite is None"
@@ -50,7 +50,7 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
         )
         return cast(int, e.errno)
 
-    ui.complete_step("Configuration file parsed")
+    ui.complete_task("Configuration file parsed")
     ui.trace(f"Received the following configuration: {config}")
     ui.start_phase("Starting to run the install steps")
 

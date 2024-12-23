@@ -90,6 +90,14 @@ class UserInterface(ABC):
     def complete_step(self, msg: str):
         pass
 
+    @abstractmethod
+    def start_task(self, msg: str):
+        pass
+
+    @abstractmethod
+    def complete_task(self, msg: str):
+        pass
+
 
 class Terminal(UserInterface):
     """
@@ -188,6 +196,24 @@ class Terminal(UserInterface):
 
     @override
     def complete_step(self, msg: str):
+        self._print(
+            msg,
+            level=MessageLevel.INFO,
+            file=sys.stderr,
+            color="cyan" if self._level <= MessageLevel.DEBUG else None,
+        )
+
+    @override
+    def start_task(self, msg: str):
+        self._print(
+            msg,
+            level=MessageLevel.INFO,
+            file=sys.stderr,
+            color="blue" if self._level <= MessageLevel.DEBUG else None,
+        )
+
+    @override
+    def complete_task(self, msg: str):
         self._print(
             msg,
             level=MessageLevel.INFO,
