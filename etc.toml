@@ -1,5 +1,5 @@
 [[install.steps]]
-type = "packages"
+directive = "packages"
 
 [install.steps.darwin]
 formulae = [

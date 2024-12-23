@@ -5,7 +5,9 @@ import tomllib
 
 from etc.config import Config
 from etc.options import Options
+from etc.runners.packages import PackagesRunner
 from etc.shell import Shell
+from etc.step_runner import StepRunner
 from etc.ui import UserInterface
 
 
@@ -67,9 +69,14 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
             )
         )
 
+    runners: list[StepRunner] = [PackagesRunner(opts, shell, ui)]
+
     if "install" in config and "steps" in config["install"]:
         for step in config["install"]["steps"]:
-            print(step)
+            for runner in filter(
+                lambda s: s.can_handle(step["directive"]), runners
+            ):
+                print(runner)
 
     ui.complete_phase("Install steps run")
     ui.complete_phase("Install suite complete")

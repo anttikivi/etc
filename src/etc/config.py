@@ -1,13 +1,15 @@
 from typing import Literal, Required, TypedDict
 
 
+StepDirective = Literal["packages"]
+
 _DarwinPackages = TypedDict(
     "_DarwinPackages", {"formulae": list[str], "casks": list[str]}
 )
 
 _PackagesStep = TypedDict(
     "_PackagesStep",
-    {"type": Required[Literal["packages"]], "darwin": _DarwinPackages},
+    {"directive": Required[StepDirective], "darwin": _DarwinPackages},
 )
 
 

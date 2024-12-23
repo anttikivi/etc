@@ -5,6 +5,18 @@ from typing import Literal
 from etc.message_level import MessageLevel
 from etc.shell import Shell
 
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing import Any, Callable
+
+    _Func = Callable[..., Any]
+
+    # Fallback for Python 3.11 and earlier.
+    def override(method: _Func, /) -> _Func:  # pyright: ignore[reportUnreachable]
+        return method
+
+
 Color = Literal[
     "red",
     "green",
@@ -96,15 +108,15 @@ class Terminal(UserInterface):
         self._shell: Shell = shell
         self._use_colors: bool = use_colors
 
-    # TODO: Add @override in Python 3.12.
-    def print(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+    @override
+    def print(self, msg: str):
         """
         Prints a message to stdout.
         """
         self._print(msg, level=MessageLevel.INFO)
 
-    # TODO: Add @override in Python 3.12.
-    def trace(  # pyright: ignore [reportImplicitOverride]
+    @override
+    def trace(
         self, msg: str, bold: bool | None = None, underline: bool | None = None
     ):
         self._print(
@@ -114,8 +126,8 @@ class Terminal(UserInterface):
             underline=underline,
         )
 
-    # TODO: Add @override in Python 3.12.
-    def debug(  # pyright: ignore [reportImplicitOverride]
+    @override
+    def debug(
         self, msg: str, bold: bool | None = None, underline: bool | None = None
     ):
         self._print(
@@ -125,8 +137,8 @@ class Terminal(UserInterface):
             underline=underline,
         )
 
-    # TODO: Add @override in Python 3.12.
-    def warning(  # pyright: ignore [reportImplicitOverride]
+    @override
+    def warning(
         self, msg: str, bold: bool | None = None, underline: bool | None = None
     ):
         self._print(
@@ -137,8 +149,8 @@ class Terminal(UserInterface):
             underline=underline,
         )
 
-    # TODO: Add @override in Python 3.12.
-    def error(  # pyright: ignore [reportImplicitOverride]
+    @override
+    def error(
         self, msg: str, bold: bool | None = None, underline: bool | None = None
     ):
         self._print(
@@ -149,24 +161,24 @@ class Terminal(UserInterface):
             underline=underline,
         )
 
-    # TODO: Add @override in Python 3.12.
-    def start_phase(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+    @override
+    def start_phase(self, msg: str):
         self._print(msg, level=MessageLevel.INFO, color="magenta")
 
-    # TODO: Add @override in Python 3.12.
-    def complete_phase(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+    @override
+    def complete_phase(self, msg: str):
         self._print(msg, level=MessageLevel.INFO, color="green")
 
-    # TODO: Add @override in Python 3.12.
-    def start_step(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+    @override
+    def start_step(self, msg: str):
         self._print(
             msg,
             level=MessageLevel.INFO,
             color="blue" if self._level <= MessageLevel.DEBUG else None,
         )
 
-    # TODO: Add @override in Python 3.12.
-    def complete_step(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+    @override
+    def complete_step(self, msg: str):
         self._print(
             msg,
             level=MessageLevel.INFO,
