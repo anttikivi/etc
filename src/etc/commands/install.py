@@ -1,6 +1,9 @@
 import os
-import tomllib
 from typing import cast
+
+import tomllib
+
+from etc.config import Config
 from etc.options import Options
 from etc.shell import Shell
 from etc.ui import UserInterface
@@ -23,22 +26,52 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
         )
         return 4  # TODO: Or something.
 
-    config = None
+    config: Config | None = None
     try:
         with open(opts.config_file, "rb") as f:
             try:
-                config = tomllib.load(f)
+                config = cast(Config, cast(object, tomllib.load(f)))
             except tomllib.TOMLDecodeError as e:
                 ui.error(
-                    f'Failed to parse the configuration from file at "{opts.config_file}": {e}'
+                    msg=(
+                        "Failed to parse the configuration from file at "
+                        f'"{opts.config_file}": {e}'
+                    )
                 )
                 return 1  # TODO: Or something.
     except OSError as e:
         ui.error(
-            f'Failed to read the configuration file at "{opts.config_file}": {e}'
+            msg=(
+                "Failed to read the configuration file at "
+                f'"{opts.config_file}": {e}'
+            )
         )
         return cast(int, e.errno)
     print(config)
 
     ui.complete_step("Configuration file parsed")
+    ui.start_phase("Starting to run the install steps")
+
+    if "install" not in config:
+        ui.warning(
+            msg=(
+                'No "install" key was provided in the configuration file, '
+                "thus there are no steps to run"
+            )
+        )
+    if "install" in config and "steps" not in config["install"]:
+        ui.warning(
+            msg=(
+                'No "install.steps" key was provided in the configuration '
+                "file, thus there are no steps to run"
+            )
+        )
+
+    if "install" in config and "steps" in config["install"]:
+        for step in config["install"]["steps"]:
+            print(step)
+
+    ui.complete_phase("Install steps run")
+    ui.complete_phase("Install suite complete")
+
     return 0

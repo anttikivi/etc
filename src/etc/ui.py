@@ -6,11 +6,19 @@ from etc.message_level import MessageLevel
 from etc.shell import Shell
 
 Color = Literal[
-    "red", "green", "blue", "magenta", "cyan", "light_green", "light_cyan"
+    "red",
+    "green",
+    "yellow",
+    "blue",
+    "magenta",
+    "cyan",
+    "light_green",
+    "light_cyan",
 ]
 HIGHLIGHTS: dict[Color, int] = {
     "red": 31,
     "green": 32,
+    "yellow": 33,
     "blue": 34,
     "magenta": 35,
     "cyan": 36,
@@ -43,6 +51,12 @@ class UserInterface(ABC):
         pass
 
     @abstractmethod
+    def warning(
+        self, msg: str, bold: bool | None = None, underline: bool | None = None
+    ):
+        pass
+
+    @abstractmethod
     def error(
         self, msg: str, bold: bool | None = None, underline: bool | None = None
     ):
@@ -50,6 +64,10 @@ class UserInterface(ABC):
 
     @abstractmethod
     def start_phase(self, msg: str):
+        pass
+
+    @abstractmethod
+    def complete_phase(self, msg: str):
         pass
 
     @abstractmethod
@@ -108,6 +126,18 @@ class Terminal(UserInterface):
         )
 
     # TODO: Add @override in Python 3.12.
+    def warning(  # pyright: ignore [reportImplicitOverride]
+        self, msg: str, bold: bool | None = None, underline: bool | None = None
+    ):
+        self._print(
+            msg,
+            level=MessageLevel.ERROR,
+            color="yellow",
+            bold=bold,
+            underline=underline,
+        )
+
+    # TODO: Add @override in Python 3.12.
     def error(  # pyright: ignore [reportImplicitOverride]
         self, msg: str, bold: bool | None = None, underline: bool | None = None
     ):
@@ -122,6 +152,10 @@ class Terminal(UserInterface):
     # TODO: Add @override in Python 3.12.
     def start_phase(self, msg: str):  # pyright: ignore [reportImplicitOverride]
         self._print(msg, level=MessageLevel.INFO, color="magenta")
+
+    # TODO: Add @override in Python 3.12.
+    def complete_phase(self, msg: str):  # pyright: ignore [reportImplicitOverride]
+        self._print(msg, level=MessageLevel.INFO, color="green")
 
     # TODO: Add @override in Python 3.12.
     def start_step(self, msg: str):  # pyright: ignore [reportImplicitOverride]
