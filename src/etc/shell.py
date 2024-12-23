@@ -122,6 +122,10 @@ class Shell:
         if self._print_commands:
             self._echo_command(["[", "-e", file, "]"])
 
+    def echo_test_not_f(self, file: str):
+        if self._print_commands:
+            self._echo_command(["[", "!", "-f", file, "]"])
+
     def _echo_command(
         self,
         command: list[str],

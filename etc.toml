@@ -1,2 +1,35 @@
-[[steps]]
+[[install.steps]]
 type = "packages"
+
+[install.steps.darwin]
+formulae = [
+  "awscli",
+  "bat",
+  "clang-format",
+  "cmake",
+  "cormacrelf/tap/dark-notify",
+  "fd",
+  "gettext",
+  "gh",
+  "fzf",
+  "jq",
+  "lima",
+  "luarocks",
+  "ninja",
+  "opentofu",
+  "php",
+  "reattach-to-user-namespace",
+  "ripgrep",
+  "roots/tap/trellis-cli",
+  "shellcheck",
+  "terraform",
+  "tmux",
+  "wget",
+]
+casks = [
+  "1password",
+  "1password-cli",
+  "font-jetbrains-mono",
+  "font-jetbrains-mono-nerd-font",
+  "nikitabobko/tap/aerospace",
+]
