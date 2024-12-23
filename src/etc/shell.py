@@ -22,9 +22,6 @@ class Shell:
     ):
         self._dry_run: bool = dry_run
         self._verobosity: MessageLevel = verbosity
-        # self._print_commands: bool = (
-        #     cast(bool, self._verobosity <= MessageLevel.TRACE) or dry_run
-        # )
         self._print_commands: bool = print_commands or dry_run
         self._print_outputs: bool = cast(
             bool, self._verobosity <= MessageLevel.TRACE
