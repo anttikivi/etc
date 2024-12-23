@@ -1,6 +1,6 @@
 import sys
 from abc import ABC, abstractmethod
-from typing import Literal
+from typing import Literal, TextIO
 
 from etc.message_level import MessageLevel
 from etc.shell import Shell
@@ -113,7 +113,7 @@ class Terminal(UserInterface):
         """
         Prints a message to stdout.
         """
-        self._print(msg, level=MessageLevel.INFO)
+        self._print(msg, level=MessageLevel.INFO, file=sys.stderr)
 
     @override
     def trace(
@@ -122,6 +122,7 @@ class Terminal(UserInterface):
         self._print(
             msg,
             level=MessageLevel.TRACE,
+            file=sys.stderr,
             bold=bold,
             underline=underline,
         )
@@ -133,6 +134,7 @@ class Terminal(UserInterface):
         self._print(
             msg,
             level=MessageLevel.DEBUG,
+            file=sys.stderr,
             bold=bold,
             underline=underline,
         )
@@ -144,6 +146,7 @@ class Terminal(UserInterface):
         self._print(
             msg,
             level=MessageLevel.ERROR,
+            file=sys.stderr,
             color="yellow",
             bold=bold,
             underline=underline,
@@ -156,6 +159,7 @@ class Terminal(UserInterface):
         self._print(
             msg,
             level=MessageLevel.ERROR,
+            file=sys.stderr,
             color="red",
             bold=bold,
             underline=underline,
@@ -163,17 +167,22 @@ class Terminal(UserInterface):
 
     @override
     def start_phase(self, msg: str):
-        self._print(msg, level=MessageLevel.INFO, color="magenta")
+        self._print(
+            msg, level=MessageLevel.INFO, file=sys.stderr, color="magenta"
+        )
 
     @override
     def complete_phase(self, msg: str):
-        self._print(msg, level=MessageLevel.INFO, color="green")
+        self._print(
+            msg, level=MessageLevel.INFO, file=sys.stderr, color="green"
+        )
 
     @override
     def start_step(self, msg: str):
         self._print(
             msg,
             level=MessageLevel.INFO,
+            file=sys.stderr,
             color="blue" if self._level <= MessageLevel.DEBUG else None,
         )
 
@@ -182,6 +191,7 @@ class Terminal(UserInterface):
         self._print(
             msg,
             level=MessageLevel.INFO,
+            file=sys.stderr,
             color="cyan" if self._level <= MessageLevel.DEBUG else None,
         )
 
@@ -189,6 +199,7 @@ class Terminal(UserInterface):
         self,
         msg: str,
         level: MessageLevel,
+        file: TextIO | None = None,
         color: Color | None = None,
         bold: bool | None = None,
         underline: bool | None = None,
@@ -207,7 +218,10 @@ class Terminal(UserInterface):
             reset = True
         if reset:
             msg = f"{msg}{RESET}"
-        if level >= MessageLevel.WARNING:
-            self._shell.echo(msg, file=sys.stderr)
+        if file is not None:
+            self._shell.echo(msg, file=file)
         else:
-            self._shell.echo(msg)
+            if level >= MessageLevel.WARNING:
+                self._shell.echo(msg, file=sys.stderr)
+            else:
+                self._shell.echo(msg)
