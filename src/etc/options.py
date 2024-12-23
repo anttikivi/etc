@@ -168,8 +168,7 @@ def create_parser():
                 "absolute path, it is used as it is. Otherwise it is resolved "
                 "relative to the base directory. Environment variables are "
                 'expanded and initial "~" and "~user" are resolved to user\'s '
-                "home directory. Default: "
-                f"{os.path.expanduser(defaults.get_default_base_directory())}"
+                "home directory. Default: %(default)s"
             ),
         )
         _ = configured_parser.add_argument(
@@ -184,7 +183,7 @@ def create_parser():
                 "path, it is used as it is. Otherwise it is resolved relative "
                 "to the base directory. Environment variables are expanded "
                 'and initial "~" and "~user" are resolved to user\'s home '
-                f"directory. Default: {defaults.DEFAULT_CONFIG}"
+                "directory. Default: %(default)s"
             ),
         )
         return configured_parser
