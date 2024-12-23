@@ -126,6 +126,12 @@ class Shell:
         if self._print_commands:
             self._echo_command(["[", "!", "-f", file, "]"])
 
+    def echo_uname_tr(self):
+        if self._print_commands:
+            self._echo_command(
+                ["uname", "|", "tr", "'[:upper:]'", "'[:lower:]'"]
+            )
+
     def _echo_command(
         self,
         command: list[str],
@@ -150,6 +156,7 @@ class Shell:
         """
         Gives a shell-escaped version of the argument.
         """
+        s = s.replace("`", "\\`")
         if "\n" in s or "\033" in s:
             return repr(s)
         if s == ">&2":

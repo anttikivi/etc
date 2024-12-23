@@ -1,7 +1,7 @@
 [[install.steps]]
 directive = "packages"
 
-[install.steps.darwin]
+[install.steps.platforms.darwin]
 formulae = [
   "awscli",
   "bat",

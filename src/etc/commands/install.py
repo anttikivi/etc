@@ -51,6 +51,7 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
         return cast(int, e.errno)
 
     ui.complete_step("Configuration file parsed")
+    ui.trace(f"Received the following configuration: {config}")
     ui.start_phase("Starting to run the install steps")
 
     if "install" not in config:
@@ -83,7 +84,13 @@ def run(opts: Options, shell: Shell, ui: UserInterface) -> int:
                 lambda s: s.can_handle(step["directive"]), runners
             ):
                 try:
-                    runner_exit_code = runner.run()
+                    ui.trace(
+                        (
+                            f"Calling the runner {runner} with the following "
+                            f"configuration: {step}"
+                        )
+                    )
+                    runner_exit_code = runner.run(step)
                     if runner_exit_code != 0:
                         ui.error(
                             (

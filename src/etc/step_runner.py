@@ -1,7 +1,8 @@
 import sys
 from abc import ABC, abstractmethod
+from typing import cast
 
-from etc.config import StepDirective
+from etc.config import StepConfig, StepDirective
 from etc.options import Options
 from etc.shell import Shell
 from etc.ui import UserInterface
@@ -29,11 +30,16 @@ class StepRunner(ABC):
     def __init__(
         self,
         directive: StepDirective,
+        aliases: StepDirective | list[StepDirective],
         opts: Options,
         shell: Shell,
         ui: UserInterface,
     ) -> None:
         self.directive: StepDirective = directive
+        self.aliases: list[StepDirective] = cast(
+            list[StepDirective],
+            aliases if type(aliases) is list else [aliases],
+        )
 
         self._opts: Options = opts
         self._shell: Shell = shell
@@ -44,8 +50,8 @@ class StepRunner(ABC):
         return f"<{self.__class__.__name__} '{self.directive}'>"
 
     def can_handle(self, directive: str) -> bool:
-        return directive == self.directive
+        return directive == self.directive or directive in self.aliases
 
     @abstractmethod
-    def run(self) -> int:
+    def run(self, config: StepConfig) -> int:
         pass
