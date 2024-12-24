@@ -72,42 +72,12 @@ function M.detectors.pattern(buf, patterns)
   return pattern and { vim.fs.dirname(pattern) } or {}
 end
 
--- returns the root directory based on:
--- * lsp workspace folders
--- * lsp root_dir
--- * root pattern of filename of the current buffer
--- * root pattern of cwd
----@param opts? {normalize?:boolean, buf?:number}
----@return string
-function M.get(opts)
-  opts = opts or {}
-  local buf = opts.buf or vim.api.nvim_get_current_buf()
-  local ret = M.cache[buf]
-  if not ret then
-    local roots = M.detect({ all = false, buf = buf })
-    ret = roots[1] and roots[1].paths[1] or vim.uv.cwd()
-    M.cache[buf] = ret
-  end
-  if opts and opts.normalize then
-    return ret
-  end
-  return AK.is_win() and ret:gsub("/", "\\") or ret
-end
-
 function M.bufpath(buf)
   return M.realpath(vim.api.nvim_buf_get_name(assert(buf)))
 end
 
 function M.cwd()
   return M.realpath(vim.uv.cwd()) or ""
-end
-
-function M.realpath(path)
-  if path == "" or path == nil then
-    return nil
-  end
-  path = vim.uv.fs_realpath(path) or path
-  return AK.norm(path)
 end
 
 ---@param opts? { buf?: number, spec?: AKRootSpec[], all?: boolean }
@@ -145,6 +115,35 @@ function M.detect(opts)
   return ret
 end
 
+-- returns the root directory based on:
+-- * lsp workspace folders
+-- * lsp root_dir
+-- * root pattern of filename of the current buffer
+-- * root pattern of cwd
+---@param opts? {normalize?:boolean, buf?:number}
+---@return string
+function M.get(opts)
+  opts = opts or {}
+  local buf = opts.buf or vim.api.nvim_get_current_buf()
+  local ret = M.cache[buf]
+  if not ret then
+    local roots = M.detect({ all = false, buf = buf })
+    ret = roots[1] and roots[1].paths[1] or vim.uv.cwd()
+    M.cache[buf] = ret
+  end
+  if opts and opts.normalize then
+    return ret
+  end
+  return AK.is_win() and ret:gsub("/", "\\") or ret
+end
+
+function M.git()
+  local root = M.get()
+  local git_root = vim.fs.find(".git", { path = root, upward = true })[1]
+  local ret = git_root and vim.fn.fnamemodify(git_root, ":h") or root
+  return ret
+end
+
 function M.info()
   local spec = type(vim.g.root_spec) == "table" and vim.g.root_spec or M.spec
 
@@ -168,6 +167,14 @@ function M.info()
   lines[#lines + 1] = "```"
   AK.info(lines, { title = "AK Roots" })
   return roots[1] and roots[1].paths[1] or vim.uv.cwd()
+end
+
+function M.realpath(path)
+  if path == "" or path == nil then
+    return nil
+  end
+  path = vim.uv.fs_realpath(path) or path
+  return AK.norm(path)
 end
 
 ---@param spec AKRootSpec

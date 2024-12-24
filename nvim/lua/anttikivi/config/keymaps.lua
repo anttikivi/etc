@@ -137,6 +137,27 @@ map("n", "<leader>gb", function()
   Snacks.git.blame_line()
 end, { desc = "Git blame line" })
 
+-- Lazygit
+if vim.fn.executable("lazygit") == 1 then
+  map("n", "<leader>gg", function()
+    ---@diagnostic disable-next-line: missing-fields
+    Snacks.lazygit({ cwd = AK.root.git() })
+  end, { desc = "Lazygit (root dir)" })
+  map("n", "<leader>gG", function()
+    Snacks.lazygit()
+  end, { desc = "Lazygit (cwd)" })
+  map("n", "<leader>gf", function()
+    Snacks.lazygit.log_file()
+  end, { desc = "Lazygit current file History" })
+  map("n", "<leader>gl", function()
+    ---@diagnostic disable-next-line: missing-fields
+    Snacks.lazygit.log({ cwd = AK.root.git() })
+  end, { desc = "Lazygit log" })
+  map("n", "<leader>gL", function()
+    Snacks.lazygit.log()
+  end, { desc = "Lazygit log (cwd)" })
+end
+
 -- Native snippets. Only needed on < 0.11, as 0.11 creates these by default.
 if vim.fn.has("nvim-0.11") == 0 then
   map("s", "<Tab>", function()
