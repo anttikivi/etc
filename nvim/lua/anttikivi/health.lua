@@ -37,6 +37,7 @@ function M.check()
     "fd",
     "fzf",
     "git",
+    "lazygit",
     "rg",
   }) do
     local name = type(cmd) == "string" and cmd or vim.inspect(cmd)
