@@ -1,4 +1,4 @@
-from etc.commands import bootstrap, install
+from etc import bootstrap, install
 from etc.options import Options, create_parser
 from etc.shell import Shell
 from etc.ui import Terminal

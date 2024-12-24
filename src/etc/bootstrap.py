@@ -1,6 +1,6 @@
 import os
 
-from etc.commands import install
+from etc import install
 from etc.message_level import MessageLevel
 from etc.options import Options
 from etc.shell import Shell
